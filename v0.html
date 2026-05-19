@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Film Maker - v0 Draft</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Vobile Brand Integrated Tokens in oklch */
+            --bg-base: oklch(18% 0.01 250);
+            --bg-surface: oklch(22% 0.01 250);
+            --bg-surface-hover: oklch(28% 0.01 250);
+            
+            --brand-blue: oklch(60% 0.12 260); /* Used for active states, tabs */
+            --brand-orange: oklch(65% 0.18 45); /* Used for active progress, highlights */
+            
+            --text-main: oklch(90% 0.01 250);
+            --text-muted: oklch(60% 0.01 250);
+            --border-color: oklch(30% 0.01 250);
+
+            --font-ui: 'Plus Jakarta Sans', sans-serif;
+            --font-code: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            font-family: var(--font-ui);
+            height: 100vh;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 3fr 10fr 3fr; /* 3:10:3 Layout */
+        }
+
+        /* ------------------ Left Panel (L区) ------------------ */
+        .panel-l {
+            background-color: var(--bg-surface);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .l-top {
+            flex: 1; /* 1/3 height implicitly */
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .l-bottom {
+            flex: 2; /* 2/3 height implicitly */
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .panel-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-new {
+            background-color: transparent;
+            border: 1px dashed var(--border-color);
+            color: var(--text-main);
+            padding: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: inherit;
+            margin-bottom: 12px;
+            transition: all 0.2s;
+        }
+        .btn-new:hover {
+            border-color: var(--brand-blue);
+            color: var(--brand-blue);
+        }
+
+        .list-item {
+            padding: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .list-item:hover {
+            background-color: var(--bg-surface-hover);
+            color: var(--text-main);
+        }
+        .list-item.active {
+            background-color: color-mix(in srgb, var(--brand-blue) 15%, transparent);
+            color: var(--brand-blue);
+        }
+
+        .file-tree { font-family: var(--font-code); font-size: 13px; }
+
+        /* ------------------ Middle Panel (M区) ------------------ */
+        .panel-m {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background-color: var(--bg-base);
+        }
+
+        .m-tabs {
+            height: 48px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            background-color: var(--bg-surface);
+            gap: 4px;
+        }
+
+        .tab {
+            padding: 8px 16px;
+            border-radius: 6px 6px 0 0;
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid transparent;
+            border-bottom: none;
+            margin-bottom: -1px; /* overlap border */
+        }
+        .tab.active {
+            background-color: var(--bg-base);
+            color: var(--brand-blue);
+            border-color: var(--border-color);
+            border-top: 2px solid var(--brand-blue);
+        }
+
+        .m-content {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-area {
+            flex: 1;
+            border: 1px dashed var(--border-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .input-box {
+            height: 56px;
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            color: var(--text-muted);
+        }
+
+        /* ------------------ Right Panel (R区) ------------------ */
+        .panel-r {
+            background-color: var(--bg-surface);
+            border-left: 1px solid var(--border-color);
+            height: 100vh;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .timeline-container {
+            flex: 1;
+            position: relative;
+            margin-top: 24px;
+        }
+
+        /* The vertical line */
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            bottom: 20px;
+            left: 11px; /* Center of the 24px dot */
+            width: 2px;
+            background-color: var(--border-color);
+            z-index: 1;
+        }
+
+        .timeline-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 32px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: var(--bg-surface);
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            flex-shrink: 0;
+            transition: all 0.3s;
+        }
+
+        .step-text {
+            padding-top: 2px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* Status Modifiers */
+        .timeline-step.completed .step-dot {
+            background-color: var(--brand-blue);
+            border-color: var(--brand-blue);
+            color: var(--bg-base);
+        }
+        .timeline-step.completed .step-text {
+            color: var(--text-main);
+        }
+
+        .timeline-step.active .step-dot {
+            border-color: var(--brand-orange);
+            background-color: var(--bg-surface);
+            box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand-orange) 20%, transparent);
+        }
+        .timeline-step.active .step-dot::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background-color: var(--brand-orange);
+            border-radius: 50%;
+        }
+        .timeline-step.active .step-text {
+            color: var(--brand-orange);
+            font-weight: 600;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- L区 -->
+    <div class="panel-l">
+        <div class="l-top">
+            <div class="panel-title">Chat History</div>
+            <button class="btn-new">[Icon] New Chat</button>
+            <div class="list-item">[Icon] 脚本构思会议</div>
+            <div class="list-item active">[Icon] 镜头风格调整</div>
+            <div class="list-item">[Icon] 上一次的生成记录</div>
+        </div>
+        <div class="l-bottom">
+            <div class="panel-title">
+                Explorer
+                <span>[Icon: Add] [Icon: Folder]</span>
+            </div>
+            <div class="file-tree">
+                <div class="list-item">[Icon] 📁 src</div>
+                <div class="list-item">[Icon] 📁 assets</div>
+                <div class="list-item active">[Icon] 📄 design_map.md</div>
+                <div class="list-item">[Icon] 📄 app.py</div>
+                <div class="list-item">[Icon] 📄 requirements.txt</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- M区 -->
+    <div class="panel-m">
+        <div class="m-tabs">
+            <div class="tab">[Icon] 脚本构思会议</div>
+            <div class="tab active">[Icon] design_map.md <span style="font-size: 10px;">×</span></div>
+            <div class="tab">[Icon] app.py</div>
+        </div>
+        <div class="m-content">
+            <div class="chat-area">
+                [ Content Area: Markdown Editor / Chat Stream will render here ]
+            </div>
+            <div class="input-box">
+                [Icon: Attachment]  &nbsp;&nbsp;&nbsp; Type a command or ask a question...
+            </div>
+        </div>
+    </div>
+
+    <!-- R区 -->
+    <div class="panel-r">
+        <div class="panel-title">Production Flow</div>
+        <div class="timeline-container">
+            <div class="timeline-step completed">
+                <div class="step-dot">✓</div>
+                <div class="step-text">1. 原片上传</div>
+            </div>
+            <div class="timeline-step completed">
+                <div class="step-dot">✓</div>
+                <div class="step-text">2. 视频理解</div>
+            </div>
+            <div class="timeline-step active">
+                <div class="step-dot"></div>
+                <div class="step-text">3. 内容策划</div>
+            </div>
+            <div class="timeline-step">
+                <div class="step-dot"></div>
+                <div class="step-text">4. 素材抽取</div>
+            </div>
+            <div class="timeline-step">
+                <div class="step-dot"></div>
+                <div class="step-text">5. 分镜表生成</div>
+            </div>
+            <div class="timeline-step">
+                <div class="step-dot"></div>
+                <div class="step-text">6. 新片段生成</div>
+            </div>
+            <div class="timeline-step">
+                <div class="step-dot"></div>
+                <div class="step-text">7. 视频拼接</div>
+            </div>
+            <div class="timeline-step">
+                <div class="step-dot"></div>
+                <div class="step-text">8. 成片结果</div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
