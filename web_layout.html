@@ -1,29 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auto Film Maker - v2 Light Theme Draft</title>
+    <title>Auto Film Maker - v3 Theme Toggle</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
+        /* ------------------ Theme Tokens ------------------ */
         :root {
-            /* Light Theme: Vibrant & Premium (生命活力 + 高级感) */
-            /* 采用通透的底色，搭配鲜活的高饱和点缀色 */
-            --bg-base: oklch(96% 0.005 250); /* 微冷淡灰，用作 M区（工作区）底色，柔和不刺眼 */
-            --bg-surface: oklch(100% 0 0); /* 纯白，用作 L/R 侧边栏面板，打造清透的层次感 */
-            --bg-surface-hover: oklch(94% 0.01 250); /* 悬浮交互色 */
-            
-            --brand-blue: oklch(55% 0.16 260); /* Vibrant Royal Blue (高能品蓝)，比原版更显年轻张力 */
-            --brand-orange: oklch(65% 0.19 30); /* Energetic Coral (活力珊瑚橘)，充满生命力的进度高亮色 */
-            
-            --text-main: oklch(25% 0.01 250); /* Deep Ink (深墨色)，代替死黑，质感更佳 */
-            --text-muted: oklch(55% 0.01 250); /* Slate Grey (石板灰) */
-            --text-on-color: oklch(100% 0 0); /* 亮色背景上的文字（纯白） */
-            
-            --border-color: oklch(88% 0.01 250); /* 干净的浅灰边框 */
-
             --font-ui: 'Plus Jakarta Sans', sans-serif;
             --font-code: 'JetBrains Mono', monospace;
+        }
+
+        /* Default: Dark Theme (v1 微冷灰版) */
+        [data-theme="dark"] {
+            --bg-base: oklch(25% 0.015 255);
+            --bg-surface: oklch(29% 0.015 255);
+            --bg-surface-hover: oklch(35% 0.015 255);
+            --border-color: oklch(38% 0.015 255);
+            
+            --brand-blue: oklch(60% 0.12 260); 
+            --brand-orange: oklch(65% 0.18 45); 
+            
+            --text-main: oklch(95% 0.015 255);
+            --text-muted: oklch(70% 0.015 255);
+            --text-on-color: oklch(25% 0.015 255); /* Dark icon on blue circle */
+        }
+
+        /* Light Theme (v2 活力清透版) */
+        [data-theme="light"] {
+            --bg-base: oklch(96% 0.005 250);
+            --bg-surface: oklch(100% 0 0);
+            --bg-surface-hover: oklch(94% 0.01 250);
+            --border-color: oklch(88% 0.01 250);
+            
+            --brand-blue: oklch(55% 0.16 260); 
+            --brand-orange: oklch(65% 0.19 30); 
+            
+            --text-main: oklch(25% 0.01 250);
+            --text-muted: oklch(55% 0.01 250);
+            --text-on-color: oklch(100% 0 0); /* White icon on blue circle */
         }
 
         * {
@@ -40,6 +56,7 @@
             overflow: hidden;
             display: grid;
             grid-template-columns: 3fr 10fr 3fr; /* 3:10:3 Layout */
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         /* ------------------ Left Panel (L区) ------------------ */
@@ -49,6 +66,7 @@
             display: flex;
             flex-direction: column;
             height: 100vh;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
         }
 
         .l-top {
@@ -57,6 +75,7 @@
             padding: 16px;
             display: flex;
             flex-direction: column;
+            transition: border-color 0.3s ease;
         }
 
         .l-bottom {
@@ -77,6 +96,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: color 0.3s ease;
         }
 
         .btn-new {
@@ -111,7 +131,7 @@
             color: var(--text-main);
         }
         .list-item.active {
-            background-color: color-mix(in srgb, var(--brand-blue) 10%, transparent);
+            background-color: color-mix(in srgb, var(--brand-blue) 12%, transparent);
             color: var(--brand-blue);
             font-weight: 500;
         }
@@ -124,6 +144,7 @@
             flex-direction: column;
             height: 100vh;
             background-color: var(--bg-base);
+            transition: background-color 0.3s ease;
         }
 
         .m-tabs {
@@ -134,6 +155,7 @@
             padding: 0 16px;
             background-color: var(--bg-surface);
             gap: 4px;
+            transition: all 0.3s ease;
         }
 
         .tab {
@@ -177,6 +199,7 @@
             margin-bottom: 16px;
             background-color: var(--bg-surface);
             box-shadow: 0 4px 20px color-mix(in srgb, var(--text-main) 3%, transparent);
+            transition: all 0.3s ease;
         }
 
         .input-box {
@@ -189,6 +212,7 @@
             align-items: center;
             color: var(--text-muted);
             box-shadow: 0 2px 10px color-mix(in srgb, var(--text-main) 2%, transparent);
+            transition: all 0.3s ease;
         }
 
         /* ------------------ Right Panel (R区) ------------------ */
@@ -196,13 +220,49 @@
             background-color: var(--bg-surface);
             border-left: 1px solid var(--border-color);
             height: 100vh;
-            padding: 24px;
             display: flex;
             flex-direction: column;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        /* R区顶部控制栏：高度与 M区 Tabs 保持一致 (48px) */
+        .r-top {
+            height: 48px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end; /* 图标靠右对齐 */
+            padding: 0 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        /* 主题切换按钮 */
+        .theme-toggle-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 10px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+        .theme-toggle-btn:hover {
+            background-color: var(--bg-surface-hover);
+            color: var(--text-main);
+        }
+
+        /* R区主体内容 */
+        .r-content {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
         }
 
         .timeline-container {
-            flex: 1;
             position: relative;
             margin-top: 24px;
         }
@@ -217,6 +277,7 @@
             width: 2px;
             background-color: var(--border-color);
             z-index: 1;
+            transition: background-color 0.3s ease;
         }
 
         .timeline-step {
@@ -239,7 +300,7 @@
             justify-content: center;
             font-size: 10px;
             flex-shrink: 0;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
             color: transparent; /* Hide checkmark by default */
         }
 
@@ -247,13 +308,14 @@
             padding-top: 2px;
             font-size: 14px;
             color: var(--text-muted);
+            transition: color 0.3s ease;
         }
 
         /* Status Modifiers */
         .timeline-step.completed .step-dot {
             background-color: var(--brand-blue);
             border-color: var(--brand-blue);
-            color: var(--text-on-color); /* White checkmark */
+            color: var(--text-on-color); /* Dynamically white or dark based on theme */
         }
         .timeline-step.completed .step-text {
             color: var(--text-main);
@@ -323,42 +385,71 @@
 
     <!-- R区 -->
     <div class="panel-r">
-        <div class="panel-title">Production Flow</div>
-        <div class="timeline-container">
-            <div class="timeline-step completed">
-                <div class="step-dot">✓</div>
-                <div class="step-text">1. 原片上传</div>
-            </div>
-            <div class="timeline-step completed">
-                <div class="step-dot">✓</div>
-                <div class="step-text">2. 视频理解</div>
-            </div>
-            <div class="timeline-step active">
-                <div class="step-dot"></div>
-                <div class="step-text">3. 内容策划</div>
-            </div>
-            <div class="timeline-step">
-                <div class="step-dot"></div>
-                <div class="step-text">4. 素材抽取</div>
-            </div>
-            <div class="timeline-step">
-                <div class="step-dot"></div>
-                <div class="step-text">5. 分镜表生成</div>
-            </div>
-            <div class="timeline-step">
-                <div class="step-dot"></div>
-                <div class="step-text">6. 新片段生成</div>
-            </div>
-            <div class="timeline-step">
-                <div class="step-dot"></div>
-                <div class="step-text">7. 视频拼接</div>
-            </div>
-            <div class="timeline-step">
-                <div class="step-dot"></div>
-                <div class="step-text">8. 成片结果</div>
+        <!-- 新增：R区顶部控制栏 -->
+        <div class="r-top">
+            <button class="theme-toggle-btn" id="themeToggle">
+                <span id="themeIcon">[Icon: Sun]</span> Light Mode
+            </button>
+        </div>
+        
+        <!-- R区主体内容（原流程条下移至此处） -->
+        <div class="r-content">
+            <div class="panel-title">Production Flow</div>
+            <div class="timeline-container">
+                <div class="timeline-step completed">
+                    <div class="step-dot">✓</div>
+                    <div class="step-text">1. 原片上传</div>
+                </div>
+                <div class="timeline-step completed">
+                    <div class="step-dot">✓</div>
+                    <div class="step-text">2. 视频理解</div>
+                </div>
+                <div class="timeline-step active">
+                    <div class="step-dot"></div>
+                    <div class="step-text">3. 内容策划</div>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-dot"></div>
+                    <div class="step-text">4. 素材抽取</div>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-dot"></div>
+                    <div class="step-text">5. 分镜表生成</div>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-dot"></div>
+                    <div class="step-text">6. 新片段生成</div>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-dot"></div>
+                    <div class="step-text">7. 视频拼接</div>
+                </div>
+                <div class="timeline-step">
+                    <div class="step-dot"></div>
+                    <div class="step-text">8. 成片结果</div>
+                </div>
             </div>
         </div>
     </div>
 
+    <script>
+        // 简单的主题切换逻辑
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const htmlElement = document.documentElement;
+
+        themeToggleBtn.addEventListener('click', () => {
+            const currentTheme = htmlElement.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                htmlElement.setAttribute('data-theme', 'light');
+                themeIcon.innerText = '[Icon: Moon]';
+                themeToggleBtn.innerHTML = '<span id="themeIcon">[Icon: Moon]</span> Dark Mode';
+            } else {
+                htmlElement.setAttribute('data-theme', 'dark');
+                themeIcon.innerText = '[Icon: Sun]';
+                themeToggleBtn.innerHTML = '<span id="themeIcon">[Icon: Sun]</span> Light Mode';
+            }
+        });
+    </script>
 </body>
 </html>
