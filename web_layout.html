@@ -47,12 +47,24 @@
             height: 100vh;
             overflow: hidden;
             display: grid;
-            grid-template-columns: 3fr 10fr 3fr;
+            grid-template-columns: var(--l-width, 3fr) 4px var(--m-width, 10fr) 3fr;
             transition: background-color 0.3s, color 0.3s;
+        }
+        .resizer {
+            background-color: transparent;
+            cursor: ew-resize;
+            width: 100%;
+            height: 100%;
+            transition: background-color 0.2s;
+            z-index: 100;
+        }
+        .resizer:hover, .resizer.dragging {
+            background-color: var(--brand-blue);
         }
 
         /* L区 */
         .panel-l {
+            min-width: 0;
             background-color: var(--bg-surface);
             border-right: 1px solid var(--border-color);
             display: flex; flex-direction: column; height: 100vh;
@@ -71,7 +83,7 @@
         .file-tree { font-family: var(--font-code); font-size: 13px; }
         .tree-folder { margin-left: 16px; display: none; }
         .tree-folder.open { display: block; }
-        .tree-item { display: flex; align-items: center; gap: 6px; padding: 4px 8px; cursor: pointer; border-radius: 4px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; position: relative; }
+        .tree-item { display: flex; min-width: 0; align-items: center; gap: 6px; padding: 4px 8px; cursor: pointer; border-radius: 4px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; position: relative; }
         .tree-item:hover { background-color: var(--bg-surface-hover); color: var(--text-main); }
         
         .action-icon { display: inline-block; margin-left: 2px; padding: 4px; border-radius: 4px; cursor: pointer; transition: all 0.2s; color: var(--text-muted); }
@@ -152,6 +164,7 @@
         </div>
     </div>
 
+    <div class="resizer" id="resizer" title="Drag to resize"></div>
     <div class="panel-m">
         <div class="m-tabs" id="tabsContainer">
             <div class="tab active" onclick="switchTab('chat')"><i data-lucide="message-square" style="width:14px;"></i> Chat</div>
@@ -210,6 +223,50 @@
         let editor;
         let currentFilePath = null;
         let openFiles = {}; // path -> content
+
+
+        // Resizer Logic
+        const resizer = document.getElementById('resizer');
+        let isDragging = false;
+
+        resizer.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            resizer.classList.add('dragging');
+            document.body.style.cursor = 'ew-resize';
+            document.body.style.userSelect = 'none';
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            const totalWidth = document.body.clientWidth;
+            
+            let newL = e.clientX;
+            const minL = 0;
+            const maxL = totalWidth * (5 / 16); // max 5/16 ratio (i.e. L=5, M=8, R=3)
+            
+            if (newL < minL) newL = minL;
+            if (newL > maxL) newL = maxL;
+            
+            const newLFr = (newL / totalWidth) * 16;
+            const newMFr = 13 - newLFr; // Since L + M = 13fr (16fr total - 3fr for R)
+            
+            document.body.style.setProperty('--l-width', newLFr + 'fr');
+            document.body.style.setProperty('--m-width', newMFr + 'fr');
+        });
+
+        window.addEventListener('mouseup', () => {
+            if (isDragging) {
+                isDragging = false;
+                resizer.classList.remove('dragging');
+                document.body.style.cursor = '';
+                document.body.style.userSelect = '';
+                
+                // Trigger monaco editor layout refresh if exists
+                if (typeof editor !== 'undefined' && editor) {
+                    setTimeout(() => editor.layout(), 10);
+                }
+            }
+        });
 
         // Initialize Monaco Editor
         require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' }});
