@@ -35,6 +35,17 @@ class RenameItem(BaseModel):
     new_name: str
 
 
+
+class ChatCreate(BaseModel):
+    name: str
+
+class ChatRename(BaseModel):
+    chat_id: str
+    new_name: str
+
+class SendMessage(BaseModel):
+    content: str
+
 class DeleteItem(BaseModel):
     path: str
 
@@ -224,6 +235,84 @@ def move_item(data: MoveItem):
         return {"status": "success"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+CHATS_DIR = os.path.join(WORK_DIR, "chats")
+os.makedirs(CHATS_DIR, exist_ok=True)
+UPLOAD_DIR = os.path.join(WORK_DIR, "Uploaded_Files")
+os.makedirs(UPLOAD_DIR, exist_ok=True)
+
+@app.get("/api/chat")
+def get_chats():
+    chats = []
+    for filename in os.listdir(CHATS_DIR):
+        if filename.endswith(".json"):
+            try:
+                with open(os.path.join(CHATS_DIR, filename), "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                    chats.append({"id": data.get("id"), "name": data.get("name")})
+            except:
+                pass
+    # sort by modification time descending
+    chats.sort(key=lambda x: os.path.getmtime(os.path.join(CHATS_DIR, x["id"]+".json")), reverse=True)
+    return chats
+
+@app.post("/api/chat")
+def create_chat(data: ChatCreate):
+    chat_id = str(uuid.uuid4())
+    chat_data = {"id": chat_id, "name": data.name, "messages": []}
+    with open(os.path.join(CHATS_DIR, f"{chat_id}.json"), "w", encoding="utf-8") as f:
+        json.dump(chat_data, f, ensure_ascii=False, indent=2)
+    return chat_data
+
+@app.put("/api/chat/rename")
+def rename_chat(data: ChatRename):
+    path = os.path.join(CHATS_DIR, f"{data.chat_id}.json")
+    if not os.path.exists(path):
+        raise HTTPException(status_code=404, detail="Chat not found")
+    with open(path, "r", encoding="utf-8") as f:
+        chat_data = json.load(f)
+    chat_data["name"] = data.new_name
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(chat_data, f, ensure_ascii=False, indent=2)
+    return {"status": "success"}
+
+@app.get("/api/chat/{chat_id}")
+def get_chat(chat_id: str):
+    path = os.path.join(CHATS_DIR, f"{chat_id}.json")
+    if not os.path.exists(path):
+        raise HTTPException(status_code=404, detail="Chat not found")
+    with open(path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+@app.post("/api/chat/{chat_id}/message")
+def send_message(chat_id: str, data: SendMessage):
+    path = os.path.join(CHATS_DIR, f"{chat_id}.json")
+    if not os.path.exists(path):
+        raise HTTPException(status_code=404, detail="Chat not found")
+        
+    with open(path, "r", encoding="utf-8") as f:
+        chat_data = json.load(f)
+        
+    # Append user message
+    user_msg = {"role": "user", "content": data.content}
+    chat_data["messages"].append(user_msg)
+    
+    # Generate AI Mock Response (Context Aware)
+    # In a real app, you would pass `chat_data["messages"]` to OpenAI/Gemini API here.
+    history_length = len(chat_data["messages"])
+    ai_text = f"收到你的消息：「{data.content}」。\n\n(系统提示：我已经记住了我们之前的 {history_length-1} 条对话。为了能够接入真实的AI模型，请在 `app.py` 中的 `send_message` 路由里配置您的 OpenAI 或 Gemini API Key。)"
+    
+    if "[Attached file:" in data.content:
+        ai_text = f"我看到了你上传的文件！这很棒。\n\n(系统提示：文件已保存至 Uploaded_Files 目录。要让我真正理解视频内容，请在后端集成多模态大模型 API。)"
+
+    ai_msg = {"role": "assistant", "content": ai_text}
+    chat_data["messages"].append(ai_msg)
+    
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(chat_data, f, ensure_ascii=False, indent=2)
+        
+    return {"user_message": user_msg, "assistant_message": ai_msg}
 
 if __name__ == "__main__":
     uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)

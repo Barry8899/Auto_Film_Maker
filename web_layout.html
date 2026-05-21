@@ -69,8 +69,8 @@
             border-right: 1px solid var(--border-color);
             display: flex; flex-direction: column; height: 100vh;
         }
-        .l-top { flex: 1; border-bottom: 1px solid var(--border-color); padding: 16px; display: flex; flex-direction: column; overflow-y: auto; }
-        .l-bottom { flex: 2; padding: 16px; display: flex; flex-direction: column; overflow-y: auto; }
+        .l-top { flex: 1; border-bottom: 1px solid var(--border-color); padding: 16px; display: flex; flex-direction: column; overflow-y: auto; min-height: 0; }
+        .l-bottom { flex: 2; padding: 16px; display: flex; flex-direction: column; overflow-y: auto; min-height: 0; }
         .panel-title { font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: 12px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
         .icon-btn { cursor: pointer; color: var(--text-muted); transition: color 0.2s; display: inline-flex; }
         .icon-btn:hover { color: var(--brand-blue); }
@@ -116,7 +116,11 @@
         
         /* 聊天容器 */
         #chat-container { flex: 1; padding: 24px; display: flex; flex-direction: column; }
-        .chat-area { flex: 1; border: 1px dashed var(--border-color); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); margin-bottom: 16px; background-color: var(--bg-surface); }
+        /* Chat Area */
+        .chat-area { flex: 1; border-radius: 8px; display: flex; flex-direction: column; margin-bottom: 16px; overflow-y: auto; padding: 16px; gap: 16px; scroll-behavior: smooth; }
+        .msg-bubble { max-width: 80%; padding: 12px 16px; border-radius: 8px; font-size: 14px; line-height: 1.5; word-wrap: break-word; white-space: pre-wrap; }
+        .msg-user { align-self: flex-end; background-color: var(--brand-blue); color: #fff; border-bottom-right-radius: 2px; }
+        .msg-assistant { align-self: flex-start; background-color: var(--bg-surface-hover); color: var(--text-main); border-bottom-left-radius: 2px; border: 1px solid var(--border-color); }
         .input-box { height: 56px; background-color: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 0 16px; display: flex; align-items: center; gap: 12px; }
         .input-box input { flex: 1; background: transparent; border: none; color: var(--text-main); font-family: inherit; font-size: 14px; outline: none; }
 
@@ -142,10 +146,10 @@
 </head>
 <body>
     <div class="panel-l">
-        <div class="l-top">
+                <div class="l-top">
             <div class="panel-title">Chat History</div>
-            <button class="btn-new"><i data-lucide="message-square-plus" style="width:16px;"></i> New Chat</button>
-            <div class="list-item active"><i data-lucide="message-square" style="width:16px;"></i> 脚本构思会议</div>
+            <button class="btn-new" onclick="createNewChat()"><i data-lucide="message-square-plus" style="width:16px;"></i> New Chat</button>
+            <div id="chatHistoryContainer" style="display:flex; flex-direction:column; gap:4px; margin-top:8px;"></div>
         </div>
         <div class="l-bottom">
             <div class="panel-title">
@@ -167,7 +171,6 @@
     <div class="resizer" id="resizer" title="Drag to resize"></div>
     <div class="panel-m">
         <div class="m-tabs" id="tabsContainer">
-            <div class="tab active" onclick="switchTab('chat')"><i data-lucide="message-square" style="width:14px;"></i> Chat</div>
         </div>
         <div class="m-content">
             <div class="editor-actions" id="editorActions">
@@ -176,11 +179,12 @@
             <div id="editor-container"></div>
             <div id="media-container" style="flex:1; display:none; background:var(--bg-base); align-items:center; justify-content:center; overflow:auto; padding:24px;"></div>
             <div id="chat-container">
-                <div class="chat-area">Chat interface ready</div>
+                                <div class="chat-area" id="chatArea"></div>
                 <div class="input-box">
-                    <i data-lucide="paperclip" style="cursor:pointer;"></i>
-                    <input type="text" placeholder="Type a command or ask a question...">
-                    <i data-lucide="send" style="cursor:pointer;color:var(--brand-blue);"></i>
+                    <i data-lucide="paperclip" style="cursor:pointer;" onclick="document.getElementById('chatFileInput').click()"></i>
+                    <input type="file" id="chatFileInput" style="display:none" onchange="uploadChatAttachment(event)">
+                    <input type="text" id="chatInput" placeholder="Type a command or ask a question..." onkeypress="if(event.key === 'Enter') sendChatMessage()">
+                    <i data-lucide="send" style="cursor:pointer;color:var(--brand-blue);" onclick="sendChatMessage()"></i>
                 </div>
             </div>
         </div>
@@ -303,6 +307,7 @@
             });
             
             fetchFileTree();
+            fetchChats();
         });
 
         
@@ -333,6 +338,7 @@
                     throw new Error(data.detail || 'Create failed');
                 }
                 fetchFileTree();
+            fetchChats();
             } catch(e) {
                 alert(e.message);
             }
@@ -353,6 +359,7 @@
                     throw new Error(data.detail || 'Rename failed');
                 }
                 fetchFileTree();
+            fetchChats();
             } catch(e) {
                 alert(e.message);
             }
@@ -378,6 +385,7 @@
                 }
                 
                 fetchFileTree();
+            fetchChats();
             } catch(e) {
                 alert(e.message);
             }
@@ -465,6 +473,7 @@
                 const res = await fetch('/api/fs/upload', { method: 'POST', body: formData });
                 if (!res.ok) throw new Error('Upload failed');
                 fetchFileTree();
+            fetchChats();
             } catch(e) {
                 alert(e.message);
             }
@@ -486,6 +495,7 @@
                 });
                 if (!res.ok) throw new Error('Move failed');
                 fetchFileTree();
+            fetchChats();
             } catch(err) {
                 alert(err.message);
             }
@@ -505,6 +515,224 @@
             e.stopPropagation();
         }
 
+
+        // --- CHAT SYSTEM ---
+        let currentChatId = null;
+        let chatSessions = {}; // ID -> name
+
+        async function fetchChats() {
+            try {
+                const res = await fetch('/api/chat');
+                const chats = await res.json();
+                const container = document.getElementById('chatHistoryContainer');
+                container.innerHTML = '';
+                chats.forEach(chat => {
+                    chatSessions[chat.id] = chat.name;
+                    const el = document.createElement('div');
+                    el.className = `list-item ${currentChatId === chat.id ? 'active' : ''}`;
+                    const safeName = chat.name.replace(/'/g, "\\'");
+                    el.innerHTML = `<i data-lucide="message-square" style="width:16px;"></i> <span style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${chat.name}</span> <i class="action-icon" data-lucide="edit-2" style="width:12px; display:none;" onclick="renameChat('${chat.id}', '${safeName}', event)"></i>`;
+                    
+                    // Show action icon on hover
+                    el.onmouseenter = () => { const icon = el.querySelector('.action-icon'); if(icon) icon.style.display = 'inline-block'; };
+                    el.onmouseleave = () => { const icon = el.querySelector('.action-icon'); if(icon) icon.style.display = 'none'; };
+                    
+                    el.onclick = () => openChat(chat.id, chat.name);
+                    container.appendChild(el);
+                });
+                lucide.createIcons();
+            } catch(e) { console.error(e); }
+        }
+
+        async function createNewChat() {
+            const name = prompt("Enter chat name:", "New Conversation");
+            if (!name) return;
+            try {
+                const res = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name })
+                });
+                const chat = await res.json();
+                fetchChats();
+                openChat(chat.id, chat.name);
+            } catch(e) { alert('Failed to create chat'); }
+        }
+
+        async function renameChat(id, oldName, event) {
+            event.stopPropagation();
+            const newName = prompt("Rename chat:", oldName);
+            if (!newName || newName === oldName) return;
+            try {
+                await fetch('/api/chat/rename', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: id, new_name: newName })
+                });
+                
+                // Update tab name if open
+                const tab = document.getElementById(`tab-chat-${id}`);
+                if (tab) {
+                    tab.innerHTML = `<i data-lucide="message-square" style="width:14px;"></i> ${newName} <span class="tab-close" onclick="closeTab('chat-${id}', event)">×</span>`;
+                }
+                fetchChats();
+            } catch(e) { alert('Failed to rename chat'); }
+        }
+
+        function renderMessages(messages) {
+            const area = document.getElementById('chatArea');
+            area.innerHTML = '';
+            messages.forEach(msg => {
+                const div = document.createElement('div');
+                div.className = `msg-bubble msg-${msg.role}`;
+                div.textContent = msg.content;
+                area.appendChild(div);
+            });
+            area.scrollTop = area.scrollHeight;
+        }
+
+        async function openChat(id, name) {
+            currentChatId = id;
+            currentFilePath = null; // deactivate file editor
+
+            // Create tab if not exists
+            const tabId = `chat-${id}`;
+            if (!document.getElementById(`tab-${tabId}`)) {
+                const tabs = document.getElementById('tabsContainer');
+                const tab = document.createElement('div');
+                tab.className = 'tab';
+                tab.id = `tab-${tabId}`;
+                tab.innerHTML = `<i data-lucide="message-square" style="width:14px;"></i> ${name} <span class="tab-close" onclick="closeTab('${tabId}', event)">×</span>`;
+                tab.onclick = () => openChat(id, chatSessions[id]);
+                tabs.appendChild(tab);
+                lucide.createIcons();
+            }
+            
+            // Switch active tab styling
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(t => t.classList.remove('active'));
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+
+            // Switch view
+            document.getElementById('editor-container').style.display = 'none';
+            document.getElementById('media-container').style.display = 'none';
+            document.getElementById('editorActions').style.display = 'none';
+            document.getElementById('chat-container').style.display = 'flex';
+
+            // Highlight in L-panel
+            const items = document.getElementById('chatHistoryContainer').querySelectorAll('.list-item');
+            items.forEach(item => item.classList.remove('active'));
+            fetchChats(); // refresh to set active class properly
+
+            // Fetch and render history
+            try {
+                const res = await fetch(`/api/chat/${id}`);
+                if (!res.ok) throw new Error("Chat not found");
+                const chat = await res.json();
+                renderMessages(chat.messages);
+            } catch (e) {
+                document.getElementById('chatArea').innerHTML = `<div style="text-align:center; color:red;">${e.message}</div>`;
+            }
+        }
+
+        async function sendChatMessage(contentOverride = null) {
+            if (!currentChatId) {
+                alert("Please select or create a chat first.");
+                return;
+            }
+            const input = document.getElementById('chatInput');
+            const text = contentOverride || input.value.trim();
+            if (!text) return;
+            
+            if (!contentOverride) input.value = '';
+
+            // Optimistic UI
+            const area = document.getElementById('chatArea');
+            const userDiv = document.createElement('div');
+            userDiv.className = `msg-bubble msg-user`;
+            userDiv.textContent = text;
+            area.appendChild(userDiv);
+            area.scrollTop = area.scrollHeight;
+
+            try {
+                const res = await fetch(`/api/chat/${currentChatId}/message`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ content: text })
+                });
+                const data = await res.json();
+                
+                const aiDiv = document.createElement('div');
+                aiDiv.className = `msg-bubble msg-assistant`;
+                aiDiv.textContent = data.assistant_message.content;
+                area.appendChild(aiDiv);
+                area.scrollTop = area.scrollHeight;
+                
+            } catch (e) {
+                const errDiv = document.createElement('div');
+                errDiv.className = `msg-bubble msg-assistant`;
+                errDiv.style.color = "red";
+                errDiv.textContent = "Failed to send message: " + e.message;
+                area.appendChild(errDiv);
+            }
+        }
+
+        async function uploadChatAttachment(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('path', 'Uploaded_Files');
+            
+            try {
+                const res = await fetch('/api/fs/upload', { method: 'POST', body: formData });
+                if (!res.ok) throw new Error('Upload failed');
+                
+                // Refresh file tree to show the uploaded file
+                fetchFileTree();
+                
+                // Auto-send a message to the chat
+                const attachmentMsg = `[Attached file: Uploaded_Files/${file.name}] Please review this file.`;
+                sendChatMessage(attachmentMsg);
+                
+            } catch(e) {
+                alert(e.message);
+            }
+            event.target.value = ''; // Reset
+        }
+        
+        // Ensure switchTab logic correctly handles chat-xxx IDs
+        const originalSwitchToDocument = switchToDocument;
+        switchToDocument = function(filePath) {
+            currentChatId = null; // clear chat id so sending messages fails gracefully or prevents sending to wrong place
+            fetchChats(); // update L-panel UI to remove highlight
+            originalSwitchToDocument(filePath);
+        };
+        
+        const originalCloseTab = closeTab;
+        closeTab = function(tabId, event) {
+            event.stopPropagation();
+            const tabEl = document.getElementById(`tab-${tabId}`);
+            if (tabEl) tabEl.remove();
+            
+            if (tabId.startsWith('chat-')) {
+                const id = tabId.replace('chat-', '');
+                if (currentChatId === id) {
+                    currentChatId = null;
+                    document.getElementById('chat-container').style.display = 'none'; // hide chat if closed
+                }
+            } else {
+                delete openFiles[tabId];
+                if (currentFilePath === tabId) {
+                    document.getElementById('editor-container').style.display = 'none';
+                    document.getElementById('media-container').style.display = 'none';
+                    document.getElementById('editorActions').style.display = 'none';
+                }
+            }
+        };
+
+        // Inject fetchChats into initialization
         // UI Logic
         function renderFileTree(nodes, container, level = 0) {
             container.innerHTML = '';
