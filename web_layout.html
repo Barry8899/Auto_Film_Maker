@@ -3,50 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auto Film Maker - v3 Theme Toggle</title>
+    <title>Auto Film Maker</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        /* ------------------ Theme Tokens ------------------ */
+        /* Theme Tokens & Base CSS */
         :root {
             --font-ui: 'Plus Jakarta Sans', sans-serif;
             --font-code: 'JetBrains Mono', monospace;
         }
 
-        /* Default: Dark Theme (v1 微冷灰版) */
         [data-theme="dark"] {
             --bg-base: oklch(25% 0.015 255);
             --bg-surface: oklch(29% 0.015 255);
             --bg-surface-hover: oklch(35% 0.015 255);
             --border-color: oklch(38% 0.015 255);
-            
             --brand-blue: oklch(60% 0.12 260); 
             --brand-orange: oklch(65% 0.18 45); 
-            
             --text-main: oklch(95% 0.015 255);
             --text-muted: oklch(70% 0.015 255);
-            --text-on-color: oklch(25% 0.015 255); /* Dark icon on blue circle */
+            --text-on-color: oklch(25% 0.015 255);
         }
 
-        /* Light Theme (v2 活力清透版) */
         [data-theme="light"] {
             --bg-base: oklch(96% 0.005 250);
             --bg-surface: oklch(100% 0 0);
             --bg-surface-hover: oklch(94% 0.01 250);
             --border-color: oklch(88% 0.01 250);
-            
             --brand-blue: oklch(55% 0.16 260); 
             --brand-orange: oklch(65% 0.19 30); 
-            
             --text-main: oklch(25% 0.01 250);
             --text-muted: oklch(55% 0.01 250);
-            --text-on-color: oklch(100% 0 0); /* White icon on blue circle */
+            --text-on-color: oklch(100% 0 0);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             background-color: var(--bg-base);
@@ -55,401 +47,320 @@
             height: 100vh;
             overflow: hidden;
             display: grid;
-            grid-template-columns: 3fr 10fr 3fr; /* 3:10:3 Layout */
-            transition: background-color 0.3s ease, color 0.3s ease;
+            grid-template-columns: 3fr 10fr 3fr;
+            transition: background-color 0.3s, color 0.3s;
         }
 
-        /* ------------------ Left Panel (L区) ------------------ */
+        /* L区 */
         .panel-l {
             background-color: var(--bg-surface);
             border-right: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            transition: background-color 0.3s ease, border-color 0.3s ease;
+            display: flex; flex-direction: column; height: 100vh;
         }
-
-        .l-top {
-            flex: 1; /* 1/3 height implicitly */
-            border-bottom: 1px solid var(--border-color);
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            transition: border-color 0.3s ease;
-        }
-
-        .l-bottom {
-            flex: 2; /* 2/3 height implicitly */
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-        }
-
-        .panel-title {
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--text-muted);
-            margin-bottom: 12px;
-            font-weight: 600;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: color 0.3s ease;
-        }
-
-        .btn-new {
-            background-color: transparent;
-            border: 1px dashed var(--border-color);
-            color: var(--text-main);
-            padding: 8px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-family: inherit;
-            margin-bottom: 12px;
-            transition: all 0.2s;
-        }
-        .btn-new:hover {
-            border-color: var(--brand-blue);
-            color: var(--brand-blue);
-        }
-
-        .list-item {
-            padding: 8px;
-            border-radius: 4px;
-            cursor: pointer;
-            color: var(--text-muted);
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s ease;
-        }
-        .list-item:hover {
-            background-color: var(--bg-surface-hover);
-            color: var(--text-main);
-        }
-        .list-item.active {
-            background-color: color-mix(in srgb, var(--brand-blue) 12%, transparent);
-            color: var(--brand-blue);
-            font-weight: 500;
-        }
-
+        .l-top { flex: 1; border-bottom: 1px solid var(--border-color); padding: 16px; display: flex; flex-direction: column; overflow-y: auto; }
+        .l-bottom { flex: 2; padding: 16px; display: flex; flex-direction: column; overflow-y: auto; }
+        .panel-title { font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: 12px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
+        .icon-btn { cursor: pointer; color: var(--text-muted); transition: color 0.2s; display: inline-flex; }
+        .icon-btn:hover { color: var(--brand-blue); }
+        .btn-new { background: transparent; border: 1px dashed var(--border-color); color: var(--text-main); padding: 8px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+        .btn-new:hover { border-color: var(--brand-blue); color: var(--brand-blue); }
+        .list-item { padding: 6px 8px; border-radius: 4px; cursor: pointer; color: var(--text-muted); font-size: 13px; display: flex; align-items: center; gap: 8px; }
+        .list-item:hover { background-color: var(--bg-surface-hover); color: var(--text-main); }
+        .list-item.active { background-color: color-mix(in srgb, var(--brand-blue) 12%, transparent); color: var(--brand-blue); }
+        
         .file-tree { font-family: var(--font-code); font-size: 13px; }
+        .tree-folder { margin-left: 16px; display: none; }
+        .tree-folder.open { display: block; }
+        .tree-item { display: flex; align-items: center; gap: 6px; padding: 4px 8px; cursor: pointer; border-radius: 4px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .tree-item:hover { background-color: var(--bg-surface-hover); color: var(--text-main); }
 
-        /* ------------------ Middle Panel (M区) ------------------ */
-        .panel-m {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            background-color: var(--bg-base);
-            transition: background-color 0.3s ease;
-        }
+        /* M区 */
+        .panel-m { display: flex; flex-direction: column; height: 100vh; background-color: var(--bg-base); }
+        .m-tabs { height: 48px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; padding: 0 16px; background-color: var(--bg-surface); gap: 4px; }
+        .tab { padding: 8px 16px; border-radius: 6px 6px 0 0; cursor: pointer; font-size: 13px; color: var(--text-muted); display: flex; align-items: center; gap: 8px; border: 1px solid transparent; border-bottom: none; margin-bottom: -1px; }
+        .tab.active { background-color: var(--bg-base); color: var(--brand-blue); border-color: var(--border-color); border-top: 2px solid var(--brand-blue); }
+        .tab-close { opacity: 0.5; transition: opacity 0.2s; }
+        .tab-close:hover { opacity: 1; color: red; }
+        
+        .m-content { flex: 1; display: flex; flex-direction: column; position: relative; }
+        
+        /* 编辑器容器 */
+        #editor-container { flex: 1; display: none; }
+        
+        /* 聊天容器 */
+        #chat-container { flex: 1; padding: 24px; display: flex; flex-direction: column; }
+        .chat-area { flex: 1; border: 1px dashed var(--border-color); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); margin-bottom: 16px; background-color: var(--bg-surface); }
+        .input-box { height: 56px; background-color: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 0 16px; display: flex; align-items: center; gap: 12px; }
+        .input-box input { flex: 1; background: transparent; border: none; color: var(--text-main); font-family: inherit; font-size: 14px; outline: none; }
 
-        .m-tabs {
-            height: 48px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            padding: 0 16px;
-            background-color: var(--bg-surface);
-            gap: 4px;
-            transition: all 0.3s ease;
-        }
+        /* R区 */
+        .panel-r { background-color: var(--bg-surface); border-left: 1px solid var(--border-color); height: 100vh; display: flex; flex-direction: column; }
+        .r-top { height: 48px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: flex-end; padding: 0 16px; }
+        .theme-toggle-btn { background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 6px; }
+        .theme-toggle-btn:hover { background-color: var(--bg-surface-hover); color: var(--text-main); }
+        .r-content { flex: 1; padding: 24px; overflow-y: auto; }
+        
+        /* 流程条占位 (简化) */
+        .timeline-container { position: relative; margin-top: 24px; }
+        .timeline-container::before { content: ''; position: absolute; top: 10px; bottom: 20px; left: 11px; width: 2px; background-color: var(--border-color); z-index: 1; }
+        .timeline-step { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 32px; position: relative; z-index: 2; }
+        .step-dot { width: 24px; height: 24px; border-radius: 50%; background-color: var(--bg-surface); border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; }
+        .step-text { padding-top: 2px; font-size: 14px; color: var(--text-muted); }
 
-        .tab {
-            padding: 8px 16px;
-            border-radius: 6px 6px 0 0;
-            cursor: pointer;
-            font-size: 13px;
-            color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border: 1px solid transparent;
-            border-bottom: none;
-            margin-bottom: -1px; /* overlap border */
-            transition: all 0.2s;
-        }
-        .tab.active {
-            background-color: var(--bg-base);
-            color: var(--brand-blue);
-            border-color: var(--border-color);
-            border-top: 2px solid var(--brand-blue);
-            font-weight: 500;
-        }
-
-        .m-content {
-            flex: 1;
-            padding: 24px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .chat-area {
-            flex: 1;
-            border: 1px dashed var(--border-color);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
-            margin-bottom: 16px;
-            background-color: var(--bg-surface);
-            box-shadow: 0 4px 20px color-mix(in srgb, var(--text-main) 3%, transparent);
-            transition: all 0.3s ease;
-        }
-
-        .input-box {
-            height: 56px;
-            background-color: var(--bg-surface);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 0 16px;
-            display: flex;
-            align-items: center;
-            color: var(--text-muted);
-            box-shadow: 0 2px 10px color-mix(in srgb, var(--text-main) 2%, transparent);
-            transition: all 0.3s ease;
-        }
-
-        /* ------------------ Right Panel (R区) ------------------ */
-        .panel-r {
-            background-color: var(--bg-surface);
-            border-left: 1px solid var(--border-color);
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            transition: background-color 0.3s ease, border-color 0.3s ease;
-        }
-
-        /* R区顶部控制栏：高度与 M区 Tabs 保持一致 (48px) */
-        .r-top {
-            height: 48px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: flex-end; /* 图标靠右对齐 */
-            padding: 0 16px;
-            transition: border-color 0.3s ease;
-        }
-
-        /* 主题切换按钮 */
-        .theme-toggle-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 10px;
-            border-radius: 6px;
-            transition: all 0.2s ease;
-        }
-        .theme-toggle-btn:hover {
-            background-color: var(--bg-surface-hover);
-            color: var(--text-main);
-        }
-
-        /* R区主体内容 */
-        .r-content {
-            flex: 1;
-            padding: 24px;
-            overflow-y: auto;
-        }
-
-        .timeline-container {
-            position: relative;
-            margin-top: 24px;
-        }
-
-        /* The vertical line */
-        .timeline-container::before {
-            content: '';
-            position: absolute;
-            top: 10px;
-            bottom: 20px;
-            left: 11px; /* Center of the 24px dot */
-            width: 2px;
-            background-color: var(--border-color);
-            z-index: 1;
-            transition: background-color 0.3s ease;
-        }
-
-        .timeline-step {
-            display: flex;
-            align-items: flex-start;
-            gap: 16px;
-            margin-bottom: 32px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .step-dot {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background-color: var(--bg-surface);
-            border: 2px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-            flex-shrink: 0;
-            transition: all 0.3s ease;
-            color: transparent; /* Hide checkmark by default */
-        }
-
-        .step-text {
-            padding-top: 2px;
-            font-size: 14px;
-            color: var(--text-muted);
-            transition: color 0.3s ease;
-        }
-
-        /* Status Modifiers */
-        .timeline-step.completed .step-dot {
-            background-color: var(--brand-blue);
-            border-color: var(--brand-blue);
-            color: var(--text-on-color); /* Dynamically white or dark based on theme */
-        }
-        .timeline-step.completed .step-text {
-            color: var(--text-main);
-        }
-
-        .timeline-step.active .step-dot {
-            border-color: var(--brand-orange);
-            background-color: var(--bg-surface);
-            box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand-orange) 15%, transparent);
-        }
-        .timeline-step.active .step-dot::after {
-            content: '';
-            width: 8px;
-            height: 8px;
-            background-color: var(--brand-orange);
-            border-radius: 50%;
-        }
-        .timeline-step.active .step-text {
-            color: var(--brand-orange);
-            font-weight: 600;
-        }
-
+        /* 顶部动作栏 (文件保存) */
+        .editor-actions { position: absolute; top: 10px; right: 20px; z-index: 10; display: none; }
+        .btn-save { background-color: var(--brand-blue); color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; display: flex; align-items: center; gap: 6px; }
+        .btn-save:hover { filter: brightness(1.1); }
     </style>
 </head>
 <body>
-
-    <!-- L区 -->
     <div class="panel-l">
         <div class="l-top">
             <div class="panel-title">Chat History</div>
-            <button class="btn-new">[Icon] New Chat</button>
-            <div class="list-item">[Icon] 脚本构思会议</div>
-            <div class="list-item active">[Icon] 镜头风格调整</div>
-            <div class="list-item">[Icon] 上一次的生成记录</div>
+            <button class="btn-new"><i data-lucide="message-square-plus" style="width:16px;"></i> New Chat</button>
+            <div class="list-item active"><i data-lucide="message-square" style="width:16px;"></i> 脚本构思会议</div>
         </div>
         <div class="l-bottom">
             <div class="panel-title">
                 Explorer
-                <span>[Icon: Add] [Icon: Folder]</span>
+                <div style="display:flex;gap:8px;">
+                    <span class="icon-btn" title="New File"><i data-lucide="file-plus" style="width:16px;"></i></span>
+                    <span class="icon-btn" title="New Folder"><i data-lucide="folder-plus" style="width:16px;"></i></span>
+                    <span class="icon-btn" title="Refresh" onclick="fetchFileTree()"><i data-lucide="refresh-cw" style="width:16px;"></i></span>
+                </div>
             </div>
-            <div class="file-tree">
-                <div class="list-item">[Icon] 📁 src</div>
-                <div class="list-item">[Icon] 📁 assets</div>
-                <div class="list-item active">[Icon] 📄 design_map.md</div>
-                <div class="list-item">[Icon] 📄 app.py</div>
-                <div class="list-item">[Icon] 📄 requirements.txt</div>
+            <div class="file-tree" id="fileTreeContainer">
+                Loading...
             </div>
         </div>
     </div>
 
-    <!-- M区 -->
     <div class="panel-m">
-        <div class="m-tabs">
-            <div class="tab">[Icon] 脚本构思会议</div>
-            <div class="tab active">[Icon] design_map.md <span style="font-size: 10px;">×</span></div>
-            <div class="tab">[Icon] app.py</div>
+        <div class="m-tabs" id="tabsContainer">
+            <div class="tab active" onclick="switchTab('chat')"><i data-lucide="message-square" style="width:14px;"></i> Chat</div>
         </div>
         <div class="m-content">
-            <div class="chat-area">
-                [ Content Area: Markdown Editor / Chat Stream will render here ]
+            <div class="editor-actions" id="editorActions">
+                <button class="btn-save" onclick="saveCurrentFile()"><i data-lucide="save" style="width:14px;"></i> Save (Ctrl+S)</button>
             </div>
-            <div class="input-box">
-                [Icon: Attachment]  &nbsp;&nbsp;&nbsp; Type a command or ask a question...
+            <div id="editor-container"></div>
+            <div id="chat-container">
+                <div class="chat-area">Chat interface ready</div>
+                <div class="input-box">
+                    <i data-lucide="paperclip" style="cursor:pointer;"></i>
+                    <input type="text" placeholder="Type a command or ask a question...">
+                    <i data-lucide="send" style="cursor:pointer;color:var(--brand-blue);"></i>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- R区 -->
     <div class="panel-r">
-        <!-- 新增：R区顶部控制栏 -->
         <div class="r-top">
             <button class="theme-toggle-btn" id="themeToggle">
-                <span id="themeIcon">[Icon: Sun]</span> Light Mode
+                <i data-lucide="sun" id="themeIcon" style="width:16px;"></i> <span id="themeText">Light Mode</span>
             </button>
         </div>
-        
-        <!-- R区主体内容（原流程条下移至此处） -->
         <div class="r-content">
             <div class="panel-title">Production Flow</div>
             <div class="timeline-container">
-                <div class="timeline-step completed">
-                    <div class="step-dot">✓</div>
-                    <div class="step-text">1. 原片上传</div>
-                </div>
-                <div class="timeline-step completed">
-                    <div class="step-dot">✓</div>
-                    <div class="step-text">2. 视频理解</div>
-                </div>
-                <div class="timeline-step active">
-                    <div class="step-dot"></div>
-                    <div class="step-text">3. 内容策划</div>
-                </div>
-                <div class="timeline-step">
-                    <div class="step-dot"></div>
-                    <div class="step-text">4. 素材抽取</div>
-                </div>
-                <div class="timeline-step">
-                    <div class="step-dot"></div>
-                    <div class="step-text">5. 分镜表生成</div>
-                </div>
-                <div class="timeline-step">
-                    <div class="step-dot"></div>
-                    <div class="step-text">6. 新片段生成</div>
-                </div>
-                <div class="timeline-step">
-                    <div class="step-dot"></div>
-                    <div class="step-text">7. 视频拼接</div>
-                </div>
-                <div class="timeline-step">
-                    <div class="step-dot"></div>
-                    <div class="step-text">8. 成片结果</div>
-                </div>
+                <div class="timeline-step" style="opacity:0.5"><div class="step-dot"></div><div class="step-text">Workflow tracking coming soon</div></div>
             </div>
         </div>
     </div>
 
+    <!-- Monaco Editor Loader -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.js"></script>
     <script>
-        // 简单的主题切换逻辑
-        const themeToggleBtn = document.getElementById('themeToggle');
-        const themeIcon = document.getElementById('themeIcon');
-        const htmlElement = document.documentElement;
+        // Initialize Icons
+        lucide.createIcons();
 
+        // Theme Toggle
+        const themeToggleBtn = document.getElementById('themeToggle');
         themeToggleBtn.addEventListener('click', () => {
-            const currentTheme = htmlElement.getAttribute('data-theme');
-            if (currentTheme === 'dark') {
-                htmlElement.setAttribute('data-theme', 'light');
-                themeIcon.innerText = '[Icon: Moon]';
-                themeToggleBtn.innerHTML = '<span id="themeIcon">[Icon: Moon]</span> Dark Mode';
-            } else {
-                htmlElement.setAttribute('data-theme', 'dark');
-                themeIcon.innerText = '[Icon: Sun]';
-                themeToggleBtn.innerHTML = '<span id="themeIcon">[Icon: Sun]</span> Light Mode';
+            const html = document.documentElement;
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            document.getElementById('themeText').innerText = isDark ? 'Dark Mode' : 'Light Mode';
+            lucide.createIcons();
+            if (editor) {
+                monaco.editor.setTheme(isDark ? 'vs' : 'vs-dark'); // Flip editor theme
             }
         });
+
+        // App State
+        let editor;
+        let currentFilePath = null;
+        let openFiles = {}; // path -> content
+
+        // Initialize Monaco Editor
+        require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' }});
+        require(['vs/editor/editor.main'], function() {
+            editor = monaco.editor.create(document.getElementById('editor-container'), {
+                value: '// Select a file from the explorer to edit',
+                language: 'javascript',
+                theme: 'vs-dark',
+                automaticLayout: true,
+                minimap: { enabled: false },
+                fontSize: 14,
+                fontFamily: 'JetBrains Mono'
+            });
+
+            // Ctrl+S / Cmd+S
+            editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, function() {
+                saveCurrentFile();
+            });
+            
+            fetchFileTree();
+        });
+
+        // API Calls
+        async function fetchFileTree() {
+            try {
+                const res = await fetch('/api/fs/tree');
+                const treeData = await res.json();
+                renderFileTree(treeData, document.getElementById('fileTreeContainer'));
+                lucide.createIcons();
+            } catch (e) {
+                console.error(e);
+                document.getElementById('fileTreeContainer').innerText = 'Failed to load workspace files.';
+            }
+        }
+
+        async function openFile(filePath, fileName) {
+            try {
+                const res = await fetch(`/api/fs/file?path=${encodeURIComponent(filePath)}`);
+                if (!res.ok) throw new Error('Cannot open file');
+                const data = await res.json();
+                
+                openFiles[filePath] = data.content;
+                currentFilePath = filePath;
+                
+                // Add tab if not exists
+                if(!document.getElementById(`tab-${filePath}`)) {
+                    const tabs = document.getElementById('tabsContainer');
+                    const tab = document.createElement('div');
+                    tab.className = 'tab';
+                    tab.id = `tab-${filePath}`;
+                    tab.innerHTML = `<i data-lucide="file-code" style="width:14px;"></i> ${fileName} <span class="tab-close" onclick="closeTab('${filePath}', event)">×</span>`;
+                    tab.onclick = () => switchToDocument(filePath);
+                    tabs.appendChild(tab);
+                    lucide.createIcons();
+                }
+                
+                switchToDocument(filePath);
+            } catch(e) {
+                alert(e.message);
+            }
+        }
+
+        async function saveCurrentFile() {
+            if (!currentFilePath) return;
+            const content = editor.getValue();
+            try {
+                const res = await fetch(`/api/fs/file?path=${encodeURIComponent(currentFilePath)}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ content })
+                });
+                if (res.ok) {
+                    openFiles[currentFilePath] = content;
+                    // Flash save button green
+                    const btn = document.querySelector('.btn-save');
+                    const origHtml = btn.innerHTML;
+                    btn.innerHTML = 'Saved!';
+                    btn.style.backgroundColor = '#10b981';
+                    setTimeout(() => {
+                        btn.innerHTML = origHtml;
+                        btn.style.backgroundColor = 'var(--brand-blue)';
+                    }, 1000);
+                }
+            } catch(e) {
+                alert('Save failed');
+            }
+        }
+
+        // UI Logic
+        function renderFileTree(nodes, container, level = 0) {
+            container.innerHTML = '';
+            nodes.forEach(node => {
+                const el = document.createElement('div');
+                const isDir = node.is_dir;
+                
+                const item = document.createElement('div');
+                item.className = 'tree-item';
+                item.style.paddingLeft = `${level * 12 + 8}px`;
+                
+                const icon = isDir ? 'folder' : 'file';
+                item.innerHTML = `<i data-lucide="${icon}" style="width:14px; color:var(--text-muted)"></i> <span>${node.name}</span>`;
+                
+                el.appendChild(item);
+
+                if (isDir && node.children) {
+                    const childContainer = document.createElement('div');
+                    childContainer.className = 'tree-folder';
+                    item.onclick = () => {
+                        childContainer.classList.toggle('open');
+                        const ico = item.querySelector('i');
+                        if(childContainer.classList.contains('open')) {
+                            ico.setAttribute('data-lucide', 'folder-open');
+                        } else {
+                            ico.setAttribute('data-lucide', 'folder');
+                        }
+                        lucide.createIcons();
+                    };
+                    renderFileTree(node.children, childContainer, level + 1);
+                    el.appendChild(childContainer);
+                } else {
+                    item.onclick = () => openFile(node.path, node.name);
+                }
+                
+                container.appendChild(el);
+            });
+        }
+
+        function switchTab(type) {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(t => t.classList.remove('active'));
+            tabs[0].classList.add('active'); // Hardcoded chat active for now
+            
+            document.getElementById('editor-container').style.display = 'none';
+            document.getElementById('chat-container').style.display = 'flex';
+            document.getElementById('editorActions').style.display = 'none';
+            currentFilePath = null;
+        }
+
+        function switchToDocument(filePath) {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(t => t.classList.remove('active'));
+            const currentTab = document.getElementById(`tab-${filePath}`);
+            if(currentTab) currentTab.classList.add('active');
+
+            document.getElementById('editor-container').style.display = 'block';
+            document.getElementById('chat-container').style.display = 'none';
+            document.getElementById('editorActions').style.display = 'block';
+            
+            // Set language based on extension
+            let lang = 'plaintext';
+            if(filePath.endsWith('.js')) lang = 'javascript';
+            else if(filePath.endsWith('.py')) lang = 'python';
+            else if(filePath.endsWith('.html')) lang = 'html';
+            else if(filePath.endsWith('.css')) lang = 'css';
+            else if(filePath.endsWith('.json')) lang = 'json';
+            else if(filePath.endsWith('.md')) lang = 'markdown';
+
+            monaco.editor.setModelLanguage(editor.getModel(), lang);
+            editor.setValue(openFiles[filePath]);
+        }
+
+        function closeTab(filePath, event) {
+            event.stopPropagation();
+            document.getElementById(`tab-${filePath}`).remove();
+            delete openFiles[filePath];
+            if (currentFilePath === filePath) {
+                switchTab('chat');
+            }
+        }
     </script>
 </body>
 </html>
