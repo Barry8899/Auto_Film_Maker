@@ -458,8 +458,8 @@
                 item.style.paddingLeft = `${level * 12 + 8}px`;
                 item.draggable = true;
                 
-                const safePath = node.path.replace(/\/g, '\\').replace(/'/g, "\'");
-                const safeName = node.name.replace(/'/g, "\'");
+                const safePath = node.path.replace(/\\\\/g, '\\\\').replace(/'/g, "\\'");
+                const safeName = node.name.replace(/'/g, "\\'");
 
                 item.ondragstart = (e) => handleDragStart(e, node.path);
                 item.ondragover = handleDragOver;
