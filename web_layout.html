@@ -98,9 +98,9 @@
 
 
         /* M区 */
-        .panel-m { display: flex; flex-direction: column; height: 100vh; background-color: var(--bg-base); }
+        .panel-m { display: flex; flex-direction: column; height: 100vh; background-color: var(--bg-base); min-width: 0; }
                 .m-tabs::-webkit-scrollbar { display: none; }
-        .m-tabs { height: 48px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; padding: 0 16px; background-color: var(--bg-surface); gap: 4px; overflow-x: auto; flex-wrap: nowrap; scrollbar-width: none; }
+        .m-tabs { height: 48px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; padding: 0 16px; background-color: var(--bg-surface); gap: 4px; overflow-x: auto; flex-wrap: nowrap; scrollbar-width: none; min-width: 0; }
                 .tab { flex: 0 1 auto; min-width: 60px; max-width: 250px; padding: 8px 12px; border-radius: 6px 6px 0 0; cursor: pointer; font-size: 13px; color: var(--text-muted); display: flex; align-items: center; gap: 8px; border: 1px solid transparent; border-bottom: none; margin-bottom: -1px; overflow: hidden; }
         .tab.active { background-color: var(--bg-base); color: var(--brand-blue); border-color: var(--border-color); border-top: 2px solid var(--brand-blue); }
         
