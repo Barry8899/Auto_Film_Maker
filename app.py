@@ -2,6 +2,7 @@ import os
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 import uvicorn
 
@@ -18,8 +19,19 @@ app.add_middleware(
 
 WORK_DIR = os.path.dirname(os.path.abspath(__file__))
 
+# Mount the workspace directory to serve static files (like media)
+app.mount("/files", StaticFiles(directory=WORK_DIR), name="files")
+
 class FileContent(BaseModel):
     content: str
+
+class CreateItem(BaseModel):
+    path: str
+    is_dir: bool
+
+class RenameItem(BaseModel):
+    old_path: str
+    new_name: str
 
 @app.get("/")
 def index():
@@ -36,8 +48,8 @@ def build_tree(dir_path):
     try:
         entries = sorted(os.scandir(dir_path), key=lambda e: (not e.is_dir(), e.name))
         for entry in entries:
-            # Ignore hidden files, virtual environments, and caches
-            if entry.name.startswith('.') or entry.name in ['__pycache__', 'venv', 'node_modules']:
+            # Ignore .git and cache folders
+            if entry.name == '.git' or entry.name in ['__pycache__', 'venv', 'node_modules', '.idea', '.vscode']:
                 continue
             
             item = {
@@ -86,6 +98,45 @@ def save_file_content(path: str, data: FileContent):
     try:
         with open(full_path, "w", encoding="utf-8") as f:
             f.write(data.content)
+        return {"status": "success"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/fs/create")
+def create_item(data: CreateItem):
+    """Create a new file or folder."""
+    full_path = os.path.abspath(os.path.join(WORK_DIR, data.path))
+    if not full_path.startswith(WORK_DIR):
+        raise HTTPException(status_code=403, detail="Access denied")
+    if os.path.exists(full_path):
+        raise HTTPException(status_code=400, detail="Item already exists")
+    
+    try:
+        if data.is_dir:
+            os.makedirs(full_path, exist_ok=True)
+        else:
+            # Create subdirectories if they don't exist
+            os.makedirs(os.path.dirname(full_path), exist_ok=True)
+            with open(full_path, "w", encoding="utf-8") as f:
+                f.write("")
+        return {"status": "success"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/fs/rename")
+def rename_item(data: RenameItem):
+    """Rename a file or folder."""
+    old_full = os.path.abspath(os.path.join(WORK_DIR, data.old_path))
+    if not old_full.startswith(WORK_DIR) or not os.path.exists(old_full):
+        raise HTTPException(status_code=404, detail="Original item not found or access denied")
+    
+    # new_name is just the basename, so we place it in the same directory
+    new_full = os.path.join(os.path.dirname(old_full), data.new_name)
+    if os.path.exists(new_full):
+        raise HTTPException(status_code=400, detail="Target name already exists")
+    
+    try:
+        os.rename(old_full, new_full)
         return {"status": "success"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

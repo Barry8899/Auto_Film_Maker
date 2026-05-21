@@ -71,8 +71,11 @@
         .file-tree { font-family: var(--font-code); font-size: 13px; }
         .tree-folder { margin-left: 16px; display: none; }
         .tree-folder.open { display: block; }
-        .tree-item { display: flex; align-items: center; gap: 6px; padding: 4px 8px; cursor: pointer; border-radius: 4px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .tree-item { display: flex; align-items: center; gap: 6px; padding: 4px 8px; cursor: pointer; border-radius: 4px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; position: relative; }
         .tree-item:hover { background-color: var(--bg-surface-hover); color: var(--text-main); }
+        .action-icon { display: none; margin-left: auto; padding: 2px; }
+        .tree-item:hover .action-icon { display: inline-block; color: var(--text-muted); }
+        .action-icon:hover { color: var(--brand-blue); }
 
         /* M区 */
         .panel-m { display: flex; flex-direction: column; height: 100vh; background-color: var(--bg-base); }
@@ -124,8 +127,8 @@
             <div class="panel-title">
                 Explorer
                 <div style="display:flex;gap:8px;">
-                    <span class="icon-btn" title="New File"><i data-lucide="file-plus" style="width:16px;"></i></span>
-                    <span class="icon-btn" title="New Folder"><i data-lucide="folder-plus" style="width:16px;"></i></span>
+                    <span class="icon-btn" title="New File" onclick="createNewItem(false)"><i data-lucide="file-plus" style="width:16px;"></i></span>
+                    <span class="icon-btn" title="New Folder" onclick="createNewItem(true)"><i data-lucide="folder-plus" style="width:16px;"></i></span>
                     <span class="icon-btn" title="Refresh" onclick="fetchFileTree()"><i data-lucide="refresh-cw" style="width:16px;"></i></span>
                 </div>
             </div>
@@ -144,6 +147,7 @@
                 <button class="btn-save" onclick="saveCurrentFile()"><i data-lucide="save" style="width:14px;"></i> Save (Ctrl+S)</button>
             </div>
             <div id="editor-container"></div>
+            <div id="media-container" style="flex:1; display:none; background:var(--bg-base); align-items:center; justify-content:center; overflow:auto; padding:24px;"></div>
             <div id="chat-container">
                 <div class="chat-area">Chat interface ready</div>
                 <div class="input-box">
@@ -214,6 +218,7 @@
             fetchFileTree();
         });
 
+        
         // API Calls
         async function fetchFileTree() {
             try {
@@ -227,13 +232,52 @@
             }
         }
 
+        async function createNewItem(isDir) {
+            const itemName = prompt(`Enter new ${isDir ? 'folder' : 'file'} name or path:`, isDir ? "new_folder" : "new_file.txt");
+            if (!itemName) return;
+            try {
+                const res = await fetch('/api/fs/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ path: itemName, is_dir: isDir })
+                });
+                if (!res.ok) {
+                    const data = await res.json();
+                    throw new Error(data.detail || 'Create failed');
+                }
+                fetchFileTree();
+            } catch(e) {
+                alert(e.message);
+            }
+        }
+
+        async function renameItem(oldPath, oldName, event) {
+            event.stopPropagation();
+            const newName = prompt(`Rename '${oldName}' to:`, oldName);
+            if (!newName || newName === oldName) return;
+            try {
+                const res = await fetch('/api/fs/rename', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ old_path: oldPath, new_name: newName })
+                });
+                if (!res.ok) {
+                    const data = await res.json();
+                    throw new Error(data.detail || 'Rename failed');
+                }
+                fetchFileTree();
+            } catch(e) {
+                alert(e.message);
+            }
+        }
+
+        function isMediaFile(filePath) {
+            const lower = filePath.toLowerCase();
+            return lower.endsWith('.mp4') || lower.endsWith('.webm') || lower.endsWith('.jpg') || lower.endsWith('.jpeg') || lower.endsWith('.png') || lower.endsWith('.gif');
+        }
+
         async function openFile(filePath, fileName) {
             try {
-                const res = await fetch(`/api/fs/file?path=${encodeURIComponent(filePath)}`);
-                if (!res.ok) throw new Error('Cannot open file');
-                const data = await res.json();
-                
-                openFiles[filePath] = data.content;
                 currentFilePath = filePath;
                 
                 // Add tab if not exists
@@ -242,10 +286,19 @@
                     const tab = document.createElement('div');
                     tab.className = 'tab';
                     tab.id = `tab-${filePath}`;
-                    tab.innerHTML = `<i data-lucide="file-code" style="width:14px;"></i> ${fileName} <span class="tab-close" onclick="closeTab('${filePath}', event)">×</span>`;
+                    let icon = isMediaFile(filePath) ? 'image' : 'file-code';
+                    if(filePath.toLowerCase().endsWith('.mp4')) icon = 'video';
+                    tab.innerHTML = `<i data-lucide="${icon}" style="width:14px;"></i> ${fileName} <span class="tab-close" onclick="closeTab('${filePath}', event)">×</span>`;
                     tab.onclick = () => switchToDocument(filePath);
                     tabs.appendChild(tab);
                     lucide.createIcons();
+                }
+
+                if (!isMediaFile(filePath)) {
+                    const res = await fetch(`/api/fs/file?path=${encodeURIComponent(filePath)}`);
+                    if (!res.ok) throw new Error('Cannot open file');
+                    const data = await res.json();
+                    openFiles[filePath] = data.content;
                 }
                 
                 switchToDocument(filePath);
@@ -255,7 +308,7 @@
         }
 
         async function saveCurrentFile() {
-            if (!currentFilePath) return;
+            if (!currentFilePath || isMediaFile(currentFilePath)) return;
             const content = editor.getValue();
             try {
                 const res = await fetch(`/api/fs/file?path=${encodeURIComponent(currentFilePath)}`, {
@@ -265,7 +318,6 @@
                 });
                 if (res.ok) {
                     openFiles[currentFilePath] = content;
-                    // Flash save button green
                     const btn = document.querySelector('.btn-save');
                     const origHtml = btn.innerHTML;
                     btn.innerHTML = 'Saved!';
@@ -292,14 +344,17 @@
                 item.style.paddingLeft = `${level * 12 + 8}px`;
                 
                 const icon = isDir ? 'folder' : 'file';
-                item.innerHTML = `<i data-lucide="${icon}" style="width:14px; color:var(--text-muted)"></i> <span>${node.name}</span>`;
+                const safePath = node.path.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+                const safeName = node.name.replace(/'/g, "\\'");
+                item.innerHTML = `<i data-lucide="${icon}" style="width:14px; color:var(--text-muted)"></i> <span style="flex:1;">${node.name}</span> <i class="action-icon" data-lucide="edit-2" style="width:12px;" onclick="renameItem('${safePath}', '${safeName}', event)" title="Rename"></i>`;
                 
                 el.appendChild(item);
 
                 if (isDir && node.children) {
                     const childContainer = document.createElement('div');
                     childContainer.className = 'tree-folder';
-                    item.onclick = () => {
+                    item.onclick = (e) => {
+                        if (e.target.closest('.action-icon')) return; // Ignore if clicking rename
                         childContainer.classList.toggle('open');
                         const ico = item.querySelector('i');
                         if(childContainer.classList.contains('open')) {
@@ -312,7 +367,10 @@
                     renderFileTree(node.children, childContainer, level + 1);
                     el.appendChild(childContainer);
                 } else {
-                    item.onclick = () => openFile(node.path, node.name);
+                    item.onclick = (e) => {
+                        if (e.target.closest('.action-icon')) return;
+                        openFile(node.path, node.name);
+                    };
                 }
                 
                 container.appendChild(el);
@@ -326,6 +384,7 @@
             
             document.getElementById('editor-container').style.display = 'none';
             document.getElementById('chat-container').style.display = 'flex';
+            document.getElementById('media-container').style.display = 'none';
             document.getElementById('editorActions').style.display = 'none';
             currentFilePath = null;
         }
@@ -336,26 +395,45 @@
             const currentTab = document.getElementById(`tab-${filePath}`);
             if(currentTab) currentTab.classList.add('active');
 
-            document.getElementById('editor-container').style.display = 'block';
-            document.getElementById('chat-container').style.display = 'none';
-            document.getElementById('editorActions').style.display = 'block';
-            
-            // Set language based on extension
-            let lang = 'plaintext';
-            if(filePath.endsWith('.js')) lang = 'javascript';
-            else if(filePath.endsWith('.py')) lang = 'python';
-            else if(filePath.endsWith('.html')) lang = 'html';
-            else if(filePath.endsWith('.css')) lang = 'css';
-            else if(filePath.endsWith('.json')) lang = 'json';
-            else if(filePath.endsWith('.md')) lang = 'markdown';
+            const isMedia = isMediaFile(filePath);
 
-            monaco.editor.setModelLanguage(editor.getModel(), lang);
-            editor.setValue(openFiles[filePath]);
+            document.getElementById('chat-container').style.display = 'none';
+            
+            if (isMedia) {
+                document.getElementById('editor-container').style.display = 'none';
+                document.getElementById('editorActions').style.display = 'none';
+                const mediaContainer = document.getElementById('media-container');
+                mediaContainer.style.display = 'flex';
+                const fileUrl = `/files/${filePath.replace(/\\/g, '/')}`;
+                if (filePath.toLowerCase().endsWith('.mp4') || filePath.toLowerCase().endsWith('.webm')) {
+                    mediaContainer.innerHTML = `<video controls style="max-width:100%; max-height:100%;" src="${fileUrl}"></video>`;
+                } else {
+                    mediaContainer.innerHTML = `<img style="max-width:100%; max-height:100%; object-fit:contain;" src="${fileUrl}">`;
+                }
+            } else {
+                document.getElementById('media-container').style.display = 'none';
+                document.getElementById('media-container').innerHTML = ''; // stop video
+                document.getElementById('editor-container').style.display = 'block';
+                document.getElementById('editorActions').style.display = 'block';
+                
+                // Set language based on extension
+                let lang = 'plaintext';
+                if(filePath.endsWith('.js')) lang = 'javascript';
+                else if(filePath.endsWith('.py')) lang = 'python';
+                else if(filePath.endsWith('.html')) lang = 'html';
+                else if(filePath.endsWith('.css')) lang = 'css';
+                else if(filePath.endsWith('.json')) lang = 'json';
+                else if(filePath.endsWith('.md')) lang = 'markdown';
+
+                monaco.editor.setModelLanguage(editor.getModel(), lang);
+                editor.setValue(openFiles[filePath]);
+            }
         }
 
         function closeTab(filePath, event) {
             event.stopPropagation();
-            document.getElementById(`tab-${filePath}`).remove();
+            const tabEl = document.getElementById(`tab-${filePath}`);
+            if (tabEl) tabEl.remove();
             delete openFiles[filePath];
             if (currentFilePath === filePath) {
                 switchTab('chat');
