@@ -1,6 +1,6 @@
 import os
 import shutil
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, UploadFile, File, Form
 from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -34,8 +34,14 @@ class RenameItem(BaseModel):
     old_path: str
     new_name: str
 
+
 class DeleteItem(BaseModel):
     path: str
+
+class MoveItem(BaseModel):
+    source: str
+    destination: str
+
 
 @app.get("/")
 def index():
@@ -169,6 +175,48 @@ def download_item(path: str):
         raise HTTPException(status_code=404, detail="File not found")
     
     return FileResponse(full_path, media_type='application/octet-stream', filename=os.path.basename(full_path))
+
+
+@app.post("/api/fs/upload")
+async def upload_file(path: str = Form(""), file: UploadFile = File(...)):
+    # if path is empty, upload to WORK_DIR
+    target_dir = os.path.abspath(os.path.join(WORK_DIR, path))
+    if not target_dir.startswith(WORK_DIR):
+        raise HTTPException(status_code=403, detail="Access denied")
+    os.makedirs(target_dir, exist_ok=True)
+    
+    full_path = os.path.join(target_dir, file.filename)
+    try:
+        content = await file.read()
+        with open(full_path, "wb") as f:
+            f.write(content)
+        return {"status": "success"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/fs/move")
+def move_item(data: MoveItem):
+    src_full = os.path.abspath(os.path.join(WORK_DIR, data.source))
+    dst_full = os.path.abspath(os.path.join(WORK_DIR, data.destination))
+    
+    if not src_full.startswith(WORK_DIR) or not dst_full.startswith(WORK_DIR):
+        raise HTTPException(status_code=403, detail="Access denied")
+    if not os.path.exists(src_full):
+        raise HTTPException(status_code=404, detail="Source not found")
+        
+    # If destination is an existing directory, move into it
+    if os.path.isdir(dst_full):
+        dst_full = os.path.join(dst_full, os.path.basename(src_full))
+        
+    if src_full == dst_full:
+        return {"status": "success"}
+        
+    try:
+        import shutil
+        shutil.move(src_full, dst_full)
+        return {"status": "success"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
     uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)
