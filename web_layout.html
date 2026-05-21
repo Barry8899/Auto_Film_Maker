@@ -74,9 +74,10 @@
         .tree-item { display: flex; align-items: center; gap: 6px; padding: 4px 8px; cursor: pointer; border-radius: 4px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; position: relative; }
         .tree-item:hover { background-color: var(--bg-surface-hover); color: var(--text-main); }
         
-        .action-icon { display: none; margin-left: 2px; padding: 4px; border-radius: 4px; cursor: pointer; transition: all 0.2s; }
-        .tree-item:hover .action-icon { display: inline-block; color: var(--text-muted); }
+        .action-icon { display: inline-block; margin-left: 2px; padding: 4px; border-radius: 4px; cursor: pointer; transition: all 0.2s; color: var(--text-muted); }
         .action-icon:hover { color: var(--brand-blue); background: rgba(0,0,0,0.1); box-shadow: 0 2px 4px rgba(0,0,0,0.2); transform: scale(1.1); }
+        .tree-item-actions { display: none; position: absolute; right: 4px; top: 50%; transform: translateY(-50%); background: var(--bg-surface-hover); padding-left: 8px; box-shadow: -8px 0 8px var(--bg-surface-hover); border-radius: 4px; align-items: center; }
+        .tree-item:hover .tree-item-actions { display: flex; }
         
         .chevron-icon { transition: transform 0.2s; opacity: 0.7; }
         .tree-folder.open ~ .tree-item .chevron-icon { transform: rotate(90deg); }
@@ -415,6 +416,7 @@
 
         async function handleDrop(e, targetPath) {
             e.preventDefault();
+            e.stopPropagation();
             e.currentTarget.classList.remove('drag-over');
             const sourcePath = e.dataTransfer.getData('text/plain');
             if (!sourcePath || sourcePath === targetPath) return;
@@ -473,7 +475,7 @@
                 const deleteHtml = `<i class="action-icon" data-lucide="trash-2" style="width:18px;" onclick="deleteItem('${safePath}', '${safeName}', event)" title="Delete"></i>`;
                 const renameHtml = `<i class="action-icon" data-lucide="edit-2" style="width:18px;" onclick="renameItem('${safePath}', '${safeName}', event)" title="Rename"></i>`;
                 
-                item.innerHTML = `${chevronHtml}<i data-lucide="${icon}" style="width:14px; color:var(--text-muted)"></i> <span style="flex:1; margin-left:6px;">${node.name}</span> <div style="display:flex; align-items:center;">${renameHtml}${downloadHtml}${deleteHtml}</div>`;
+                item.innerHTML = `${chevronHtml}<i data-lucide="${icon}" style="width:14px; color:var(--text-muted)"></i> <span style="flex:1; margin-left:6px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; padding-right:10px;" title="${node.name}">${node.name}</span> <div class="tree-item-actions">${renameHtml}${downloadHtml}${deleteHtml}</div>`;
                 
                 el.appendChild(item);
 

@@ -204,12 +204,19 @@ def move_item(data: MoveItem):
     if not os.path.exists(src_full):
         raise HTTPException(status_code=404, detail="Source not found")
         
+    # If destination is a file, use its parent directory
+    if os.path.isfile(dst_full):
+        dst_full = os.path.dirname(dst_full)
+        
     # If destination is an existing directory, move into it
     if os.path.isdir(dst_full):
         dst_full = os.path.join(dst_full, os.path.basename(src_full))
         
     if src_full == dst_full:
         return {"status": "success"}
+        
+    if os.path.exists(dst_full):
+        raise HTTPException(status_code=400, detail="Target file already exists")
         
     try:
         import shutil
