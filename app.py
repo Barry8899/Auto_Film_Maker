@@ -1,6 +1,7 @@
 import os
+import shutil
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
@@ -33,6 +34,9 @@ class RenameItem(BaseModel):
     old_path: str
     new_name: str
 
+class DeleteItem(BaseModel):
+    path: str
+
 @app.get("/")
 def index():
     """Serve the main web layout."""
@@ -54,7 +58,7 @@ def build_tree(dir_path):
             
             item = {
                 "name": entry.name,
-                "path": os.path.relpath(entry.path, WORK_DIR).replace("\\", "/"),
+                "path": os.path.relpath(entry.path, WORK_DIR).replace("\\\\", "/"),
                 "is_dir": entry.is_dir(),
             }
             if entry.is_dir():
@@ -140,6 +144,31 @@ def rename_item(data: RenameItem):
         return {"status": "success"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.delete("/api/fs/delete")
+def delete_item(data: DeleteItem):
+    """Delete a file or folder."""
+    full_path = os.path.abspath(os.path.join(WORK_DIR, data.path))
+    if not full_path.startswith(WORK_DIR) or not os.path.exists(full_path):
+        raise HTTPException(status_code=404, detail="Item not found")
+    
+    try:
+        if os.path.isdir(full_path):
+            shutil.rmtree(full_path)
+        else:
+            os.remove(full_path)
+        return {"status": "success"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/fs/download")
+def download_item(path: str):
+    """Download a file."""
+    full_path = os.path.abspath(os.path.join(WORK_DIR, path))
+    if not full_path.startswith(WORK_DIR) or not os.path.isfile(full_path):
+        raise HTTPException(status_code=404, detail="File not found")
+    
+    return FileResponse(full_path, media_type='application/octet-stream', filename=os.path.basename(full_path))
 
 if __name__ == "__main__":
     uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)

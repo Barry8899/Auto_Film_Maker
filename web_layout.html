@@ -82,8 +82,12 @@
         .m-tabs { height: 48px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; padding: 0 16px; background-color: var(--bg-surface); gap: 4px; }
         .tab { padding: 8px 16px; border-radius: 6px 6px 0 0; cursor: pointer; font-size: 13px; color: var(--text-muted); display: flex; align-items: center; gap: 8px; border: 1px solid transparent; border-bottom: none; margin-bottom: -1px; }
         .tab.active { background-color: var(--bg-base); color: var(--brand-blue); border-color: var(--border-color); border-top: 2px solid var(--brand-blue); }
+        
         .tab-close { opacity: 0.5; transition: opacity 0.2s; }
         .tab-close:hover { opacity: 1; color: red; }
+        .unsaved-dot { width: 8px; height: 8px; background-color: var(--text-main); border-radius: 50%; display: none; margin-left: 4px; }
+        .tab.unsaved .unsaved-dot { display: inline-block; }
+
         
         .m-content { flex: 1; display: flex; flex-direction: column; position: relative; }
         
@@ -214,6 +218,22 @@
             editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, function() {
                 saveCurrentFile();
             });
+
+            // Listen for changes to show unsaved dot
+            editor.onDidChangeModelContent(() => {
+                if (currentFilePath && !isMediaFile(currentFilePath)) {
+                    const currentContent = editor.getValue();
+                    const savedContent = openFiles[currentFilePath];
+                    const tab = document.getElementById(`tab-${currentFilePath}`);
+                    if (tab) {
+                        if (currentContent !== savedContent) {
+                            tab.classList.add('unsaved');
+                        } else {
+                            tab.classList.remove('unsaved');
+                        }
+                    }
+                }
+            });
             
             fetchFileTree();
         });
@@ -271,6 +291,36 @@
             }
         }
 
+        async function deleteItem(path, name, event) {
+            event.stopPropagation();
+            if (!confirm(`Are you sure you want to delete '${name}'?`)) return;
+            try {
+                const res = await fetch('/api/fs/delete', {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ path: path })
+                });
+                if (!res.ok) {
+                    const data = await res.json();
+                    throw new Error(data.detail || 'Delete failed');
+                }
+                
+                // If it's open, close it
+                if (openFiles[path] !== undefined) {
+                    closeTab(path, new Event('click'));
+                }
+                
+                fetchFileTree();
+            } catch(e) {
+                alert(e.message);
+            }
+        }
+
+        function downloadItem(path, event) {
+            event.stopPropagation();
+            window.open(`/api/fs/download?path=${encodeURIComponent(path)}`, '_blank');
+        }
+
         function isMediaFile(filePath) {
             const lower = filePath.toLowerCase();
             return lower.endsWith('.mp4') || lower.endsWith('.webm') || lower.endsWith('.jpg') || lower.endsWith('.jpeg') || lower.endsWith('.png') || lower.endsWith('.gif');
@@ -288,7 +338,7 @@
                     tab.id = `tab-${filePath}`;
                     let icon = isMediaFile(filePath) ? 'image' : 'file-code';
                     if(filePath.toLowerCase().endsWith('.mp4')) icon = 'video';
-                    tab.innerHTML = `<i data-lucide="${icon}" style="width:14px;"></i> ${fileName} <span class="tab-close" onclick="closeTab('${filePath}', event)">×</span>`;
+                    tab.innerHTML = `<i data-lucide="${icon}" style="width:14px;"></i> ${fileName} <span class="unsaved-dot"></span> <span class="tab-close" onclick="closeTab('${filePath}', event)">×</span>`;
                     tab.onclick = () => switchToDocument(filePath);
                     tabs.appendChild(tab);
                     lucide.createIcons();
@@ -318,6 +368,11 @@
                 });
                 if (res.ok) {
                     openFiles[currentFilePath] = content;
+                    
+                    // Remove unsaved state
+                    const tab = document.getElementById(`tab-${currentFilePath}`);
+                    if (tab) tab.classList.remove('unsaved');
+
                     const btn = document.querySelector('.btn-save');
                     const origHtml = btn.innerHTML;
                     btn.innerHTML = 'Saved!';
@@ -346,7 +401,11 @@
                 const icon = isDir ? 'folder' : 'file';
                 const safePath = node.path.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
                 const safeName = node.name.replace(/'/g, "\\'");
-                item.innerHTML = `<i data-lucide="${icon}" style="width:14px; color:var(--text-muted)"></i> <span style="flex:1;">${node.name}</span> <i class="action-icon" data-lucide="edit-2" style="width:12px;" onclick="renameItem('${safePath}', '${safeName}', event)" title="Rename"></i>`;
+                
+                const downloadHtml = !isDir ? `<i class="action-icon" data-lucide="download" style="width:12px; margin-left:6px;" onclick="downloadItem('${safePath}', event)" title="Download"></i>` : '';
+                const deleteHtml = `<i class="action-icon" data-lucide="trash-2" style="width:12px; margin-left:6px;" onclick="deleteItem('${safePath}', '${safeName}', event)" title="Delete"></i>`;
+                
+                item.innerHTML = `<i data-lucide="${icon}" style="width:14px; color:var(--text-muted)"></i> <span style="flex:1;">${node.name}</span> <i class="action-icon" data-lucide="edit-2" style="width:12px;" onclick="renameItem('${safePath}', '${safeName}', event)" title="Rename"></i>${downloadHtml}${deleteHtml}`;
                 
                 el.appendChild(item);
 
@@ -354,7 +413,7 @@
                     const childContainer = document.createElement('div');
                     childContainer.className = 'tree-folder';
                     item.onclick = (e) => {
-                        if (e.target.closest('.action-icon')) return; // Ignore if clicking rename
+                        if (e.target.closest('.action-icon')) return; // Ignore if clicking rename/delete
                         childContainer.classList.toggle('open');
                         const ico = item.querySelector('i');
                         if(childContainer.classList.contains('open')) {
