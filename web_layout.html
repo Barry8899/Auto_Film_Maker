@@ -553,7 +553,7 @@
                 tab.id = `tab-${filePath}`;
                 let icon = isMediaFile(filePath) ? 'image' : 'file-code';
                 if(filePath.toLowerCase().endsWith('.mp4')) icon = 'video';
-                const safePathForClick = filePath.replace(/\/g, '\\').replace(/'/g, "\'");
+                const safePathForClick = filePath.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
                 tab.innerHTML = `<i data-lucide="${icon}" style="width:14px; flex-shrink:0;"></i> <span style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${fileName}">${fileName}</span> <span class="unsaved-dot" style="flex-shrink:0;"></span> <span class="tab-close" style="flex-shrink:0;" onclick="closeTab('${safePathForClick}', event)">×</span>`;
                 tab.onclick = () => switchToDocument(filePath);
                 tabs.appendChild(tab);
@@ -1061,7 +1061,7 @@
                 document.getElementById('editorActions').style.display = 'none';
                 const mediaContainer = document.getElementById('media-container');
                 mediaContainer.style.display = 'flex';
-                const fileUrl = `/files/${filePath.replace(/\/g, '/')}`;
+                const fileUrl = `/files/${filePath.replace(/\\\\/g, '/')}`;
                 if (filePath.toLowerCase().endsWith('.mp4') || filePath.toLowerCase().endsWith('.webm')) {
                     mediaContainer.innerHTML = `<video controls style="max-width:100%; max-height:100%;" src="${fileUrl}"></video>`;
                 } else {
