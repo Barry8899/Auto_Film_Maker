@@ -929,10 +929,11 @@
         // Ensure switchTab logic correctly handles chat-xxx IDs
         const originalSwitchToDocument = switchToDocument;
         switchToDocument = function(filePath) {
-            currentChatId = null; // clear chat id so sending messages fails gracefully or prevents sending to wrong place
-            currentFilePath = filePath; // FIX for save bug
-            fetchChats(); // update L-panel UI to remove highlight
+            currentChatId = null; 
+            currentFilePath = filePath; 
+            fetchChats(); 
             originalSwitchToDocument(filePath);
+            currentFilePath = filePath; // Ensure it stays set after original function runs
         };
         
         const originalCloseTab = closeTab;
