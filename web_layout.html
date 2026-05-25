@@ -144,7 +144,7 @@
         .btn-save { background-color: var(--brand-blue); color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; display: flex; align-items: center; gap: 6px; }
         .btn-save:hover { filter: brightness(1.1); }
     
-        
+        /* abcdefg */
         
         .loading-container {
             display: flex;
@@ -540,22 +540,24 @@
 
         async function openFile(filePath, fileName) {
             try {
-                currentFilePath = filePath;
+                // Req 3 & Req 1: If it's already open, just switch to it directly
+                if (document.getElementById(`tab-${filePath}`)) {
+                    switchToDocument(filePath);
+                    return;
+                }
                 
                 // Add tab if not exists
-                if(!document.getElementById(`tab-${filePath}`)) {
-                    const tabs = document.getElementById('tabsContainer');
-                    const tab = document.createElement('div');
-                    tab.className = 'tab';
-                    tab.id = `tab-${filePath}`;
-                    let icon = isMediaFile(filePath) ? 'image' : 'file-code';
-                    if(filePath.toLowerCase().endsWith('.mp4')) icon = 'video';
-                    const safePathForClick = filePath.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
-                    tab.innerHTML = `<i data-lucide="${icon}" style="width:14px; flex-shrink:0;"></i> <span style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${fileName}">${fileName}</span> <span class="unsaved-dot" style="flex-shrink:0;"></span> <span class="tab-close" style="flex-shrink:0;" onclick="closeTab('${safePathForClick}', event)">×</span>`;
-                    tab.onclick = () => switchToDocument(filePath);
-                    tabs.appendChild(tab);
-                    lucide.createIcons();
-                }
+                const tabs = document.getElementById('tabsContainer');
+                const tab = document.createElement('div');
+                tab.className = 'tab';
+                tab.id = `tab-${filePath}`;
+                let icon = isMediaFile(filePath) ? 'image' : 'file-code';
+                if(filePath.toLowerCase().endsWith('.mp4')) icon = 'video';
+                const safePathForClick = filePath.replace(/\/g, '\\').replace(/'/g, "\'");
+                tab.innerHTML = `<i data-lucide="${icon}" style="width:14px; flex-shrink:0;"></i> <span style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${fileName}">${fileName}</span> <span class="unsaved-dot" style="flex-shrink:0;"></span> <span class="tab-close" style="flex-shrink:0;" onclick="closeTab('${safePathForClick}', event)">×</span>`;
+                tab.onclick = () => switchToDocument(filePath);
+                tabs.appendChild(tab);
+                lucide.createIcons();
 
                 if (!isMediaFile(filePath)) {
                     const res = await fetch(`/api/fs/file?path=${encodeURIComponent(filePath)}`);
@@ -1041,6 +1043,10 @@
         }
 
         function switchToDocument(filePath) {
+            currentChatId = null; // deactivate chat
+            currentFilePath = filePath; // firmly lock current file
+            fetchChats(); // update L-panel to remove chat highlight
+
             const tabs = document.querySelectorAll('.tab');
             tabs.forEach(t => t.classList.remove('active'));
             const currentTab = document.getElementById(`tab-${filePath}`);
@@ -1055,7 +1061,7 @@
                 document.getElementById('editorActions').style.display = 'none';
                 const mediaContainer = document.getElementById('media-container');
                 mediaContainer.style.display = 'flex';
-                const fileUrl = `/files/${filePath.replace(/\\/g, '/')}`;
+                const fileUrl = `/files/${filePath.replace(/\/g, '/')}`;
                 if (filePath.toLowerCase().endsWith('.mp4') || filePath.toLowerCase().endsWith('.webm')) {
                     mediaContainer.innerHTML = `<video controls style="max-width:100%; max-height:100%;" src="${fileUrl}"></video>`;
                 } else {
@@ -1077,17 +1083,48 @@
                 else if(filePath.endsWith('.md')) lang = 'markdown';
 
                 monaco.editor.setModelLanguage(editor.getModel(), lang);
-                editor.setValue(openFiles[filePath]);
+                editor.setValue(openFiles[filePath] || "");
             }
         }
 
-        function closeTab(filePath, event) {
+        function closeTab(tabId, event) {
             event.stopPropagation();
-            const tabEl = document.getElementById(`tab-${filePath}`);
+            const tabEl = document.getElementById(`tab-${tabId}`);
             if (tabEl) tabEl.remove();
-            delete openFiles[filePath];
-            if (currentFilePath === filePath) {
-                switchTab('chat');
+            
+            let wasActive = false;
+            
+            if (tabId.startsWith('chat-')) {
+                const id = tabId.replace('chat-', '');
+                if (currentChatId === id) {
+                    wasActive = true;
+                    currentChatId = null;
+                    document.getElementById('chat-container').style.display = 'none';
+                }
+            } else {
+                delete openFiles[tabId];
+                if (currentFilePath === tabId) {
+                    wasActive = true;
+                    currentFilePath = null;
+                    document.getElementById('editor-container').style.display = 'none';
+                    document.getElementById('media-container').style.display = 'none';
+                    document.getElementById('editorActions').style.display = 'none';
+                }
+            }
+            
+            // Req 2: Auto switch to the right-most tab if the closed one was active
+            if (wasActive) {
+                const remainingTabs = document.querySelectorAll('.tab');
+                if (remainingTabs.length > 0) {
+                    const lastTab = remainingTabs[remainingTabs.length - 1];
+                    const lastTabId = lastTab.id.replace('tab-', '');
+                    if (lastTabId.startsWith('chat-')) {
+                        const chatId = lastTabId.replace('chat-', '');
+                        openChat(chatId, chatSessions[chatId] || "Chat");
+                    } else {
+                        switchToDocument(lastTabId);
+                    }
+                }
             }
         }
     </script>
