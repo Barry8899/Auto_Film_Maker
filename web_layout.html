@@ -229,14 +229,7 @@
 
     
 
-        .list-item { position: relative; }
-        .chat-del-btn {
-            position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
-            color: #ff4444; font-size: 16px; font-weight: bold; cursor: pointer;
-            display: none !important; padding: 0 4px; line-height: 1; border-radius: 4px; z-index: 10;
-        }
-        .chat-del-btn:hover { background: rgba(255,0,0,0.1); }
-        .list-item:hover .chat-del-btn { display: flex !important; align-items: center; justify-content: center; }
+
 
 
     
@@ -682,16 +675,20 @@
                     el.innerHTML = `
                         <i data-lucide="message-square" style="width:16px;"></i> 
                         <span style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${chat.name}</span> 
-                        <i class="action-icon" data-lucide="edit-2" style="width:12px; display:none;" onclick="renameChat('${chat.id}', '${safeName}', event)"></i>
-                        <i class="action-icon chat-del-btn" data-lucide="trash-2" style="width:12px; display:none; margin-left:6px; color:#ff4444;" onclick="deleteChat('${chat.id}', '${safeName}', event)"></i>
+                        <div class="chat-actions" style="display:none; align-items:center; gap:8px;">
+                            <i class="action-icon" data-lucide="edit-2" style="width:18px; color:#aaa;" onclick="renameChat('${chat.id}', '${safeName}', event)" title="Rename"></i>
+                            <i class="action-icon" data-lucide="trash-2" style="width:18px; color:#ff4444;" onclick="deleteChat('${chat.id}', '${safeName}', event)" title="Delete"></i>
+                        </div>
                     `;
                     
                     // Show action icons on hover
                     el.onmouseenter = () => { 
-                        el.querySelectorAll('.action-icon').forEach(icon => icon.style.display = 'inline-block'); 
+                        const actions = el.querySelector('.chat-actions');
+                        if(actions) actions.style.display = 'flex';
                     };
                     el.onmouseleave = () => { 
-                        el.querySelectorAll('.action-icon').forEach(icon => icon.style.display = 'none'); 
+                        const actions = el.querySelector('.chat-actions');
+                        if(actions) actions.style.display = 'none';
                     };
                     
                     el.onclick = () => openChat(chat.id, chat.name);
@@ -914,6 +911,7 @@
         const originalSwitchToDocument = switchToDocument;
         switchToDocument = function(filePath) {
             currentChatId = null; // clear chat id so sending messages fails gracefully or prevents sending to wrong place
+            currentFilePath = filePath; // FIX for save bug
             fetchChats(); // update L-panel UI to remove highlight
             originalSwitchToDocument(filePath);
         };
