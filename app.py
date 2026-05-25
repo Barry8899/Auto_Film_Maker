@@ -292,7 +292,6 @@ def get_chat(chat_id: str):
 def delete_chat(chat_id: str):
     path = os.path.join(CHATS_DIR, f"{chat_id}.json")
     if os.path.exists(path):
-        import os
         os.remove(path)
     return {"status": "success"}
 
