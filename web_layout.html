@@ -143,6 +143,57 @@
         .editor-actions { position: absolute; top: 10px; right: 20px; z-index: 10; display: none; }
         .btn-save { background-color: var(--brand-blue); color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; display: flex; align-items: center; gap: 6px; }
         .btn-save:hover { filter: brightness(1.1); }
+    
+        .msg-assistant::before {
+            content: '';
+            position: absolute;
+            left: -40px;
+            top: 0;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #F15A24;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M30,30 Q45,80 50,90 Q65,60 80,30' fill='none' stroke='white' stroke-width='8' stroke-linecap='round'/%3E%3Cpath d='M20,35 Q40,75 45,85 Q65,55 85,25' fill='none' stroke='white' stroke-width='4' stroke-linecap='round' opacity='0.7'/%3E%3C/svg%3E");
+            background-size: cover;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 200px;
+        }
+        .loading-dots {
+            display: inline-block;
+            font-weight: bold;
+            color: #F15A24;
+            letter-spacing: 2px;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { opacity: 0.4; }
+        }
+        .tool-box {
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            border-left: 3px solid #F15A24;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-family: 'Consolas', monospace;
+            font-size: 12px;
+            color: #ccc;
+            margin-bottom: 4px;
+            animation: slideIn 0.3s ease-out forwards;
+            opacity: 0;
+            transform: translateY(-5px);
+        }
+        @keyframes slideIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
     </style>
 </head>
 <body>
@@ -656,6 +707,39 @@
             area.appendChild(userDiv);
             area.scrollTop = area.scrollHeight;
 
+            // Show loading state
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = `msg-bubble msg-assistant`;
+            loadingDiv.innerHTML = `
+                <div class="loading-container">
+                    <div><span class="loading-dots">Lobster 思考中...</span></div>
+                    <div id="tool-logs-${currentChatId}" style="margin-top: 5px;"></div>
+                </div>
+            `;
+            area.appendChild(loadingDiv);
+            area.scrollTop = area.scrollHeight;
+
+            // Cycle fake tool logs for better UX while waiting
+            const fakeLogs = [
+                "Agent woke up, analyzing request...",
+                "Scanning workspace directory...",
+                "Evaluating available OpenClaw Skills...",
+                "Executing internal file checks...",
+                "Synthesizing final response..."
+            ];
+            let logIndex = 0;
+            const logInterval = setInterval(() => {
+                const logContainer = document.getElementById(`tool-logs-${currentChatId}`);
+                if (logContainer && logIndex < fakeLogs.length) {
+                    const toolBox = document.createElement('div');
+                    toolBox.className = 'tool-box';
+                    toolBox.textContent = "> " + fakeLogs[logIndex];
+                    logContainer.appendChild(toolBox);
+                    area.scrollTop = area.scrollHeight;
+                    logIndex++;
+                }
+            }, 1200);
+
             try {
                 const res = await fetch(`/api/chat/${currentChatId}/message`, {
                     method: 'POST',
@@ -664,13 +748,13 @@
                 });
                 const data = await res.json();
                 
-                const aiDiv = document.createElement('div');
-                aiDiv.className = `msg-bubble msg-assistant`;
-                aiDiv.textContent = data.assistant_message.content;
-                area.appendChild(aiDiv);
-                area.scrollTop = area.scrollHeight;
+                clearInterval(logInterval);
+                // Replace loading div with actual content
+                loadingDiv.innerHTML = '';
+                loadingDiv.textContent = data.assistant_message.content;
                 
             } catch (e) {
+                clearInterval(logInterval);
                 const errDiv = document.createElement('div');
                 errDiv.className = `msg-bubble msg-assistant`;
                 errDiv.style.color = "red";
@@ -694,9 +778,10 @@
                 // Refresh file tree to show the uploaded file
                 fetchFileTree();
                 
-                // Auto-send a message to the chat
-                const attachmentMsg = `[Attached file: Uploaded_Files/${file.name}] Please review this file.`;
-                sendChatMessage(attachmentMsg);
+                // Append file path to chat input instead of auto-sending
+                const chatInput = document.getElementById('chatInput');
+                chatInput.value += `[Attached file: Uploaded_Files/${file.name}] `;
+                chatInput.focus();
                 
             } catch(e) {
                 alert(e.message);
