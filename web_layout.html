@@ -228,14 +228,16 @@
         }
 
     
+
         .list-item { position: relative; }
         .chat-del-btn {
             position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
             color: #ff4444; font-size: 16px; font-weight: bold; cursor: pointer;
-            display: none; padding: 0 4px; line-height: 1; border-radius: 4px;
+            display: none !important; padding: 0 4px; line-height: 1; border-radius: 4px; z-index: 10;
         }
         .chat-del-btn:hover { background: rgba(255,0,0,0.1); }
-        .list-item:hover .chat-del-btn { display: flex; align-items: center; justify-content: center; }
+        .list-item:hover .chat-del-btn { display: flex !important; align-items: center; justify-content: center; }
+
 
     
         .tool-exec-container {
