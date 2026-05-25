@@ -365,7 +365,7 @@
                 language: 'javascript',
                 theme: 'vs-dark',
                 automaticLayout: true,
-                minimap: { enabled: false },
+                minimap: { enabled: false }, wordWrap: "on",
                 fontSize: 14,
                 fontFamily: 'JetBrains Mono'
             });
@@ -553,7 +553,7 @@
             if (!file) return;
             const formData = new FormData();
             formData.append('file', file);
-            formData.append('path', ''); // Root by default
+            formData.append('path', '.'); // Root by default
             
             try {
                 const res = await fetch('/api/fs/upload', { method: 'POST', body: formData });

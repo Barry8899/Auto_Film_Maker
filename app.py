@@ -112,7 +112,7 @@ def get_file_content(path: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.put("/api/fs/file")
-def save_file_content(path: str, data: FileContent):
+async def save_file_content(path: str, data: FileContent):
     """Save file content."""
     full_path = os.path.abspath(os.path.join(WORK_DIR, path))
     if not full_path.startswith(WORK_DIR):
