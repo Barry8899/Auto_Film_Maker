@@ -112,7 +112,7 @@ def get_file_content(path: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.put("/api/fs/file")
-async def save_file_content(path: str, data: FileContent):
+def save_file_content(path: str, data: FileContent):
     """Save file content."""
     full_path = os.path.abspath(os.path.join(WORK_DIR, path))
     if not full_path.startswith(WORK_DIR):
@@ -287,7 +287,17 @@ def get_chat(chat_id: str):
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
 
+
+@app.delete("/api/chat/{chat_id}")
+def delete_chat(chat_id: str):
+    path = os.path.join(CHATS_DIR, f"{chat_id}.json")
+    if os.path.exists(path):
+        import os
+        os.remove(path)
+    return {"status": "success"}
+
 @app.post("/api/chat/{chat_id}/message")
+
 def send_message(chat_id: str, data: SendMessage):
     path = os.path.join(CHATS_DIR, f"{chat_id}.json")
     if not os.path.exists(path):

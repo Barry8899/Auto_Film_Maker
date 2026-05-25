@@ -370,10 +370,18 @@
                 fontFamily: 'JetBrains Mono'
             });
 
+            
             // Ctrl+S / Cmd+S
             editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, function() {
                 saveCurrentFile();
             });
+
+            // Alt+Z to toggle word wrap
+            editor.addCommand(monaco.KeyMod.Alt | monaco.KeyCode.KeyZ, function() {
+                const currentWrap = editor.getOption(monaco.editor.EditorOption.wordWrap);
+                editor.updateOptions({ wordWrap: currentWrap === 'on' ? 'off' : 'on' });
+            });
+
 
             // Listen for changes to show unsaved dot
             editor.onDidChangeModelContent(() => {
@@ -752,26 +760,14 @@
             area.appendChild(loadingDiv);
             area.scrollTop = area.scrollHeight;
 
-            // Cycle fake tool logs for better UX while waiting
-            const fakeLogs = [
-                "Agent woke up, analyzing request...",
-                "Scanning workspace directory...",
-                "Evaluating available OpenClaw Skills...",
-                "Executing internal file checks...",
-                "Synthesizing final response..."
-            ];
-            let logIndex = 0;
-            const logInterval = setInterval(() => {
-                const logContainer = document.getElementById(`tool-logs-${currentChatId}`);
-                if (logContainer && logIndex < fakeLogs.length) {
-                    const toolBox = document.createElement('div');
-                    toolBox.className = 'tool-box';
-                    toolBox.textContent = "> " + fakeLogs[logIndex];
-                    logContainer.appendChild(toolBox);
-                    area.scrollTop = area.scrollHeight;
-                    logIndex++;
-                }
-            }, 1200);
+            // Show tool execution box
+            const logContainer = document.getElementById(`tool-logs-${currentChatId}`);
+            const toolBox = document.createElement('div');
+            toolBox.className = 'tool-box';
+            toolBox.innerHTML = "> 正在调用底层 Agent 工具执行指令... <span class='loading-dots'>...</span>";
+            logContainer.appendChild(toolBox);
+            area.scrollTop = area.scrollHeight;
+            const logInterval = null;
 
             try {
                 const res = await fetch(`/api/chat/${currentChatId}/message`, {
