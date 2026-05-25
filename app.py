@@ -300,14 +300,24 @@ def send_message(chat_id: str, data: SendMessage):
     user_msg = {"role": "user", "content": data.content}
     chat_data["messages"].append(user_msg)
     
-    # Generate AI Mock Response (Context Aware)
-    # In a real app, you would pass `chat_data["messages"]` to OpenAI/Gemini API here.
-    history_length = len(chat_data["messages"])
-    ai_text = f"收到你的消息：「{data.content}」。\n\n(系统提示：我已经记住了我们之前的 {history_length-1} 条对话。为了能够接入真实的AI模型，请在 `app.py` 中的 `send_message` 路由里配置您的 OpenAI 或 Gemini API Key。)"
-    
-    if "[Attached file:" in data.content:
-        ai_text = f"我看到了你上传的文件！这很棒。\n\n(系统提示：文件已保存至 Uploaded_Files 目录。要让我真正理解视频内容，请在后端集成多模态大模型 API。)"
+    # Save user msg immediately so UI feels responsive or if process fails
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(chat_data, f, ensure_ascii=False, indent=2)
 
+    # Call OpenClaw agent
+    import subprocess
+    try:
+        result = subprocess.run(
+            ["openclaw", "agent", "--session-id", f"webchat_{chat_id}", "--message", data.content, "--json"],
+            capture_output=True,
+            text=True,
+            check=True
+        )
+        output_json = json.loads(result.stdout)
+        ai_text = output_json.get("result", {}).get("payloads", [{}])[0].get("text", "(No response generated)")
+    except Exception as e:
+        ai_text = f"(System Error: Failed to contact OpenClaw Agent. {str(e)})"
+    
     ai_msg = {"role": "assistant", "content": ai_text}
     chat_data["messages"].append(ai_msg)
     

@@ -1,16 +1,17 @@
 # Auto Film Maker - 前端设计与架构蓝图 (Design Map)
 
-> 状态：全栈工作区交互框架完成 (Phase 3)
-> 最后更新：2026-05-21
+> 状态：M区真机联动与公网代理 (Phase 4)
+> 最后更新：2026-05-25
 
 ## 1. 项目概述
 “Auto Film Maker”是一个自动理解视频并进行二次创作的 AI 平台。前端页面采用高度集成的 IDE / 工作站式布局，整合了 AI 智能体对话、本地文件管理、代码/文本/媒体编辑预览、以及视频生成生命周期追踪。
 
 ## 2. 技术栈架构 (Tech Stack)
-本项目目前已从纯静态 HTML 升级为带后端的全栈服务：
+本项目目前已从纯静态 HTML 升级为带后端的全栈服务，并正式接入 OpenClaw 本地代理核心：
 - **后端 (Backend)**: `FastAPI` + `Uvicorn` + `Pydantic`。负责处理文件系统的 API 路由以及静态资源（媒体）的挂载。
+- **大脑 (Agent Core)**: 桥接 `openclaw agent` 命令。在 M 区的每一次对话，均通过 `subprocess` 底层真实唤起 OpenClaw Agent (并注入 `--session-id`)。这意味着前端 M 区不仅是聊天框，更直接具备了服务器所在工作区（`/home/admin/.openclaw/workspace/`）的**文件读写、环境控制和 Skill 调度权限**。
 - **前端 (Frontend)**: 原生 HTML/CSS/JS + `Monaco Editor` (通过 CDN 引入)。不依赖繁重的打包框架，追求轻量级与快速响应。
-- **通信**: 基于 RESTful API 进行前后端数据交换与文件流传输。
+- **通信**: 基于 RESTful API 进行前后端数据交换与文件流传输。公网代理通过 `Pinggy`（内网穿透）等工具生成 HTTPS 链接对外发布。
 
 ---
 
@@ -24,7 +25,7 @@
 - L 区最大宽度限制为屏幕总宽度的 5/16（即 L 与 M 的比例极值限制在 5:8），确保 M 区永远有充足的工作空间。R区宽度始终固定。
 
 ### 3.2 左侧边栏 (L区) - 资源与历史
-- **上部 - 对话管理 (Chat History)**：管理 AI 对话会话。
+- **上部 - 对话管理 (Chat History)**：管理 AI 对话会话（每个会话独立保留 json 记录，结合 OpenClaw agent session-id 实现上下文隔离）。
 - **下部 - 工作区文件树 (File Explorer)**：
   - 映射真实的本地路径：`/home/admin/.openclaw/workspace/auto_film_maker`
   - **动态响应布局**: 无论文件名多长，均会被 `...` 截断，绝对不撑破左侧边栏。
@@ -41,7 +42,7 @@
 - **多态容器路由**:
   1. **代码编辑器 (Monaco)**: 遇到文本/代码/配置类文件时，注入 Monaco 实例，支持语法高亮与 `Ctrl+S` 保存。
   2. **媒体阅览器 (Media Viewer)**: 遇到图片 (`jpg`, `png`, `gif`) 或视频 (`mp4`, `webm`) 文件时，利用 FastAPI 挂载的 `/files` 静态路由，直接以原生 `<video>` 或 `<img>` 标签在 M 区全比例内嵌播放/阅览。
-  3. **对话面板 (Chat)**: 执行 AI 交互指令的地方，具有独立记忆体与文件注入能力，支持自适应无限滚动机制。
+  3. **对话面板 (Chat)**: 执行 AI 交互指令的地方。已通过后端真实对接 OpenClaw Agent。
 
 ### 3.4 右侧边栏 (R区) - 生产力流转条
 采用 **垂直时间线 (Vertical Timeline)** 设计：
@@ -61,6 +62,7 @@
 - `POST /api/fs/move` : 用于拖拽时移动文件路径的逻辑映射与防覆盖保护。
 - `GET /api/fs/download?path=...` : 返回文件数据流用于浏览器下载。
 - **静态挂载**: `/files` -> 映射到工作区根目录用于媒体直接加载。
+- **对话路由**: `/api/chat/{chat_id}/message` -> 桥接执行 `openclaw agent --session-id {chat_id} --message {data.content} --json`，实现了浏览器前端直接命令底层 AI 代理能力的闭环。
 
 ---
 
