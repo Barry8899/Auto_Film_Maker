@@ -713,6 +713,23 @@
             } catch(e) { alert('Failed to create chat'); }
         }
 
+        
+        async function deleteChat(id, name, event) {
+            event.stopPropagation();
+            if (confirm(`Are you sure you want to delete chat "${name}"?`)) {
+                try {
+                    const res = await fetch(`/api/chat/${id}`, { method: 'DELETE' });
+                    if (!res.ok) throw new Error("Delete failed");
+                    if (currentChatId === id) {
+                        closeTab(`chat-${id}`, new Event('click'));
+                    }
+                    fetchChats();
+                } catch (e) {
+                    alert('Failed to delete chat: ' + e.message);
+                }
+            }
+        }
+
         async function renameChat(id, oldName, event) {
             event.stopPropagation();
             const newName = prompt("Rename chat:", oldName);
