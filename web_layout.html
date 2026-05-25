@@ -590,13 +590,15 @@
                     if (tab) tab.classList.remove('unsaved');
 
                     const btn = document.querySelector('.btn-save');
-                    const origHtml = btn.innerHTML;
-                    btn.innerHTML = 'Saved!';
-                    btn.style.backgroundColor = '#10b981';
-                    setTimeout(() => {
-                        btn.innerHTML = origHtml;
-                        btn.style.backgroundColor = 'var(--brand-blue)';
-                    }, 1000);
+                    if (btn) {
+                        btn.innerHTML = 'Saved!';
+                        btn.style.backgroundColor = '#10b981';
+                        setTimeout(() => {
+                            btn.innerHTML = `<i data-lucide="save" style="width:14px;"></i> Save (Ctrl+S)`;
+                            btn.style.backgroundColor = '';
+                            lucide.createIcons();
+                        }, 1000);
+                    }
                 }
             } catch(e) {
                 alert('Save failed');
