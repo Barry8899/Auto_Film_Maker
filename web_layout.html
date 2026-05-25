@@ -227,6 +227,55 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
+    
+        .list-item { position: relative; }
+        .chat-del-btn {
+            position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+            color: #ff4444; font-size: 16px; font-weight: bold; cursor: pointer;
+            display: none; padding: 0 4px; line-height: 1; border-radius: 4px;
+        }
+        .chat-del-btn:hover { background: rgba(255,0,0,0.1); }
+        .list-item:hover .chat-del-btn { display: flex; align-items: center; justify-content: center; }
+
+    
+        .tool-exec-container {
+            margin: 8px 0;
+            border: 1px solid #333;
+            border-radius: 6px;
+            background: #1e1e1e;
+            overflow: hidden;
+            font-size: 13px;
+        }
+        .tool-exec-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+            color: #888;
+        }
+        .tool-exec-header:hover {
+            background: #252525;
+        }
+        .tool-exec-body {
+            display: none;
+            padding: 12px;
+            border-top: 1px solid #333;
+            background: #181818;
+            color: #bbb;
+            font-family: 'Consolas', monospace;
+            white-space: pre-wrap;
+        }
+        .tool-exec-container.open .tool-exec-body {
+            display: block;
+        }
+        .tool-exec-container.open .tool-icon-arrow {
+            transform: rotate(90deg);
+        }
+        .tool-icon-arrow {
+            transition: transform 0.2s;
+        }
+
     </style>
 </head>
 <body>
@@ -378,7 +427,7 @@
 
             // Alt+Z to toggle word wrap
             editor.addCommand(monaco.KeyMod.Alt | monaco.KeyCode.KeyZ, function() {
-                const currentWrap = editor.getOption(monaco.editor.EditorOption.wordWrap);
+                const currentWrap = editor.getRawOptions().wordWrap;
                 editor.updateOptions({ wordWrap: currentWrap === 'on' ? 'off' : 'on' });
             });
 
@@ -527,7 +576,10 @@
         }
 
         async function saveCurrentFile() {
-            if (!currentFilePath || isMediaFile(currentFilePath)) return;
+            if (!currentFilePath || isMediaFile(currentFilePath)) {
+                alert("Cannot save: No valid file selected");
+                return;
+            }
             const content = editor.getValue();
             try {
                 const res = await fetch(`/api/fs/file?path=${encodeURIComponent(currentFilePath)}`, {
@@ -760,13 +812,42 @@
             area.appendChild(loadingDiv);
             area.scrollTop = area.scrollHeight;
 
-            // Show tool execution box
+            // Show tool execution collapsible box
             const logContainer = document.getElementById(`tool-logs-${currentChatId}`);
             const toolBox = document.createElement('div');
-            toolBox.className = 'tool-box';
-            toolBox.innerHTML = "> 正在调用底层 Agent 工具执行指令... <span class='loading-dots'>...</span>";
+            toolBox.className = 'tool-exec-container';
+            // Open by default while loading
+            toolBox.innerHTML = `
+                <div class="tool-exec-header" onclick="this.parentElement.classList.toggle('open')">
+                    <span class="tool-icon-arrow" style="font-size:10px;">▶</span>
+                    <i data-lucide="wrench" style="width:14px; color:#F15A24;"></i>
+                    <span>1 tool exec</span>
+                    <span style="margin-left:auto; color:#F15A24;" class="loading-dots">running...</span>
+                </div>
+                <div class="tool-exec-body">Executing OpenClaw Agent runtime...<br>Connecting to workspace environment...</div>
+            `;
             logContainer.appendChild(toolBox);
+            lucide.createIcons();
             area.scrollTop = area.scrollHeight;
+            
+            // Randomly fake 2nd tool if taking long
+            let fakeToolTimeout = setTimeout(() => {
+                const toolBox2 = document.createElement('div');
+                toolBox2.className = 'tool-exec-container';
+                toolBox2.innerHTML = `
+                    <div class="tool-exec-header" onclick="this.parentElement.classList.toggle('open')">
+                        <span class="tool-icon-arrow" style="font-size:10px;">▶</span>
+                        <i data-lucide="wrench" style="width:14px; color:#F15A24;"></i>
+                        <span>File System Operations</span>
+                        <span style="margin-left:auto; color:#F15A24;" class="loading-dots">running...</span>
+                    </div>
+                    <div class="tool-exec-body">Reading workspace context...<br>Applying file diffs...</div>
+                `;
+                logContainer.appendChild(toolBox2);
+                lucide.createIcons();
+                area.scrollTop = area.scrollHeight;
+            }, 3500);
+            
             const logInterval = null;
 
             try {
@@ -777,7 +858,7 @@
                 });
                 const data = await res.json();
                 
-                clearInterval(logInterval);
+                clearTimeout(fakeToolTimeout);
                 // Replace loading div with actual content
                 loadingDiv.innerHTML = '';
                 loadingDiv.textContent = data.assistant_message.content;

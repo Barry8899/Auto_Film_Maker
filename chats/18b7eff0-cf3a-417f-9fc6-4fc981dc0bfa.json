@@ -1,0 +1,54 @@
+{
+  "id": "18b7eff0-cf3a-417f-9fc6-4fc981dc0bfa",
+  "name": "New Conversation",
+  "messages": [
+    {
+      "role": "user",
+      "content": "你好你好！请帮我删掉 /home/admin/.openclaw/workspace/videos/bird.json"
+    },
+    {
+      "role": "assistant",
+      "content": "我已经检查过了，`/home/admin/.openclaw/workspace/videos/bird.json` 这个文件目前不存在，可能之前已经被删除或者路径有误。还需要我帮你检查其他的吗？"
+    },
+    {
+      "role": "user",
+      "content": "噢，是在 outputs下面"
+    },
+    {
+      "role": "assistant",
+      "content": "找到了！它在 `outputs/videos/` 目录下。我已经帮你把 `/home/admin/.openclaw/workspace/outputs/videos/bird.json` 成功删除了。还需要我做些什么吗？"
+    },
+    {
+      "role": "user",
+      "content": "你好，今天星期几"
+    },
+    {
+      "role": "assistant",
+      "content": "你好！今天是星期一。有什么我可以帮你的吗？"
+    },
+    {
+      "role": "user",
+      "content": "您好，今天是农历初几？"
+    },
+    {
+      "role": "assistant",
+      "content": "今天是农历四月初九。有什么我可以帮您的吗？"
+    },
+    {
+      "role": "user",
+      "content": "今年的世界杯什么时候开幕？"
+    },
+    {
+      "role": "assistant",
+      "content": "今年的美加墨世界杯（2026 FIFA World Cup）将于 **2026年6月11日**（星期四）开幕。\n\n揭幕战将在墨西哥城的阿兹特克体育场（Estadio Azteca）举行。"
+    },
+    {
+      "role": "user",
+      "content": "那是当天的几点开幕式？"
+    },
+    {
+      "role": "assistant",
+      "content": "根据赛程安排，揭幕战（墨西哥国家队出战）将在墨西哥城当地时间 **6月11日下午 1:00**（美东时间下午 3:00）正式开球。\n\n**开幕式**通常会在开球前 90 分钟进行，也就是当地时间 **6月11日上午 11:30**。\n\n如果您需要换算成**北京时间**：\n* **开幕式**：北京时间 6月12日（星期五）凌晨 1:30\n* **揭幕战开球**：北京时间 6月12日（星期五）凌晨 3:00"
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "id": "eeb31985-aeaf-4f0e-b3e9-cec9528507cf",
+  "name": "New Conversation",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Hi 你好哦！"
+    },
+    {
+      "role": "assistant",
+      "content": "你好呀！我是 Lobster，你的创作搭档。\n\n在这里我们可以一起做很多事：直接跑流程出片、讨论创作方向、排查遇到的问题，或者一起调整和优化现在的系统。\n\n你现在是想先直接出片，还是先讨论一下方案呢？"
+    },
+    {
+      "role": "user",
+      "content": "稍等稍等，我来测试一下你！今天星期几呀？"
+    },
+    {
+      "role": "assistant",
+      "content": "哈哈，随时接受测试！今天是星期一哦。\n\n接下来有什么安排？想看看现在的系统怎么跑，还是有什么新点子要试？"
+    },
+    {
+      "role": "user",
+      "content": "我上传的 img001.jpg 图像 是什么？"
+    },
+    {
+      "role": "assistant",
+      "content": "LLM request timed out."
+    },
+    {
+      "role": "user",
+      "content": "[Attached file: Uploaded_Files/huaji.jpg] Please review this file."
+    },
+    {
+      "role": "assistant",
+      "content": "这张图片是大家都非常熟悉的经典表情包——**“滑稽”（Huaji）**，最早出自百度贴吧。\n\n以下是具体的画面分析：\n\n**1. 画面总结**\n这是一个黄色的卡通笑脸表情符号，带有强烈的戏谑、调侃和幽默意味。\n\n**2. 核心主体**\n- **面部表情：** 嘴角大幅度上扬，露出牙齿，呈现出一个非常夸张、略带得意的笑容。\n- **眼神：** 眼睛向右上方斜视，眉毛上挑，透出一种“你懂得”或者看破不说破的狡黠感。\n- **红晕：** 脸颊两侧带有两抹红晕，增加了一丝滑稽和魔性的效果。\n\n**3. 构图与风格**\n- 经典的 2D 扁平化表情包风格。\n- 正面圆形构图，背景透明或纯白，主体非常突出。\n\n**4. 色彩与氛围**\n- 主要是明亮的黄色（代表脸部），配合简单的红白黑线条勾勒五官。\n- 氛围：充满网络亚文化的幽默感、反讽、调皮。\n\n**5. 后续使用建议**\n如果在我们的创作流程（比如视频或故事板）中要用到它：\n- **作为素材：** 非常适合用作搞笑、转折或彩蛋性质的视觉元素。\n- **作为情绪参考：** 如果你想做一个带有网络梗文化、轻松幽默基调的片子，这个表情完美定义了那种“皮一下”的氛围。\n\n你上传这张经典表情，是打算把它加进我们接下来的某个视频项目里当彩蛋吗？"
+    },
+    {
+      "role": "user",
+      "content": "帮我删掉文件 /home/admin/.openclaw/workspace/outputs/images/banker_wan27.json"
+    },
+    {
+      "role": "assistant",
+      "content": "搞定，我已经帮你把 `/home/admin/.openclaw/workspace/outputs/images/banker_wan27.json` 删掉啦。\n\n还需要清理别的文件，还是准备开始跑点新东西？"
+    }
+  ]
+}
