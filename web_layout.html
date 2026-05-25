@@ -679,11 +679,20 @@
                     const el = document.createElement('div');
                     el.className = `list-item ${currentChatId === chat.id ? 'active' : ''}`;
                     const safeName = chat.name.replace(/'/g, "\\'");
-                    el.innerHTML = `<i data-lucide="message-square" style="width:16px;"></i> <span style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${chat.name}</span> <i class="action-icon" data-lucide="edit-2" style="width:12px; display:none;" onclick="renameChat('${chat.id}', '${safeName}', event)"></i>`;
+                    el.innerHTML = `
+                        <i data-lucide="message-square" style="width:16px;"></i> 
+                        <span style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${chat.name}</span> 
+                        <i class="action-icon" data-lucide="edit-2" style="width:12px; display:none;" onclick="renameChat('${chat.id}', '${safeName}', event)"></i>
+                        <i class="action-icon chat-del-btn" data-lucide="trash-2" style="width:12px; display:none; margin-left:6px; color:#ff4444;" onclick="deleteChat('${chat.id}', '${safeName}', event)"></i>
+                    `;
                     
-                    // Show action icon on hover
-                    el.onmouseenter = () => { const icon = el.querySelector('.action-icon'); if(icon) icon.style.display = 'inline-block'; };
-                    el.onmouseleave = () => { const icon = el.querySelector('.action-icon'); if(icon) icon.style.display = 'none'; };
+                    // Show action icons on hover
+                    el.onmouseenter = () => { 
+                        el.querySelectorAll('.action-icon').forEach(icon => icon.style.display = 'inline-block'); 
+                    };
+                    el.onmouseleave = () => { 
+                        el.querySelectorAll('.action-icon').forEach(icon => icon.style.display = 'none'); 
+                    };
                     
                     el.onclick = () => openChat(chat.id, chat.name);
                     container.appendChild(el);
