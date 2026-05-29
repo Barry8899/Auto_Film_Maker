@@ -86,3 +86,18 @@
 ### 3.7 工具执行动态 UI 与会话管理 (Tool UI & Session Management)
 - **工具调用拟物化组件**: 发送消息后，采用可折叠的工具调用组件 (`Tool Exec Container`) 代替纯文本日志，精确匹配原生 OpenClaw 的交互心智（`▶ [🔧扳手图标] 1 tool exec ... running`）。
 - **L区聊天历史安全删除**: 对话记录增加防误触的红色悬停删除按钮（Hover 显示），并且后端绑定同步删除物理存储的 `.json` 记录，保证空间整洁。
+
+
+## R-Zone (Right Zone) Navigation Updates
+Added 8-step production pipeline in the right zone:
+1. Video Upload
+2. Video Understanding
+3. Script Writing
+4. Resource Extractions
+5. Storyboarding
+6. Video Generation
+7. Video Editing
+8. Review & Export
+
+Step 1 (Video Upload) triggers a modal overlay in the M-Zone (Middle Zone) to handle video uploads via drag & drop.
+Uploaded files are routed to `repo/S1_uploaded_video/`.
