@@ -91,19 +91,24 @@
 - **L区聊天历史安全删除**: 对话记录增加防误触的红色悬停删除按钮（Hover 显示），并且后端绑定同步删除物理存储的 `.json` 记录，保证空间整洁。
 
 
-## R-Zone (Right Zone) Navigation Updates
-Added an 8-step vertical production pipeline in the right zone:
-1. Video Upload
-2. Video Understanding
-3. Script Writing
-4. Content Extraction
-5. Storyboarding
-6. Video Generation
-7. Video Editing
-8. Review & Export
+## 3.8 右侧边栏 (R区) 导航更新与管线 (Pipeline)
+在右侧边栏引入了由上至下的 8 步垂直生产管线 (Production Pipeline)：
+1. Video Upload (视频上传)
+2. Video Understanding (视频理解)
+3. Script Writing (脚本编写)
+4. Content Extraction (内容提取)
+5. Storyboarding (故事板)
+6. Video Generation (视频生成)
+7. Video Editing (视频编辑)
+8. Review & Export (审查与导出)
 
-**Pipeline UX & Vobile Brand Alignment:**
-- The pipeline follows a progressive disclosure design. Initially, only **Step 1 (Video Upload)** is active and illuminated with Vobile Orange (`#F15A24`), while the remaining steps are dimmed/disabled.
-- **Upload Modal Enhancement:** Clicking Step 1 opens a custom centered Modal overlay instead of a silent file picker. It features a drag-and-drop styled browse zone, confirms the selected file with a checkmark UI, and provides a distinct "Upload File" button with an animated spinner.
-- **Existing Video Bypass:** The upload modal includes a "Use Existing Videos" button. It scans the `repo/S1_uploaded_video` directory. If video files are already present, it bypasses the upload process, immediately unlocks Step 2, and prints a success system message to the chat. If no videos exist, it halts with an error alert.
-- Once the upload completes, the Modal dismisses automatically, Step 1 turns green, and Step 2 automatically becomes active, seamlessly guiding the user to the next phase. Uploaded files are routed directly to `repo/S1_uploaded_video/`.
+**管线交互 (Pipeline UX) 与 Vobile 品牌对齐:**
+- 管线遵循**渐进式披露 (Progressive Disclosure)** 的设计原则。初始状态下，只有 **Step 1 (Video Upload)** 处于激活状态，并以 Vobile 品牌橙色 (`#F15A24`) 高亮，其余步骤处于暗色/禁用状态。
+- **上传弹窗 (Upload Modal) 增强:** 点击 Step 1 会在屏幕中央弹出一个定制的 Modal 覆盖层，而不是干瘪的系统文件选择器。它包含一个支持拖拽风格的浏览区，选择文件后会以绿勾图标确认，并提供一个带有加载动画的“Upload File”按钮。
+- **已有视频复用逻辑 (Existing Video Bypass):** 上传弹窗内包含一个 "Use Existing Videos" 按钮。点击后，系统会扫描 `repo/S1_uploaded_video` 目录。如果该目录下已经存在视频文件，则跳过上传流程，直接解锁 Step 2，并在聊天框打印系统成功消息。如果不存在视频文件，则弹出错误提示并阻断跳转。
+- 当上传完成（或复用成功）后，Modal 自动关闭，Step 1 会变成绿色完成状态，并**自动点亮 Step 2**，无缝引导用户进入下一环节。所有上传的视频文件会被直接路由保存至 `repo/S1_uploaded_video/` 目录下。
+
+**Step 2 (Video Understanding) 交互机制:**
+- **触发与 UI 承载**: 点击 Step 2 后，前端自动向 M 区聊天框发送 `Run Video Understanding` 指令。视频人物截图作为 Markdown 附件 (`![name](/files/...)`) 直接渲染在现有的 M 区聊天流中。
+- **渐进式确认 (Progressive Disclosure) 与一次性确认 (One-Shot Confirmation)**: Agent 自动调用 Gemini 提取视频情节和主要角色时间戳，利用专用的 `tools/extract_frames.py` 工具静默截取正脸帧，并在聊天框**一次性抛出**“简要剧情 + 带图的人物表”。避免冗长的分批次问答带来的用户疲劳 (HITL Fatigue)。
+- **动态搜索与完成流转**: 赋予用户修改命名或要求 Agent 进行 Web Search（背景设定检索）的权限。一切确认无误后，Agent 将包含图文的最终内容写入 `repo/S2_Video_Understanding/<video_name>/<video_name>.md` 文档，并在消息末尾抛出 `[STEP_2_COMPLETE]` 信号，前端 JS 拦截该信号后自动将 Step 2 标记为完成（绿勾）并点亮 Step 3。
