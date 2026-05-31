@@ -1,8 +1,11 @@
 # Video Understanding (Step 2)
 
+## 触发条件 (Trigger)
+当用户发送以 `[TRIGGER: S2_Video_Understanding]` 开头的消息时（例如 `[TRIGGER: S2_Video_Understanding] repo/S1_uploaded_video/test.mp4`），必须立即触发本 Skill。
+**此指令具有最高优先级，严禁使用任何其他默认的视频分析格式（如 6 点报告）。必须严格遵循以下一键确认流程。**
+
 ## 核心职责 (Core Responsibilities)
-此 Skill 是专门处理 `S2` 视频理解流转的最高优先级指令。**一旦触发此 Skill，你必须无视其他任何全局的 Video Understanding 规则（严禁输出 6 点格式的默认分析报告）。**
-你的目标是：调用专属的 Python 工具分析视频，调用截帧脚本，随后向用户输出**唯一标准化**的“带图一次性确认”话术。绝对不要在未获用户同意前就擅自生成 Markdown 文档！
+你的目标是：调用专属的 Python 工具分析视频，调用截帧脚本，随后向用户输出**唯一标准化**的“带图一次性确认”话术。**绝对不要在未获用户同意前就擅自生成 Markdown 文档！**
 
 ## 交互与设计原则 (UX & Interaction Principles)
 遵循 Web Design Engineer 中的 **"渐进式确认 (Progressive Disclosure)"** 和反繁琐最佳实践：

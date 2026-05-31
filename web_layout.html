@@ -787,6 +787,9 @@
                 }
                 lucide.createIcons();
                 
+                // Auto open the video selector modal for step 2
+                openVideoSelectorModal();
+                
                 // Send automated chat message to confirm
                 sendChatMessage(`[System] Video "${selectedVideoFile.name}" uploaded successfully. Ready for Step 2.`);
                 
@@ -832,9 +835,8 @@
                     }
                     lucide.createIcons();
                     
-                    // Do not auto-send a message here anymore, wait for the user to explicitly click Step 2
-                    // We just log an alert or small toast
                     console.log(`[System] Existing video found in S1_uploaded_video. Ready for Step 2.`);
+                    openVideoSelectorModal();
                 } else {
                     alert('Error: No existing video found in repo/S1_uploaded_video');
                 }
@@ -916,8 +918,7 @@
             closeVideoSelectorModal();
             
             const fileListStr = selectedFiles.join(', ');
-            // Specific prompt structure to forcefully trigger our custom skill and suppress global skills
-            const triggerPrompt = `[TRIGGER: S2_Video_Understanding] 请严格按照 S2_Video_Understanding Skill 中定义的一段式输出格式（包含剧情、N位人物带/files/截图、询问语句），对我指定的以下视频进行分析截帧：${fileListStr}。注意：绝对禁止使用全局 gemini-video-understanding 的6点报告格式，不要立刻生成md文档，必须等待我的回复！`;
+            const triggerPrompt = `[TRIGGER: S2_Video_Understanding] repo/S1_uploaded_video/${fileListStr}`;
             
             sendChatMessage(triggerPrompt);
         }

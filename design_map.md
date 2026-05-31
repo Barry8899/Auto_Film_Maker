@@ -66,7 +66,12 @@
 
 ---
 
-## 5. 设计系统规范 (Design System Declaration)
+## 5. 项目技能与工具集成规范 (Skill & Tool Architecture)
+为了解决与 OpenClaw 默认环境配置冲突的问题（例如 `gemini-video-understanding`），本项目确立了以下技能与工具管理规范：
+- **项目级独立化**: 本项目专属的 Pipeline 技能（`S2_Video_Understanding`、`S3_Script_Writing` 等）统一存放在 `auto_film_maker/skills/` 目录下。相关支持脚本统一存放于 `auto_film_maker/tools/` 下。
+- **软链接注入**: 避免全局环境污染。在运行时或部署时，将 `auto_film_maker/skills/` 下的专属技能通过软链接（`ln -s`）挂载到 OpenClaw 的 `~/.openclaw/workspace/skills/` 中。
+- **降级与替换**: 如果原 OpenClaw 环境中存在功能冲突的旧技能，本项目推荐直接在宿主工作区中移除（或重命名），由本项目的结构化 Pipeline 技能完全接管。例如，完全使用 `S2_Video_Understanding` 替代原有的 `gemini-video-understanding`。
+- **触发隐式化**: M 区向 Agent 发送触发消息时，采用纯净路由指令（如 `[TRIGGER: S2_Video_Understanding] repo/S1_...`），将冗长的格式限制和行为约束全部后置并收敛于对应的 `SKILL.md` 内，保证用户聊天框界面的极简与专业。
 *（沿用 Phase 2 的色值与字体设计系统，并拓展了交互细节的设计）*
 - 交互反馈增强：所有悬浮操作按钮增加放大过渡效果（Scale）与阴影，拖拽操作增加虚线边框与半透颜色填充，提升专业软件操控手感。
 
