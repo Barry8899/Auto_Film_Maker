@@ -92,8 +92,9 @@
   - **前端 (HLS.js)**: M区多态容器新增对 `.m3u8` 文件的深度识别与拦截。当用户在左侧 Explorer 点击 `.m3u8` 时，采用 `hls.js` 劫持并注入原生 `<video>`，实现毫秒级秒开和边下边播的流媒体体验，完全规避了传统 MP4 必须预加载大量文件头的带宽瓶颈。
 
 ### 3.7 工具执行动态 UI 与会话管理 (Tool UI & Session Management)
-- **工具执行动态 UI**: 发送消息后，采用拟物化组件 (`Tool Exec Container`) 呈现工具调用状态。系统会自动根据触发指令动态更新显示的 Skill 与 Tool 名称（例如触发 S2 时，UI 会精确显示 `Executing S2_Video_Understanding Skill` 及对应的底层 `.py` 脚本）。
+- **工具执行动态 UI**: 发送消息后，采用拟物化组件 (`Tool Exec Container`) 呈现工具调用状态。外层统一显示为 `1 skill exec running` 以保证布局整齐，折叠面板内动态展示真实调用的 Skill 与 Tool 名称及正在执行的具体操作内容。
 - **L区聊天历史安全删除**: 对话记录增加防误触的红色悬停删除按钮（Hover 显示），并且后端绑定同步删除物理存储的 `.json` 记录，保证空间整洁。
+- **超长任务断连保护 (Long-running Timeout UX)**: 针对 Gemini 视频理解等耗时极长的任务导致的 `Failed to fetch` 代理中断报错，前端加入了友好的断连保护 UI。不再抛出刺眼的红字错误，而是以品牌橙色温和提示用户“任务仍在后台运行，请稍后刷新对话”，极大缓解了用户的焦虑感。
 
 
 ## 3.8 右侧边栏 (R区) 导航更新与管线 (Pipeline)

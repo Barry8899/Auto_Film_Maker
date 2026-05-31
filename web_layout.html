@@ -1215,10 +1215,10 @@
                 <div class="tool-exec-header" onclick="this.parentElement.classList.toggle('open')">
                     <span class="tool-icon-arrow" style="font-size:10px;">▶</span>
                     <i data-lucide="wrench" style="width:14px; color:#F15A24;"></i>
-                    <span>Executing ${primaryTool}</span>
+                    <span>1 skill exec</span>
                     <span style="margin-left:auto; color:#F15A24;" class="loading-dots">running...</span>
                 </div>
-                <div class="tool-exec-body">${primaryAction}</div>
+                <div class="tool-exec-body"><strong>${primaryTool}</strong><br/>${primaryAction}</div>
             `;
             logContainer.appendChild(toolBox);
             lucide.createIcons();
@@ -1232,10 +1232,10 @@
                     <div class="tool-exec-header" onclick="this.parentElement.classList.toggle('open')">
                         <span class="tool-icon-arrow" style="font-size:10px;">▶</span>
                         <i data-lucide="wrench" style="width:14px; color:#F15A24;"></i>
-                        <span>Executing ${secondaryTool}</span>
+                        <span>1 tool exec</span>
                         <span style="margin-left:auto; color:#F15A24;" class="loading-dots">running...</span>
                     </div>
-                    <div class="tool-exec-body">${secondaryAction}</div>
+                    <div class="tool-exec-body"><strong>${secondaryTool}</strong><br/>${secondaryAction}</div>
                 `;
                 logContainer.appendChild(toolBox2);
                 lucide.createIcons();
@@ -1274,9 +1274,17 @@
                 clearInterval(logInterval);
                 const errDiv = document.createElement('div');
                 errDiv.className = `msg-bubble msg-assistant`;
-                errDiv.style.color = "red";
-                errDiv.textContent = "Failed to send message: " + e.message;
+                errDiv.style.color = "#F15A24"; // Use brand orange instead of harsh red for system notices
+                
+                // If it's a fetch/timeout error due to long processing
+                if (e.message.includes('Failed to fetch') || e.message.includes('timeout')) {
+                    errDiv.innerHTML = `<i data-lucide="alert-circle" style="width:14px; margin-bottom:-2px;"></i> <b>Network connection paused.</b><br>The video analysis is taking longer than the network timeout (common for large files). Gemini is still processing the video in the background.<br><br><i>Please wait a minute, then switch to another tab and switch back to refresh the chat history.</i>`;
+                } else {
+                    errDiv.textContent = "System Error: " + e.message;
+                }
+                
                 area.appendChild(errDiv);
+                lucide.createIcons();
             }
         }
 
