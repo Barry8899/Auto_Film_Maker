@@ -132,6 +132,9 @@
         .theme-toggle-btn:hover { background-color: var(--bg-surface-hover); color: var(--text-main); }
         .r-content { flex: 1; padding: 24px; overflow-y: auto; }
         
+        .action-btn { background-color: var(--bg-surface-hover); border: 1px solid var(--border-color); color: var(--text-main); padding: 12px 8px; border-radius: 8px; cursor: pointer; font-size: 12px; display: flex; flex-direction: column; align-items: center; gap: 8px; transition: all 0.2s; }
+        .action-btn:hover { border-color: var(--brand-blue); color: var(--brand-blue); transform: translateY(-2px); }
+        
         /* 流程条占位 (简化) */
         .timeline-container { position: relative; margin-top: 24px; }
         .timeline-container::before { content: ''; position: absolute; top: 10px; bottom: 20px; left: 11px; width: 2px; background-color: var(--border-color); z-index: 1; }
@@ -326,9 +329,20 @@
             </button>
         </div>
         <div class="r-content">
-            <div class="panel-title">Production Flow</div>
-            <div class="timeline-container">
-                <div class="timeline-step" style="opacity:0.5"><div class="step-dot"></div><div class="step-text">Workflow tracking coming soon</div></div>
+            <div class="panel-title">Production Pipeline</div>
+            <div class="pipeline-container" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px;">
+                <button class="action-btn" style="flex-direction: row; justify-content: flex-start; padding: 10px 16px;" onclick="document.getElementById('videoUploadInput').click()">
+                    <i data-lucide="upload-cloud" style="width:16px;"></i> 1. Video Upload
+                </button>
+                <input type="file" id="videoUploadInput" accept="video/*" style="display:none" onchange="handleVideoUpload(event)">
+                
+                <button class="action-btn" style="flex-direction: row; justify-content: flex-start; padding: 10px 16px;" onclick="sendChatMessage('Run Video Understanding')"><i data-lucide="brain" style="width:16px;"></i> 2. Video Understanding</button>
+                <button class="action-btn" style="flex-direction: row; justify-content: flex-start; padding: 10px 16px;" onclick="sendChatMessage('Run Script Writing')"><i data-lucide="file-text" style="width:16px;"></i> 3. Script Writing</button>
+                <button class="action-btn" style="flex-direction: row; justify-content: flex-start; padding: 10px 16px;" onclick="sendChatMessage('Run Resource Extractions')"><i data-lucide="archive" style="width:16px;"></i> 4. Resource Extractions</button>
+                <button class="action-btn" style="flex-direction: row; justify-content: flex-start; padding: 10px 16px;" onclick="sendChatMessage('Run Storyboarding')"><i data-lucide="layout" style="width:16px;"></i> 5. Storyboarding</button>
+                <button class="action-btn" style="flex-direction: row; justify-content: flex-start; padding: 10px 16px;" onclick="sendChatMessage('Run Video Generation')"><i data-lucide="video" style="width:16px;"></i> 6. Video Generation</button>
+                <button class="action-btn" style="flex-direction: row; justify-content: flex-start; padding: 10px 16px;" onclick="sendChatMessage('Run Video Editing')"><i data-lucide="scissors" style="width:16px;"></i> 7. Video Editing</button>
+                <button class="action-btn" style="flex-direction: row; justify-content: flex-start; padding: 10px 16px;" onclick="sendChatMessage('Run Review & Export')"><i data-lucide="check-circle" style="width:16px;"></i> 8. Review & Export</button>
             </div>
         </div>
     </div>
@@ -621,6 +635,25 @@
             fetchChats();
             } catch(e) {
                 alert(e.message);
+            }
+            event.target.value = ''; // Reset
+        }
+
+        async function handleVideoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('path', 'repo/S1_uploaded_video'); // upload specifically to repo/S1_uploaded_video
+            
+            try {
+                const res = await fetch('/api/fs/upload', { method: 'POST', body: formData });
+                if (!res.ok) throw new Error('Upload failed');
+                
+                fetchFileTree();
+                alert('Video uploaded successfully to repo/S1_uploaded_video/');
+            } catch(e) {
+                alert('Video upload error: ' + e.message);
             }
             event.target.value = ''; // Reset
         }
