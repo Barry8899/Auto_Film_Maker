@@ -105,4 +105,5 @@ Added an 8-step vertical production pipeline in the right zone:
 **Pipeline UX & Vobile Brand Alignment:**
 - The pipeline follows a progressive disclosure design. Initially, only **Step 1 (Video Upload)** is active and illuminated with Vobile Orange (`#F15A24`), while the remaining steps are dimmed/disabled.
 - **Upload Modal Enhancement:** Clicking Step 1 opens a custom centered Modal overlay instead of a silent file picker. It features a drag-and-drop styled browse zone, confirms the selected file with a checkmark UI, and provides a distinct "Upload File" button with an animated spinner.
+- **Existing Video Bypass:** The upload modal includes a "Use Existing Videos" button. It scans the `repo/S1_uploaded_video` directory. If video files are already present, it bypasses the upload process, immediately unlocks Step 2, and prints a success system message to the chat. If no videos exist, it halts with an error alert.
 - Once the upload completes, the Modal dismisses automatically, Step 1 turns green, and Step 2 automatically becomes active, seamlessly guiding the user to the next phase. Uploaded files are routed directly to `repo/S1_uploaded_video/`.

@@ -403,6 +403,8 @@
             <div id="uploadProgress" style="display:none; align-items:center; justify-content:center; gap:8px; padding:12px;">
                 <span class="loading-dots" style="color:#F15A24; font-weight:600;">Uploading...</span>
             </div>
+            
+            <button id="useExistingBtn" style="background:transparent; color:var(--brand-blue); border:1px solid var(--border-color); padding:10px; border-radius:8px; cursor:pointer; font-size:14px; font-weight:600; text-align:center; transition:all 0.2s;" onclick="useExistingVideo()">Use Existing Videos</button>
         </div>
     </div>
 
@@ -765,6 +767,50 @@
                 alert('Video upload error: ' + e.message);
                 document.getElementById('startUploadBtn').style.display = 'block';
                 document.getElementById('uploadProgress').style.display = 'none';
+            }
+        }
+
+        async function useExistingVideo() {
+            try {
+                const res = await fetch('/api/fs/tree');
+                const tree = await res.json();
+                
+                let s1Folder = null;
+                const repoFolder = tree.find(n => n.name === 'repo' && n.is_dir);
+                if (repoFolder && repoFolder.children) {
+                    s1Folder = repoFolder.children.find(n => n.name === 'S1_uploaded_video' && n.is_dir);
+                }
+                
+                let hasVideo = false;
+                if (s1Folder && s1Folder.children) {
+                    hasVideo = s1Folder.children.some(n => {
+                        const lower = n.name.toLowerCase();
+                        return !n.is_dir && (lower.endsWith('.mp4') || lower.endsWith('.webm') || lower.endsWith('.mov') || lower.endsWith('.mkv'));
+                    });
+                }
+                
+                if (hasVideo) {
+                    closeUploadModal();
+                    
+                    const step1 = document.getElementById('step-1');
+                    const step2 = document.getElementById('step-2');
+                    if (step1) {
+                        step1.classList.remove('active');
+                        step1.classList.add('completed');
+                        step1.innerHTML = `<i data-lucide="check-circle" style="width:16px; color:#10b981;"></i> 1. Video Upload`;
+                    }
+                    if (step2) {
+                        step2.classList.remove('inactive');
+                        step2.classList.add('active');
+                    }
+                    lucide.createIcons();
+                    
+                    sendChatMessage(`[System] Existing video found in S1_uploaded_video. Ready for Step 2.`);
+                } else {
+                    alert('Error: No existing video found in repo/S1_uploaded_video');
+                }
+            } catch(e) {
+                alert('Error checking existing videos: ' + e.message);
             }
         }
 
