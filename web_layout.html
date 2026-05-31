@@ -409,7 +409,7 @@
     <!-- Monaco Editor Loader -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.js"></script>
     <!-- HLS.js for m3u8 playback -->
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.4.12/hls.min.js"></script>
     <script>
         // Initialize Icons
         lucide.createIcons();
@@ -1209,12 +1209,14 @@
                     // HLS video playback
                     mediaContainer.innerHTML = `<video id="hls-video" controls style="max-width:100%; max-height:100%;"></video>`;
                     const video = document.getElementById('hls-video');
-                    if (Hls.isSupported()) {
+                    if (typeof Hls !== 'undefined' && Hls.isSupported()) {
                         const hls = new Hls();
                         hls.loadSource(fileUrl);
                         hls.attachMedia(video);
                     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                         video.src = fileUrl;
+                    } else {
+                        mediaContainer.innerHTML = '<div style="color:red; padding:20px;">Error: HLS.js failed to load or is not supported in this browser.</div>';
                     }
                 } else if (filePath.toLowerCase().endsWith('.mp4') || filePath.toLowerCase().endsWith('.webm')) {
                     mediaContainer.innerHTML = `<video controls style="max-width:100%; max-height:100%;" src="${fileUrl}"></video>`;

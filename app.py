@@ -207,7 +207,7 @@ def process_video_hls(full_path: str):
     os.makedirs(hls_dir, exist_ok=True)
     
     # Output m3u8 path
-    m3u8_path = os.path.join(hls_dir, "index.m3u8")
+    m3u8_path = os.path.join(hls_dir, f"{name_no_ext}.m3u8")
     
     # We use very fast encoding options to minimize waiting
     # -c:v libx264 -preset ultrafast -crf 28 -c:a aac -hls_time 5 -hls_list_size 0
