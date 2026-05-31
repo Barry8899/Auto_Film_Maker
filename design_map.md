@@ -106,6 +106,7 @@
 - 管线遵循**渐进式披露 (Progressive Disclosure)** 的设计原则。初始状态下，只有 **Step 1 (Video Upload)** 处于激活状态，并以 Vobile 品牌橙色 (`#F15A24`) 高亮，其余步骤处于暗色/禁用状态。
 - **上传弹窗 (Upload Modal) 增强:** 点击 Step 1 会在屏幕中央弹出一个定制的 Modal 覆盖层，而不是干瘪的系统文件选择器。它包含一个支持拖拽风格的浏览区，选择文件后会以绿勾图标确认，并提供一个带有加载动画的“Upload File”按钮。
 - **已有视频复用逻辑 (Existing Video Bypass):** 上传弹窗内包含一个 "Use Existing Videos" 按钮。点击后，系统会扫描 `repo/S1_uploaded_video` 目录。如果该目录下已经存在视频文件，则跳过上传流程，直接解锁 Step 2，并在聊天框打印系统成功消息。如果不存在视频文件，则弹出错误提示并阻断跳转。
+- **自动会话初始化 (Zero-Friction Chat Init)**: 修复了用户在点击管线按钮或上传视频时，由于未建立聊天室而导致的阻断弹窗 (`Please select or create a chat first`)。现在，当用户执行任何需要与 Agent 交互的操作时，系统会智能检测当前是否选中了会话；如果没有，会自动加载最近的会话，或者静默创建一个名为 `Production Pipeline` 的专属会话，保证生产管线的沉浸感与无缝衔接。
 - 当上传完成（或复用成功）后，Modal 自动关闭，Step 1 会变成绿色完成状态，并**自动点亮 Step 2**，无缝引导用户进入下一环节。所有上传的视频文件会被直接路由保存至 `repo/S1_uploaded_video/` 目录下。
 
 **Step 2 (Video Understanding) 交互机制:**

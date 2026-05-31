@@ -1042,8 +1042,26 @@
 
         async function sendChatMessage(contentOverride = null) {
             if (!currentChatId) {
-                alert("Please select or create a chat first.");
-                return;
+                try {
+                    const res = await fetch('/api/chat');
+                    const chats = await res.json();
+                    if (chats.length > 0) {
+                        await openChat(chats[0].id, chats[0].name);
+                    } else {
+                        const postRes = await fetch('/api/chat', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ name: "Production Pipeline" })
+                        });
+                        const chat = await postRes.json();
+                        await fetchChats();
+                        await openChat(chat.id, chat.name);
+                    }
+                } catch (e) {
+                    console.error("Auto chat creation failed", e);
+                    alert("Please select or create a chat first.");
+                    return;
+                }
             }
             const input = document.getElementById('chatInput');
             const text = contentOverride || input.value.trim();
