@@ -190,8 +190,42 @@ def download_item(path: str):
     return FileResponse(full_path, media_type='application/octet-stream', filename=os.path.basename(full_path))
 
 
+from fastapi import FastAPI, HTTPException, UploadFile, File, Form, BackgroundTasks
+import subprocess
+
+def process_video_hls(full_path: str):
+    """Convert an uploaded video to HLS for web playback using ffmpeg."""
+    if not full_path.lower().endswith(('.mp4', '.webm', '.mov')):
+        return
+        
+    base_dir = os.path.dirname(full_path)
+    file_name = os.path.basename(full_path)
+    name_no_ext, _ = os.path.splitext(file_name)
+    
+    # Target folder: same dir, name + _hls
+    hls_dir = os.path.join(base_dir, f"{name_no_ext}_hls")
+    os.makedirs(hls_dir, exist_ok=True)
+    
+    # Output m3u8 path
+    m3u8_path = os.path.join(hls_dir, "index.m3u8")
+    
+    # We use very fast encoding options to minimize waiting
+    # -c:v libx264 -preset ultrafast -crf 28 -c:a aac -hls_time 5 -hls_list_size 0
+    cmd = [
+        "ffmpeg", "-y", "-i", full_path,
+        "-c:v", "libx264", "-preset", "ultrafast", "-crf", "28",
+        "-c:a", "aac", "-b:a", "128k",
+        "-start_number", "0", "-hls_time", "5", "-hls_list_size", "0",
+        "-f", "hls", m3u8_path
+    ]
+    
+    try:
+        subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    except subprocess.CalledProcessError as e:
+        print(f"HLS Transcode failed for {full_path}: {e}")
+
 @app.post("/api/fs/upload")
-async def upload_file(path: str = Form(""), file: UploadFile = File(...)):
+async def upload_file(background_tasks: BackgroundTasks, path: str = Form(""), file: UploadFile = File(...)):
     # if path is empty, upload to WORK_DIR
     target_dir = os.path.abspath(os.path.join(WORK_DIR, path))
     if not target_dir.startswith(WORK_DIR):
@@ -203,6 +237,11 @@ async def upload_file(path: str = Form(""), file: UploadFile = File(...)):
         content = await file.read()
         with open(full_path, "wb") as f:
             f.write(content)
+            
+        # Trigger HLS transcode in background if it's a video in S1_uploaded_video
+        if target_dir.endswith("S1_uploaded_video") and file.filename.lower().endswith(('.mp4', '.webm', '.mov')):
+            background_tasks.add_task(process_video_hls, full_path)
+            
         return {"status": "success"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
