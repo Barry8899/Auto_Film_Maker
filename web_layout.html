@@ -135,6 +135,39 @@
         .action-btn { background-color: var(--bg-surface-hover); border: 1px solid var(--border-color); color: var(--text-main); padding: 12px 8px; border-radius: 8px; cursor: pointer; font-size: 12px; display: flex; flex-direction: column; align-items: center; gap: 8px; transition: all 0.2s; }
         .action-btn:hover { border-color: var(--brand-blue); color: var(--brand-blue); transform: translateY(-2px); }
         
+        .pipeline-btn {
+            flex-direction: row !important; 
+            justify-content: flex-start !important; 
+            padding: 12px 16px !important;
+            font-weight: 500; 
+            border-radius: 8px; 
+            transition: all 0.3s ease;
+        }
+        .pipeline-btn.inactive {
+            opacity: 0.4; 
+            cursor: not-allowed; 
+            pointer-events: none;
+            background-color: transparent; 
+            border-color: transparent;
+        }
+        .pipeline-btn.active {
+            opacity: 1; 
+            border-color: #F15A24; 
+            color: #F15A24;
+            background-color: rgba(241, 90, 36, 0.05);
+            box-shadow: 0 0 10px rgba(241, 90, 36, 0.15);
+            transform: translateY(-2px);
+        }
+        .pipeline-btn.active:hover {
+            border-color: #F15A24; color: #F15A24;
+            background-color: rgba(241, 90, 36, 0.1);
+        }
+        .pipeline-btn.completed {
+            opacity: 0.8; 
+            border-color: var(--border-color); 
+            color: var(--text-main);
+        }
+
         /* 流程条占位 (简化) */
         .timeline-container { position: relative; margin-top: 24px; }
         .timeline-container::before { content: ''; position: absolute; top: 10px; bottom: 20px; left: 11px; width: 2px; background-color: var(--border-color); z-index: 1; }
@@ -331,18 +364,44 @@
         <div class="r-content">
             <div class="panel-title">Production Pipeline</div>
             <div class="pipeline-container" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px;">
-                <button class="action-btn" style="flex-direction: row; justify-content: flex-start; padding: 10px 16px;" onclick="document.getElementById('videoUploadInput').click()">
+                <button id="step-1" class="action-btn pipeline-btn active" onclick="openUploadModal()">
                     <i data-lucide="upload-cloud" style="width:16px;"></i> 1. Video Upload
                 </button>
-                <input type="file" id="videoUploadInput" accept="video/*" style="display:none" onchange="handleVideoUpload(event)">
-                
-                <button class="action-btn" style="flex-direction: row; justify-content: flex-start; padding: 10px 16px;" onclick="sendChatMessage('Run Video Understanding')"><i data-lucide="brain" style="width:16px;"></i> 2. Video Understanding</button>
-                <button class="action-btn" style="flex-direction: row; justify-content: flex-start; padding: 10px 16px;" onclick="sendChatMessage('Run Script Writing')"><i data-lucide="file-text" style="width:16px;"></i> 3. Script Writing</button>
-                <button class="action-btn" style="flex-direction: row; justify-content: flex-start; padding: 10px 16px;" onclick="sendChatMessage('Run Resource Extractions')"><i data-lucide="archive" style="width:16px;"></i> 4. Resource Extractions</button>
-                <button class="action-btn" style="flex-direction: row; justify-content: flex-start; padding: 10px 16px;" onclick="sendChatMessage('Run Storyboarding')"><i data-lucide="layout" style="width:16px;"></i> 5. Storyboarding</button>
-                <button class="action-btn" style="flex-direction: row; justify-content: flex-start; padding: 10px 16px;" onclick="sendChatMessage('Run Video Generation')"><i data-lucide="video" style="width:16px;"></i> 6. Video Generation</button>
-                <button class="action-btn" style="flex-direction: row; justify-content: flex-start; padding: 10px 16px;" onclick="sendChatMessage('Run Video Editing')"><i data-lucide="scissors" style="width:16px;"></i> 7. Video Editing</button>
-                <button class="action-btn" style="flex-direction: row; justify-content: flex-start; padding: 10px 16px;" onclick="sendChatMessage('Run Review & Export')"><i data-lucide="check-circle" style="width:16px;"></i> 8. Review & Export</button>
+                <button id="step-2" class="action-btn pipeline-btn inactive" onclick="sendChatMessage('Run Video Understanding')"><i data-lucide="brain" style="width:16px;"></i> 2. Video Understanding</button>
+                <button id="step-3" class="action-btn pipeline-btn inactive" onclick="sendChatMessage('Run Script Writing')"><i data-lucide="file-text" style="width:16px;"></i> 3. Script Writing</button>
+                <button id="step-4" class="action-btn pipeline-btn inactive" onclick="sendChatMessage('Run Content Extraction')"><i data-lucide="archive" style="width:16px;"></i> 4. Content Extraction</button>
+                <button id="step-5" class="action-btn pipeline-btn inactive" onclick="sendChatMessage('Run Storyboarding')"><i data-lucide="layout" style="width:16px;"></i> 5. Storyboarding</button>
+                <button id="step-6" class="action-btn pipeline-btn inactive" onclick="sendChatMessage('Run Video Generation')"><i data-lucide="video" style="width:16px;"></i> 6. Video Generation</button>
+                <button id="step-7" class="action-btn pipeline-btn inactive" onclick="sendChatMessage('Run Video Editing')"><i data-lucide="scissors" style="width:16px;"></i> 7. Video Editing</button>
+                <button id="step-8" class="action-btn pipeline-btn inactive" onclick="sendChatMessage('Run Review & Export')"><i data-lucide="check-circle" style="width:16px;"></i> 8. Review & Export</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload Modal Overlay -->
+    <div id="uploadModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:1000; align-items:center; justify-content:center;">
+        <div style="background:var(--bg-surface); padding:32px; border-radius:12px; width:400px; border:1px solid var(--border-color); display:flex; flex-direction:column; gap:16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h3 style="margin:0; font-size:18px;">Upload Video</h3>
+                <i data-lucide="x" style="cursor:pointer; color:var(--text-muted);" onclick="closeUploadModal()"></i>
+            </div>
+            <p style="color:var(--text-muted); font-size:14px; margin:0;">Supported formats: MP4, WEBM, MOV, etc.</p>
+            
+            <div id="uploadDropzone" style="border:2px dashed var(--border-color); border-radius:8px; padding:48px 32px; text-align:center; cursor:pointer; background:var(--bg-base); transition:all 0.2s;" onclick="document.getElementById('videoUploadInput').click()">
+                <i data-lucide="upload-cloud" style="width:48px; height:48px; color:#F15A24; margin-bottom:12px;"></i>
+                <p style="margin:0; font-size:14px; color:var(--text-main); font-weight:500;">Click to browse files</p>
+            </div>
+            <input type="file" id="videoUploadInput" accept="video/*" style="display:none" onchange="handleFileSelect(event)">
+            
+            <div id="selectedFileInfo" style="display:none; align-items:center; gap:12px; background:var(--bg-surface-hover); padding:16px; border-radius:8px; border: 1px solid var(--border-color);">
+                <i data-lucide="file-video" style="color:#F15A24; width:24px; height:24px;"></i>
+                <span id="selectedFileName" style="flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:14px; font-weight:500;"></span>
+                <i data-lucide="check-circle-2" style="color:#10b981; width:20px; height:20px;"></i>
+            </div>
+            
+            <button id="startUploadBtn" style="display:none; background:#F15A24; color:white; border:none; padding:12px; border-radius:8px; cursor:pointer; font-size:14px; font-weight:600; text-align:center; transition:filter 0.2s;" onclick="startUpload()">Upload File</button>
+            <div id="uploadProgress" style="display:none; align-items:center; justify-content:center; gap:8px; padding:12px;">
+                <span class="loading-dots" style="color:#F15A24; font-weight:600;">Uploading...</span>
             </div>
         </div>
     </div>
@@ -639,23 +698,72 @@
             event.target.value = ''; // Reset
         }
 
-        async function handleVideoUpload(event) {
+        let selectedVideoFile = null;
+
+        function openUploadModal() {
+            document.getElementById('uploadModal').style.display = 'flex';
+            selectedVideoFile = null;
+            document.getElementById('videoUploadInput').value = '';
+            document.getElementById('uploadDropzone').style.display = 'block';
+            document.getElementById('selectedFileInfo').style.display = 'none';
+            document.getElementById('startUploadBtn').style.display = 'none';
+            document.getElementById('uploadProgress').style.display = 'none';
+            lucide.createIcons();
+        }
+
+        function closeUploadModal() {
+            document.getElementById('uploadModal').style.display = 'none';
+        }
+
+        function handleFileSelect(event) {
             const file = event.target.files[0];
             if (!file) return;
+            selectedVideoFile = file;
+            document.getElementById('uploadDropzone').style.display = 'none';
+            document.getElementById('selectedFileName').textContent = file.name;
+            document.getElementById('selectedFileInfo').style.display = 'flex';
+            document.getElementById('startUploadBtn').style.display = 'block';
+            lucide.createIcons();
+        }
+
+        async function startUpload() {
+            if (!selectedVideoFile) return;
+            document.getElementById('startUploadBtn').style.display = 'none';
+            document.getElementById('uploadProgress').style.display = 'flex';
+            
             const formData = new FormData();
-            formData.append('file', file);
-            formData.append('path', 'repo/S1_uploaded_video'); // upload specifically to repo/S1_uploaded_video
+            formData.append('file', selectedVideoFile);
+            formData.append('path', 'repo/S1_uploaded_video');
             
             try {
                 const res = await fetch('/api/fs/upload', { method: 'POST', body: formData });
                 if (!res.ok) throw new Error('Upload failed');
                 
                 fetchFileTree();
-                alert('Video uploaded successfully to repo/S1_uploaded_video/');
+                closeUploadModal();
+                
+                // Visual feedback: mark step 1 completed, activate step 2
+                const step1 = document.getElementById('step-1');
+                const step2 = document.getElementById('step-2');
+                if (step1) {
+                    step1.classList.remove('active');
+                    step1.classList.add('completed');
+                    step1.innerHTML = `<i data-lucide="check-circle" style="width:16px; color:#10b981;"></i> 1. Video Upload`;
+                }
+                if (step2) {
+                    step2.classList.remove('inactive');
+                    step2.classList.add('active');
+                }
+                lucide.createIcons();
+                
+                // Send automated chat message to confirm
+                sendChatMessage(`[System] Video "${selectedVideoFile.name}" uploaded successfully. Ready for Step 2.`);
+                
             } catch(e) {
                 alert('Video upload error: ' + e.message);
+                document.getElementById('startUploadBtn').style.display = 'block';
+                document.getElementById('uploadProgress').style.display = 'none';
             }
-            event.target.value = ''; // Reset
         }
 
         async function handleDrop(e, targetPath) {
