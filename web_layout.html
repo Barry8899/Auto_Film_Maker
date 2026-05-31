@@ -374,7 +374,7 @@
                 <button id="step-1" class="action-btn pipeline-btn active" onclick="openUploadModal()">
                     <i data-lucide="upload-cloud" style="width:16px;"></i> 1. Video Upload
                 </button>
-                <button id="step-2" class="action-btn pipeline-btn inactive" onclick="sendChatMessage('Run Video Understanding')"><i data-lucide="brain" style="width:16px;"></i> 2. Video Understanding</button>
+                <button id="step-2" class="action-btn pipeline-btn inactive" onclick="openVideoSelectorModal()"><i data-lucide="brain" style="width:16px;"></i> 2. Video Understanding</button>
                 <button id="step-3" class="action-btn pipeline-btn inactive" onclick="sendChatMessage('Run Script Writing')"><i data-lucide="file-text" style="width:16px;"></i> 3. Script Writing</button>
                 <button id="step-4" class="action-btn pipeline-btn inactive" onclick="sendChatMessage('Run Content Extraction')"><i data-lucide="archive" style="width:16px;"></i> 4. Content Extraction</button>
                 <button id="step-5" class="action-btn pipeline-btn inactive" onclick="sendChatMessage('Run Storyboarding')"><i data-lucide="layout" style="width:16px;"></i> 5. Storyboarding</button>
@@ -385,7 +385,25 @@
         </div>
     </div>
 
-    <!-- Upload Modal Overlay -->
+    <!-- Video Selector Modal Overlay -->
+    <div id="videoSelectorModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:1000; align-items:center; justify-content:center;">
+        <div style="background:var(--bg-surface); padding:32px; border-radius:12px; width:450px; border:1px solid var(--border-color); display:flex; flex-direction:column; gap:20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h3 style="margin:0; font-size:18px; display:flex; align-items:center; gap:8px;"><i data-lucide="video" style="color:#F15A24;"></i> Select Videos for Analysis</h3>
+                <i data-lucide="x" style="cursor:pointer; color:var(--text-muted);" onclick="closeVideoSelectorModal()"></i>
+            </div>
+            <p style="color:var(--text-muted); font-size:14px; margin:0;">Choose the videos from S1 you want the agent to understand.</p>
+            
+            <div id="videoChecklist" style="display:flex; flex-direction:column; gap:10px; max-height:250px; overflow-y:auto; background:var(--bg-base); padding:16px; border-radius:8px; border:1px solid var(--border-color);">
+                <!-- Checkboxes will be injected here -->
+            </div>
+            
+            <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:8px;">
+                <button style="background:transparent; color:var(--text-main); border:1px solid var(--border-color); padding:10px 16px; border-radius:8px; cursor:pointer; font-size:14px;" onclick="closeVideoSelectorModal()">Cancel</button>
+                <button id="startAnalysisBtn" style="background:#F15A24; color:white; border:none; padding:10px 20px; border-radius:8px; cursor:pointer; font-size:14px; font-weight:600;" onclick="submitVideoSelection()">Start Understanding</button>
+            </div>
+        </div>
+    </div>
     <div id="uploadModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:1000; align-items:center; justify-content:center;">
         <div style="background:var(--bg-surface); padding:32px; border-radius:12px; width:400px; border:1px solid var(--border-color); display:flex; flex-direction:column; gap:16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
             <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -814,13 +832,94 @@
                     }
                     lucide.createIcons();
                     
-                    sendChatMessage(`[System] Existing video found in S1_uploaded_video. Ready for Step 2.`);
+                    // Do not auto-send a message here anymore, wait for the user to explicitly click Step 2
+                    // We just log an alert or small toast
+                    console.log(`[System] Existing video found in S1_uploaded_video. Ready for Step 2.`);
                 } else {
                     alert('Error: No existing video found in repo/S1_uploaded_video');
                 }
             } catch(e) {
                 alert('Error checking existing videos: ' + e.message);
             }
+        }
+
+        async function openVideoSelectorModal() {
+            if (document.getElementById('step-2').classList.contains('inactive')) return;
+            
+            try {
+                const res = await fetch('/api/fs/tree');
+                const tree = await res.json();
+                
+                let s1Folder = null;
+                const repoFolder = tree.find(n => n.name === 'repo' && n.is_dir);
+                if (repoFolder && repoFolder.children) {
+                    s1Folder = repoFolder.children.find(n => n.name === 'S1_uploaded_video' && n.is_dir);
+                }
+                
+                let videos = [];
+                if (s1Folder && s1Folder.children) {
+                    videos = s1Folder.children.filter(n => {
+                        const lower = n.name.toLowerCase();
+                        return !n.is_dir && (lower.endsWith('.mp4') || lower.endsWith('.webm') || lower.endsWith('.mov') || lower.endsWith('.mkv'));
+                    });
+                }
+                
+                if (videos.length === 0) {
+                    alert('No videos found in S1_uploaded_video!');
+                    return;
+                }
+                
+                const checklist = document.getElementById('videoChecklist');
+                checklist.innerHTML = '';
+                
+                videos.forEach((vid, index) => {
+                    const label = document.createElement('label');
+                    label.style.display = 'flex';
+                    label.style.alignItems = 'center';
+                    label.style.gap = '10px';
+                    label.style.cursor = 'pointer';
+                    label.style.padding = '8px';
+                    label.style.borderRadius = '6px';
+                    label.style.transition = 'background 0.2s';
+                    label.onmouseover = () => label.style.background = 'var(--bg-surface-hover)';
+                    label.onmouseout = () => label.style.background = 'transparent';
+                    
+                    label.innerHTML = `
+                        <input type="checkbox" class="video-select-cb" value="${vid.name}" ${index === 0 ? 'checked' : ''} style="width:16px; height:16px; accent-color:#F15A24;">
+                        <i data-lucide="file-video" style="width:16px; color:var(--text-muted);"></i>
+                        <span style="font-size:14px; color:var(--text-main); flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${vid.name}</span>
+                    `;
+                    checklist.appendChild(label);
+                });
+                
+                lucide.createIcons();
+                document.getElementById('videoSelectorModal').style.display = 'flex';
+                
+            } catch(e) {
+                alert('Error loading videos: ' + e.message);
+            }
+        }
+        
+        function closeVideoSelectorModal() {
+            document.getElementById('videoSelectorModal').style.display = 'none';
+        }
+        
+        function submitVideoSelection() {
+            const checkboxes = document.querySelectorAll('.video-select-cb:checked');
+            const selectedFiles = Array.from(checkboxes).map(cb => cb.value);
+            
+            if (selectedFiles.length === 0) {
+                alert('Please select at least one video.');
+                return;
+            }
+            
+            closeVideoSelectorModal();
+            
+            const fileListStr = selectedFiles.join(', ');
+            // Specific prompt structure to forcefully trigger our custom skill and suppress global skills
+            const triggerPrompt = `[TRIGGER: S2_Video_Understanding] 请严格按照 S2_Video_Understanding Skill 中定义的一段式输出格式（包含剧情、N位人物带/files/截图、询问语句），对我指定的以下视频进行分析截帧：${fileListStr}。注意：绝对禁止使用全局 gemini-video-understanding 的6点报告格式，不要立刻生成md文档，必须等待我的回复！`;
+            
+            sendChatMessage(triggerPrompt);
         }
 
         async function handleDrop(e, targetPath) {
@@ -1045,13 +1144,17 @@
                 try {
                     const res = await fetch('/api/chat');
                     const chats = await res.json();
-                    if (chats.length > 0) {
-                        await openChat(chats[0].id, chats[0].name);
+                    
+                    const targetName = "🎬 video_maker";
+                    const existingChat = chats.find(c => c.name === targetName);
+                    
+                    if (existingChat) {
+                        await openChat(existingChat.id, existingChat.name);
                     } else {
                         const postRes = await fetch('/api/chat', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ name: "Production Pipeline" })
+                            body: JSON.stringify({ name: targetName })
                         });
                         const chat = await postRes.json();
                         await fetchChats();
