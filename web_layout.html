@@ -119,7 +119,14 @@
         #chat-container { flex: 1; padding: 24px; display: flex; flex-direction: column; min-height: 0; }
         /* Chat Area */
         .chat-area { flex: 1; border-radius: 8px; display: flex; flex-direction: column; margin-bottom: 16px; overflow-y: auto; padding: 16px; gap: 16px; scroll-behavior: smooth; min-height: 0; }
-        .msg-bubble { max-width: 80%; padding: 12px 16px; border-radius: 8px; font-size: 14px; line-height: 1.5; word-wrap: break-word; white-space: pre-wrap; }
+        .msg-bubble { max-width: 80%; padding: 12px 16px; border-radius: 8px; font-size: 14px; line-height: 1.6; word-wrap: break-word; }
+        .msg-bubble p { margin-bottom: 8px; }
+        .msg-bubble p:last-child { margin-bottom: 0; }
+        .msg-bubble img { max-width: 100%; max-height: 300px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); margin: 8px 0; object-fit: contain; background: rgba(0,0,0,0.2); cursor: zoom-in; }
+        .msg-bubble strong { font-weight: 600; color: inherit; }
+        .msg-bubble code { background: rgba(0,0,0,0.15); padding: 2px 4px; border-radius: 4px; font-family: var(--font-code); font-size: 13px; }
+        .msg-bubble pre { background: rgba(0,0,0,0.25); padding: 12px; border-radius: 6px; overflow-x: auto; font-family: var(--font-code); font-size: 13px; margin: 8px 0; }
+        
         .msg-user { align-self: flex-end; background-color: var(--brand-blue); color: #fff; border-bottom-right-radius: 2px; }
         .msg-assistant { align-self: flex-start; background-color: var(--bg-surface-hover); color: var(--text-main); border-bottom-left-radius: 2px; border: 1px solid var(--border-color); }
         .input-box { height: 56px; background-color: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 0 16px; display: flex; align-items: center; gap: 12px; }
@@ -412,6 +419,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.js"></script>
     <!-- HLS.js for m3u8 playback -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.4.12/hls.min.js"></script>
+    <!-- Marked.js for Markdown parsing in chat -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
         // Initialize Icons
         lucide.createIcons();
@@ -949,10 +958,42 @@
             messages.forEach(msg => {
                 const div = document.createElement('div');
                 div.className = `msg-bubble msg-${msg.role}`;
-                div.textContent = msg.content;
+                
+                let content = msg.content;
+                
+                // Pipeline Trigger interception
+                if (content.includes('[STEP_2_COMPLETE]')) {
+                    content = content.replace('[STEP_2_COMPLETE]', '');
+                    unlockPipelineStep(2, 3, 'Video Understanding');
+                }
+                
+                // Render with marked if available
+                if (typeof marked !== 'undefined') {
+                    // Tell marked to use simple line breaks
+                    marked.setOptions({ breaks: true });
+                    div.innerHTML = marked.parse(content);
+                } else {
+                    div.textContent = content;
+                }
+                
                 area.appendChild(div);
             });
             area.scrollTop = area.scrollHeight;
+        }
+
+        function unlockPipelineStep(currentNum, nextNum, currentName) {
+            const current = document.getElementById(`step-${currentNum}`);
+            const next = document.getElementById(`step-${nextNum}`);
+            if (current && !current.classList.contains('completed')) {
+                current.classList.remove('active');
+                current.classList.add('completed');
+                current.innerHTML = `<i data-lucide="check-circle" style="width:16px; color:#10b981;"></i> ${currentNum}. ${currentName}`;
+            }
+            if (next && next.classList.contains('inactive')) {
+                next.classList.remove('inactive');
+                next.classList.add('active');
+            }
+            lucide.createIcons();
         }
 
         async function openChat(id, name) {
@@ -1079,7 +1120,20 @@
                 clearTimeout(fakeToolTimeout);
                 // Replace loading div with actual content
                 loadingDiv.innerHTML = '';
-                loadingDiv.textContent = data.assistant_message.content;
+                
+                let aiContent = data.assistant_message.content;
+                
+                if (aiContent.includes('[STEP_2_COMPLETE]')) {
+                    aiContent = aiContent.replace('[STEP_2_COMPLETE]', '');
+                    unlockPipelineStep(2, 3, 'Video Understanding');
+                }
+                
+                if (typeof marked !== 'undefined') {
+                    marked.setOptions({ breaks: true });
+                    loadingDiv.innerHTML = marked.parse(aiContent);
+                } else {
+                    loadingDiv.textContent = aiContent;
+                }
                 
             } catch (e) {
                 clearInterval(logInterval);
