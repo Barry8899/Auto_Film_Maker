@@ -119,8 +119,8 @@
         #chat-container { flex: 1; padding: 24px; display: flex; flex-direction: column; min-height: 0; }
         /* Chat Area */
         .chat-area { flex: 1; border-radius: 8px; display: flex; flex-direction: column; margin-bottom: 16px; overflow-y: auto; padding: 16px; gap: 16px; scroll-behavior: smooth; min-height: 0; }
-        .msg-bubble { max-width: 80%; padding: 12px 16px; border-radius: 8px; font-size: 14px; line-height: 1.6; word-wrap: break-word; }
-        .msg-bubble p { margin-bottom: 8px; }
+        .msg-bubble { max-width: 80%; padding: 12px 16px; border-radius: 8px; font-size: 14px; line-height: 1.6; word-wrap: break-word; white-space: pre-wrap; }
+        .msg-bubble p { margin-bottom: 8px; white-space: pre-wrap; }
         .msg-bubble p:last-child { margin-bottom: 0; }
         .msg-bubble img { max-width: 100%; max-height: 300px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); margin: 8px 0; object-fit: contain; background: rgba(0,0,0,0.2); cursor: zoom-in; }
         .msg-bubble strong { font-weight: 600; color: inherit; }
@@ -1184,6 +1184,19 @@
             // Show loading state
             const loadingDiv = document.createElement('div');
             loadingDiv.className = `msg-bubble msg-assistant`;
+            
+            let primaryTool = "OpenClaw Agent runtime";
+            let primaryAction = "Connecting to workspace environment...";
+            let secondaryTool = "File System Operations";
+            let secondaryAction = "Reading workspace context...<br>Applying file diffs...";
+            
+            if (text.includes('S2_Video_Understanding')) {
+                primaryTool = "S2_Video_Understanding Skill";
+                primaryAction = "Analyzing video content with Gemini Multimodal API...";
+                secondaryTool = "extract_frames.py";
+                secondaryAction = "Extracting frame-accurate character faces via ffmpeg...";
+            }
+            
             loadingDiv.innerHTML = `
                 <div class="loading-container">
                     <div><span class="loading-dots">Lobster 思考中...</span></div>
@@ -1202,10 +1215,10 @@
                 <div class="tool-exec-header" onclick="this.parentElement.classList.toggle('open')">
                     <span class="tool-icon-arrow" style="font-size:10px;">▶</span>
                     <i data-lucide="wrench" style="width:14px; color:#F15A24;"></i>
-                    <span>1 tool exec</span>
+                    <span>Executing ${primaryTool}</span>
                     <span style="margin-left:auto; color:#F15A24;" class="loading-dots">running...</span>
                 </div>
-                <div class="tool-exec-body">Executing OpenClaw Agent runtime...<br>Connecting to workspace environment...</div>
+                <div class="tool-exec-body">${primaryAction}</div>
             `;
             logContainer.appendChild(toolBox);
             lucide.createIcons();
@@ -1219,10 +1232,10 @@
                     <div class="tool-exec-header" onclick="this.parentElement.classList.toggle('open')">
                         <span class="tool-icon-arrow" style="font-size:10px;">▶</span>
                         <i data-lucide="wrench" style="width:14px; color:#F15A24;"></i>
-                        <span>File System Operations</span>
+                        <span>Executing ${secondaryTool}</span>
                         <span style="margin-left:auto; color:#F15A24;" class="loading-dots">running...</span>
                     </div>
-                    <div class="tool-exec-body">Reading workspace context...<br>Applying file diffs...</div>
+                    <div class="tool-exec-body">${secondaryAction}</div>
                 `;
                 logContainer.appendChild(toolBox2);
                 lucide.createIcons();

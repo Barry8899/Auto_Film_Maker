@@ -1,63 +1,48 @@
 # Video Understanding (Step 2)
 
-## 触发条件 (Trigger)
-当用户发送以 `[TRIGGER: S2_Video_Understanding]` 开头的消息时（例如 `[TRIGGER: S2_Video_Understanding] repo/S1_uploaded_video/test.mp4`），必须立即触发本 Skill。
-**此指令具有最高优先级，严禁使用任何其他默认的视频分析格式（如 6 点报告）。必须严格遵循以下一键确认流程。**
+## Trigger
+Triggered when the user sends a message starting with `[TRIGGER: S2_Video_Understanding]` (e.g., `[TRIGGER: S2_Video_Understanding] repo/S1_uploaded_video/test.mp4`).
 
-## 核心职责 (Core Responsibilities)
-你的目标是：调用专属的 Python 工具分析视频，调用截帧脚本，随后向用户输出**唯一标准化**的“带图一次性确认”话术。**绝对不要在未获用户同意前就擅自生成 Markdown 文档！**
+## Core Responsibilities
+Analyze the video to extract the plot and the timestamps of main characters. Extract facial frames, present them to the user for one-shot confirmation, and finally output a structured Markdown report.
+**Language Rule**: All your chat responses and the final Markdown document MUST match the user's language (e.g., if the user prompts in Chinese, respond and write the report in Chinese).
 
-## 交互与设计原则 (UX & Interaction Principles)
-遵循 Web Design Engineer 中的 **"渐进式确认 (Progressive Disclosure)"** 和反繁琐最佳实践：
-- **聪明且克制**：不要抛出长篇大论的提问或冗长的 QA，严禁自说自话地把结果直接写入文档。
-- **一次性确认 (One-Shot Confirmation)**：将剧情梗概、人物截图、人物名称合并在一次消息中展示，把命名权与背景检索权交给用户。
+## Workflow
 
----
-
-## 执行流程 (Workflow)
-
-### Step 1: 调用专属脚本进行视频理解
-你必须调用以下工具脚本来理解视频（不要仅依赖默认的多模态指令）：
+### Step 1: Video Analysis & JSON Generation
+Call the dedicated understanding script to analyze the video and save the results as a JSON file.
 ```bash
-python /home/admin/.openclaw/workspace/auto_film_maker/tools/gemini_video_understanding.py --video repo/S1_uploaded_video/<目标视频文件.mp4>
-```
-该脚本将返回一段 JSON 数据，包含 `plot_summary` (剧情梗概) 和 `main_characters` (主要人物正脸时间戳列表)。
-
-### Step 2: 提取人物截图
-基于 Step 1 获得的 JSON 数据，你必须调用专门的截帧脚本，将画面保存到 `repo/S2_Video_Understanding/<video_name>/faces/` 目录下：
-```bash
-python /home/admin/.openclaw/workspace/auto_film_maker/tools/extract_frames.py --video repo/S1_uploaded_video/<目标视频文件.mp4> --out_dir repo/S2_Video_Understanding/<video_name>/faces --frames '[{"name":"char1", "timestamp":"00:00:12"}]'
+python tools/gemini_video_understanding.py --video <path_to_video> --out_json repo/S2_Video_Understanding/<video_name>_data.json
 ```
 
-### Step 3: 向用户抛出确认信息（严禁偏离此格式！）
-完成上述两步后，在 M 区聊天框中，**一字不差地严格按照以下模板结构**向用户发送确认消息。**绝对不要**在这里输出 6 点式长篇分析报告，也**绝对不要**提及文件保存路径！
+### Step 2: Extract Character Frames
+Call the extraction script passing the generated JSON file. This script will read the accurate timestamps and extract frame-accurate images to the `faces/` directory.
+```bash
+python tools/extract_frames.py --json_file repo/S2_Video_Understanding/<video_name>_data.json
+```
 
-```text
-我已经看完了视频！视频的简要剧情如下：
-[这里填入由脚本获取的简要剧情]
+### Step 3: Progressive Confirmation (One-Shot)
+Present the extracted information to the user in a clean format. Do not write the final markdown document yet.
+Output this exact structure in the chat (translate to the user's language):
 
-我提取到了 [N] 位主要人物：
-🙎‍♂️ ![人物名1](/files/repo/S2_Video_Understanding/<video_name>/faces/char1.jpg) ：[人物名1] (出现在 [时间戳])
-🙎‍♀️ ![人物名2](/files/repo/S2_Video_Understanding/<video_name>/faces/char2.jpg) ：[人物名2] (出现在 [时间戳])
+"I have finished analyzing the video! Here is the brief plot:
+[Plot Summary]
+
+I extracted [N] main characters:
+🙎‍♂️ ![Name1](/files/repo/S2_Video_Understanding/<video_name>/faces/char1.jpg) : [Name1] (Appears at [Timestamp])
 ...
 
-请问命名是否准确，或者需要我联网搜索他们的背景设定吗？（如果你觉得没问题，回复“直接生成文档”即可）
-```
-> **命名规则**：利用你自身的知识储备对脚本返回的角色进行识别（例如认出是“钢铁侠”）。如果无法识别，默认为“人物1”、“人物2”等。
+Are these names accurate? Would you like me to search the web for their background settings? (If everything looks good, just reply 'Proceed' or '直接生成文档')"
 
-### Step 4: 响应用户反馈
-- **如果用户要求修改或搜索**（例如：“男的叫钢铁侠，去搜一下他的剧情”）：
-  1. 调用 `web_search` 工具搜索该角色的背景设定。
-  2. 根据检索结果，在你的上下文中更新剧情或人物背景。
-  3. **必须重复展示** 包含更新后的图片和设定的确认话术。
-- **如果用户确认通过**（例如回复“直接生成文档”、“没问题”）：
-  进入 Step 5。
+### Step 4: Refinement
+If the user provides corrections or requests a web search, use the `web_search` tool, update your context, and PRESENT THE LIST AGAIN for final confirmation.
 
-### Step 5: 生成最终文档与结束流转
-1. **只有在用户明确确认后**，才允许在 `repo/S2_Video_Understanding/<video_name>/` 目录下生成 `<video_name>.md` 文件。
-2. **文档结构必须包含**：
-   - `# 剧情梗概` (Plot Summary)
-   - `# 场景表` (Scene List)
-   - `# 人物表` (Character List - 必须包含内嵌的 `/files/...` 截图格式和检索到的设定)
-3. **关键结束信号**：文档保存成功后，你**必须在回复用户的最后一行**，输出系统关键字（用于解锁UI）：
-   `[STEP_2_COMPLETE]`
+### Step 5: Final Output
+ONLY AFTER user confirmation, generate the final markdown report at `repo/S2_Video_Understanding/<video_name>/<video_name>.md`.
+It must include:
+- `# Plot Summary`
+- `# Scene List`
+- `# Character List` (MUST embed the local image paths using `![name](/files/...)` format and include their backgrounds).
+
+At the very end of your final chat message confirming the file is saved, you MUST append:
+`[STEP_2_COMPLETE]`

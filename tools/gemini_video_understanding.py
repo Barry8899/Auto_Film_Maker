@@ -5,7 +5,7 @@ import argparse
 import google.generativeai as genai
 import time
 
-def analyze_video(video_path):
+def analyze_video(video_path, out_json):
     if not os.path.exists(video_path):
         print(json.dumps({"error": f"File not found: {video_path}"}))
         sys.exit(1)
@@ -38,8 +38,8 @@ def analyze_video(video_path):
           "plot_summary": "A brief summary of what happens in the video.",
           "main_characters": [
             {
-              "name": "CharacterName or 'Unknown1'",
-              "timestamp": "00:00:10" // Approximate time (HH:MM:SS) where the character's face is clearly visible
+              "person_name": "CharacterName or 'Unknown1'",
+              "time_stamp": "00:00:10" // Approximate time (HH:MM:SS) where the character's face is clearly visible
             }
           ]
         }
@@ -54,7 +54,17 @@ def analyze_video(video_path):
         elif result_text.startswith("```"):
             result_text = result_text[3:-3].strip()
             
-        print(result_text)
+        data = json.loads(result_text)
+        
+        # Inject source_video into each character for downstream processing
+        for char in data.get("main_characters", []):
+            char["source_video"] = video_path
+            
+        os.makedirs(os.path.dirname(os.path.abspath(out_json)), exist_ok=True)
+        with open(out_json, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=2, ensure_ascii=False)
+            
+        print(json.dumps({"status": "success", "out_json": out_json}))
         
         # Cleanup
         genai.delete_file(video_file.name)
@@ -66,6 +76,7 @@ def analyze_video(video_path):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Analyze video using Gemini API")
     parser.add_argument("--video", required=True, help="Path to the video file")
+    parser.add_argument("--out_json", required=True, help="Path to save the JSON output")
     args = parser.parse_args()
     
-    analyze_video(args.video)
+    analyze_video(args.video, args.out_json)

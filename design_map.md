@@ -92,7 +92,7 @@
   - **前端 (HLS.js)**: M区多态容器新增对 `.m3u8` 文件的深度识别与拦截。当用户在左侧 Explorer 点击 `.m3u8` 时，采用 `hls.js` 劫持并注入原生 `<video>`，实现毫秒级秒开和边下边播的流媒体体验，完全规避了传统 MP4 必须预加载大量文件头的带宽瓶颈。
 
 ### 3.7 工具执行动态 UI 与会话管理 (Tool UI & Session Management)
-- **工具调用拟物化组件**: 发送消息后，采用可折叠的工具调用组件 (`Tool Exec Container`) 代替纯文本日志，精确匹配原生 OpenClaw 的交互心智（`▶ [🔧扳手图标] 1 tool exec ... running`）。
+- **工具执行动态 UI**: 发送消息后，采用拟物化组件 (`Tool Exec Container`) 呈现工具调用状态。系统会自动根据触发指令动态更新显示的 Skill 与 Tool 名称（例如触发 S2 时，UI 会精确显示 `Executing S2_Video_Understanding Skill` 及对应的底层 `.py` 脚本）。
 - **L区聊天历史安全删除**: 对话记录增加防误触的红色悬停删除按钮（Hover 显示），并且后端绑定同步删除物理存储的 `.json` 记录，保证空间整洁。
 
 
@@ -115,6 +115,8 @@
 - 当上传完成（或复用成功）后，Modal 自动关闭，Step 1 会变成绿色完成状态，并**自动点亮 Step 2**，无缝引导用户进入下一环节。所有上传的视频文件会被直接路由保存至 `repo/S1_uploaded_video/` 目录下。
 
 **Step 2 (Video Understanding) 交互机制:**
-- **触发与 UI 承载**: 点击 Step 2 后，前端自动向 M 区聊天框发送 `Run Video Understanding` 指令。视频人物截图作为 Markdown 附件 (`![name](/files/...)`) 直接渲染在现有的 M 区聊天流中。
+- **触发与 UI 承载**: 点击 Step 2 后，前端自动向 M 区聊天框发送 `Run Video Understanding` 指令。视频人物截图作为 Markdown 附件 (`![name](/files/...)`) 直接渲染在现有的 M 区聊天流中。Markdown 解析已修复，支持保留原生的换行符和空行，保证阅读体验。
 - **渐进式确认 (Progressive Disclosure) 与一次性确认 (One-Shot Confirmation)**: Agent 自动调用 Gemini 提取视频情节和主要角色时间戳，利用专用的 `tools/extract_frames.py` 工具静默截取正脸帧，并在聊天框**一次性抛出**“简要剧情 + 带图的人物表”。避免冗长的分批次问答带来的用户疲劳 (HITL Fatigue)。
+- **精准的 JSON 握手截帧**: `gemini_video_understanding.py` 现在会生成结构化的 JSON 数据（包含准确的 `time_stamp` 和 `source_video` 路径）。`extract_frames.py` 直接读取该 JSON 文件，使用 `ffmpeg -y -i <video> -ss <timestamp>` 实现**高精度的准确截帧**，解决了此前截取到错位帧或无效画面的痛点。
+- **语言自适应**: 尽管底层 `SKILL.md` 的系统指令为统一的英文，但规定了 Agent **必须跟随用户输入的语言**进行回答与文档编写，保证用户界面的亲和力。
 - **动态搜索与完成流转**: 赋予用户修改命名或要求 Agent 进行 Web Search（背景设定检索）的权限。一切确认无误后，Agent 将包含图文的最终内容写入 `repo/S2_Video_Understanding/<video_name>/<video_name>.md` 文档，并在消息末尾抛出 `[STEP_2_COMPLETE]` 信号，前端 JS 拦截该信号后自动将 Step 2 标记为完成（绿勾）并点亮 Step 3。
