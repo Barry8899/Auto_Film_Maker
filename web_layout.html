@@ -773,25 +773,7 @@
                 fetchFileTree();
                 closeUploadModal();
                 
-                // Visual feedback: mark step 1 completed, activate step 2
-                const step1 = document.getElementById('step-1');
-                const step2 = document.getElementById('step-2');
-                if (step1) {
-                    step1.classList.remove('active');
-                    step1.classList.add('completed');
-                    step1.innerHTML = `<i data-lucide="check-circle" style="width:16px; color:#10b981;"></i> 1. Video Upload`;
-                }
-                if (step2) {
-                    step2.classList.remove('inactive');
-                    step2.classList.add('active');
-                }
-                lucide.createIcons();
-                
-                // Auto open the video selector modal for step 2
-                openVideoSelectorModal();
-                
-                // Send automated chat message to confirm
-                sendChatMessage(`[System] Video "${selectedVideoFile.name}" uploaded successfully. Ready for Step 2.`);
+                promptLanguageSelection();
                 
             } catch(e) {
                 alert('Video upload error: ' + e.message);
@@ -821,22 +803,7 @@
                 
                 if (hasVideo) {
                     closeUploadModal();
-                    
-                    const step1 = document.getElementById('step-1');
-                    const step2 = document.getElementById('step-2');
-                    if (step1) {
-                        step1.classList.remove('active');
-                        step1.classList.add('completed');
-                        step1.innerHTML = `<i data-lucide="check-circle" style="width:16px; color:#10b981;"></i> 1. Video Upload`;
-                    }
-                    if (step2) {
-                        step2.classList.remove('inactive');
-                        step2.classList.add('active');
-                    }
-                    lucide.createIcons();
-                    
-                    console.log(`[System] Existing video found in S1_uploaded_video. Ready for Step 2.`);
-                    openVideoSelectorModal();
+                    promptLanguageSelection();
                 } else {
                     alert('Error: No existing video found in repo/S1_uploaded_video');
                 }
@@ -1140,33 +1107,62 @@
             }
         }
 
-        async function sendChatMessage(contentOverride = null) {
-            if (!currentChatId) {
-                try {
-                    const res = await fetch('/api/chat');
-                    const chats = await res.json();
-                    
-                    const targetName = "🎬 video_maker";
-                    const existingChat = chats.find(c => c.name === targetName);
-                    
-                    if (existingChat) {
-                        await openChat(existingChat.id, existingChat.name);
-                    } else {
-                        const postRes = await fetch('/api/chat', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ name: targetName })
-                        });
-                        const chat = await postRes.json();
-                        await fetchChats();
-                        await openChat(chat.id, chat.name);
-                    }
-                } catch (e) {
-                    console.error("Auto chat creation failed", e);
-                    alert("Please select or create a chat first.");
-                    return;
+        let isAwaitingLanguage = false;
+
+        async function ensureVideoMakerChat() {
+            if (currentChatId) return;
+            try {
+                const res = await fetch('/api/chat');
+                const chats = await res.json();
+                
+                const targetName = "🎬 video_maker";
+                const existingChat = chats.find(c => c.name === targetName);
+                
+                if (existingChat) {
+                    await openChat(existingChat.id, existingChat.name);
+                } else {
+                    const postRes = await fetch('/api/chat', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name: targetName })
+                    });
+                    const chat = await postRes.json();
+                    await fetchChats();
+                    await openChat(chat.id, chat.name);
                 }
+            } catch (e) {
+                console.error("Auto chat creation failed", e);
+                alert("Please select or create a chat first.");
+                throw e;
             }
+        }
+
+        async function promptLanguageSelection() {
+            await ensureVideoMakerChat();
+            isAwaitingLanguage = true;
+            
+            const area = document.getElementById('chatArea');
+            const div = document.createElement('div');
+            div.className = `msg-bubble msg-assistant`;
+            div.style.borderLeft = '4px solid #F15A24';
+            div.style.backgroundColor = 'rgba(241, 90, 36, 0.05)';
+            div.innerText = `(System)\n\n🎞 Video uploaded successfully. Entering the second phase: Video understanding. Select your preferred language (e.g., "Chinese" / "English") or simply reply "Continue" to start\n\n🎞 视频上传完成。即将进入第二阶段：视频理解。请回复您偏好使用的语言（例如："中文" / "English"），或者直接回复 "继续" 开始`;
+            area.appendChild(div);
+            area.scrollTop = area.scrollHeight;
+            
+            const step1 = document.getElementById('step-1');
+            if (step1 && !step1.classList.contains('completed')) {
+                step1.classList.remove('active');
+                step1.classList.add('completed');
+                step1.innerHTML = `<i data-lucide="check-circle" style="width:16px; color:#10b981;"></i> 1. Video Upload`;
+                lucide.createIcons();
+            }
+        }
+
+        async function sendChatMessage(contentOverride = null) {
+            await ensureVideoMakerChat();
+            if (!currentChatId) return;
+            
             const input = document.getElementById('chatInput');
             const text = contentOverride || input.value.trim();
             if (!text) return;
@@ -1268,6 +1264,19 @@
                     loadingDiv.innerHTML = marked.parse(aiContent);
                 } else {
                     loadingDiv.textContent = aiContent;
+                }
+                
+                if (isAwaitingLanguage && !text.includes('[TRIGGER')) {
+                    isAwaitingLanguage = false;
+                    const step2 = document.getElementById('step-2');
+                    if (step2) {
+                        step2.classList.remove('inactive');
+                        step2.classList.add('active');
+                        lucide.createIcons();
+                    }
+                    setTimeout(() => {
+                        openVideoSelectorModal();
+                    }, 1000);
                 }
                 
             } catch (e) {
