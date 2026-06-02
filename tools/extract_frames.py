@@ -31,9 +31,9 @@ def extract_frames(json_file):
         
         out_path = os.path.join(out_dir, f"{name}.jpg")
         
-        # Frame accurate seek: -i video -ss timestamp
+        # Frame accurate seek: -ss timestamp -i video
         cmd = [
-            "ffmpeg", "-y", "-i", video_path, "-ss", timestamp,
+            "ffmpeg", "-y", "-ss", timestamp, "-i", video_path,
             "-vframes", "1", "-q:v", "2", out_path
         ]
         
