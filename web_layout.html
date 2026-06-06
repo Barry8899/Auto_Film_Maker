@@ -1286,14 +1286,40 @@
                 errDiv.style.color = "#F15A24"; // Use brand orange instead of harsh red for system notices
                 
                 // If it's a fetch/timeout error due to long processing
-                if (e.message.includes('Failed to fetch') || e.message.includes('timeout')) {
-                    errDiv.innerHTML = `<i data-lucide="alert-circle" style="width:14px; margin-bottom:-2px;"></i> <b>Network connection paused.</b><br>The video analysis is taking longer than the network timeout (common for large files). Gemini is still processing the video in the background.<br><br><i>Please wait a minute, then switch to another tab and switch back to refresh the chat history.</i>`;
+                if (e.message.includes('Failed to fetch') || e.message.includes('timeout') || e.message.includes('NetworkError')) {
+                    errDiv.innerHTML = `<i data-lucide="alert-circle" style="width:14px; margin-bottom:-2px;"></i> <b>Network connection paused.</b><br>The video analysis is taking longer than the network timeout (common for large files). Gemini is still processing the video in the background.<br><br><i>Auto-refreshing in background... please wait.</i>`;
+                    
+                    // Start a polling mechanism to auto-recover when the backend finishes
+                    const currentChatIdAtError = currentChatId;
+                    const pollInterval = setInterval(async () => {
+                        try {
+                            if (currentChatId !== currentChatIdAtError) {
+                                clearInterval(pollInterval); // user switched chats
+                                return;
+                            }
+                            const res = await fetch('/api/chat/' + currentChatIdAtError + '?t=' + Date.now());
+                            if (res.ok) {
+                                const chatData = await res.json();
+                                // Check if the last message is from assistant and does not equal what we already had (or just check if it's the assistant response to our query)
+                                const lastMsg = chatData.messages[chatData.messages.length - 1];
+                                if (lastMsg && lastMsg.role === 'assistant') {
+                                    clearInterval(pollInterval);
+                                    // Agent has finished responding! Re-render everything.
+                                    renderMessages(chatData.messages);
+                                }
+                            }
+                        } catch (pollErr) {
+                            // ignore fetch errors during polling
+                        }
+                    }, 5000); // Check every 5 seconds
+                    
                 } else {
                     errDiv.textContent = "System Error: " + e.message;
                 }
                 
                 area.appendChild(errDiv);
                 lucide.createIcons();
+                area.scrollTop = area.scrollHeight;
             }
         }
 
