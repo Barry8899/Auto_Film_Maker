@@ -1241,10 +1241,15 @@
             const logInterval = null;
 
             try {
+                const payload = { content: text };
+                if (isAwaitingLanguage && !text.includes('[TRIGGER')) {
+                    payload.skip_agent = true; // Bypass slow agent boot for language handshake
+                }
+                
                 const res = await fetch(`/api/chat/${currentChatId}/message`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ content: text })
+                    body: JSON.stringify(payload)
                 });
                 const data = await res.json();
                 

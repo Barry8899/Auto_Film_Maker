@@ -47,6 +47,7 @@ class ChatRename(BaseModel):
 
 class SendMessage(BaseModel):
     content: str
+    skip_agent: bool = False
 
 class DeleteItem(BaseModel):
     path: str
@@ -353,6 +354,15 @@ def send_message(chat_id: str, data: SendMessage):
         json.dump(chat_data, f, ensure_ascii=False, indent=2)
 
     # Call OpenClaw agent
+    if data.skip_agent:
+        # Just return a simulated system acknowledgment to save time
+        ai_text = "(System) Acknowledged. Proceeding to the next step..."
+        ai_msg = {"role": "assistant", "content": ai_text}
+        chat_data["messages"].append(ai_msg)
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(chat_data, f, ensure_ascii=False, indent=2)
+        return {"user_message": user_msg, "assistant_message": ai_msg}
+
     import subprocess
     try:
         result = subprocess.run(
