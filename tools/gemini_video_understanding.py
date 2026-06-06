@@ -33,18 +33,29 @@ def analyze_video(video_path, out_json):
         # Call the model
         model = genai.GenerativeModel(model_name="gemini-2.5-pro")
         prompt = """
-        Analyze this video. Return a strictly valid JSON object with the following schema:
-        {
-          "plot_summary": "A brief summary of what happens in the video.",
-          "main_characters": [
-            {
-              "person_name": "CharacterName or 'Unknown1'",
-              "time_stamp": "00:00:10" // Approximate time (HH:MM:SS) where the character's face is clearly visible
-            }
-          ]
-        }
-        Only include main characters. Ignore background people. Ensure output is pure JSON without markdown wrappers.
-        """
+Analyze this video and return a strictly valid JSON object with this schema:
+{
+ "plot_summary": "A brief summary of what happens in the video.",
+ "main_characters": [
+ {
+ "person_name": "CharacterName or 'Unknown1'",
+ "time_stamp": "00:00:10" // Approximate time (HH:MM:SS) where the character represents its FIRST clear frontal appearance
+ }
+ ]
+}
+
+Character inclusion rules:
+- Include MAIN CHARACTERS ONLY. Minor or fleeting characters should be ignored.
+- Exclude: extras, crowd members, cameos, fleeting appearances, supporting/minor roles
+
+Timestamp rules:
+- Must be the FIRST timestamp where the character's face is CLEARLY and FRONTALLY visible
+- Detailed to (HH:MM:SS) format
+- Reject: profile shots, blur, motion blur, partial faces, distant shots, obscured views
+
+Output rules:
+- Output pure JSON only, no markdown wrappers
+"""
         response = model.generate_content([video_file, prompt], request_options={"timeout": 600})
         
         # Clean response text

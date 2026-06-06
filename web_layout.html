@@ -554,8 +554,14 @@
 
         
         // API Calls
+        let expandedFolders = new Set();
         async function fetchFileTree() {
             try {
+                // Collect currently open folders before re-render
+                document.querySelectorAll('.tree-folder.open').forEach(f => {
+                    if (f.dataset.path) expandedFolders.add(f.dataset.path);
+                });
+
                 const res = await fetch('/api/fs/tree');
                 const treeData = await res.json();
                 renderFileTree(treeData, document.getElementById('fileTreeContainer'));
@@ -1452,10 +1458,24 @@
                 if (isDir && node.children) {
                     const childContainer = document.createElement('div');
                     childContainer.className = 'tree-folder';
+                    childContainer.dataset.path = node.path;
+                    
+                    if (expandedFolders.has(node.path)) {
+                        childContainer.classList.add('open');
+                        item.querySelector('i[data-lucide^="folder"]').setAttribute('data-lucide', 'folder-open');
+                        item.querySelector('.chevron-icon').setAttribute('data-lucide', 'chevron-down');
+                    }
                     
                     item.onclick = (e) => {
                         if (e.target.closest('.action-icon')) return; 
                         childContainer.classList.toggle('open');
+                        
+                        if(childContainer.classList.contains('open')) {
+                            expandedFolders.add(node.path);
+                        } else {
+                            expandedFolders.delete(node.path);
+                        }
+
                         const ico = item.querySelector('i[data-lucide^="folder"]');
                         const chev = item.querySelector('.chevron-icon');
                         if(childContainer.classList.contains('open')) {

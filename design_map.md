@@ -125,6 +125,10 @@
 - **动态搜索与完成流转**: 赋予用户修改命名或要求 Agent 进行 Web Search（背景设定检索）的权限。一切确认无误后，Agent 将包含图文的最终内容写入 `repo/S2_Video_Understanding/<video_name>/<video_name>.md` 文档。
 - **无缝流转 (S2 -> S3)**：改变了原来依靠用户手动点击下一步的割裂感。当用户针对报告回复“进入下一阶段”后，Agent 才会打出隐式信号 `[STEP_2_COMPLETE]`。前端 JS 拦截该信号后自动将 Step 2 标记为完成（绿勾），点亮 Step 3，**并静默在后台为用户发送 `[TRIGGER: S3_Script_Writing]` 指令**，瞬间无缝唤起 S3 技能，开启对话流。
 
+### 3.9 UX/DX 体验细节打磨 (UX & Developer Experience Refinements)
+- **L区文件树状态保持 (State Preservation)**：修复了 L 区由于 CRUD 操作（增删改文件）或长连刷新导致目录树全部折叠的问题。引入了 `expandedFolders` 状态集 (Set) 并在重绘 DOM 前采集路径映射，实现了重新拉取文件树时**完全还原用户的多级展开状态**，极大地提升了查看深层嵌套文件（如 `/repo/S2/...`）的便利性。
+- **S2 Prompt 幻觉修复**：更新了 `gemini_video_understanding.py` 的提示词。增加并明确了 `Character inclusion rules`（强制排除群演和路人）与 `Timestamp rules`（必须提取正面清晰首帧），提升了 JSON 截帧输出的稳定性和准确率。
+
 **Step 3 (Script Writing) 交互机制:**
 - **消除白纸综合征 (Direction Advisor)**：被静默唤起后，Agent 不会像填表一样盘问用户，而是主动根据 S2 剧情，抛出 2~3 种带有明显差异的风格预案（如高燃快剪、治愈回忆），引导用户做选择题。
 - **五维特征采集 (Phase 1)**：在对话中不断采集并更新 `style`, `emotion_curve`, `pacing`, `aesthetic`, `duration` 五个维度，直至全部明确并落盘至 `features.json`。
