@@ -1024,15 +1024,24 @@
             const area = document.getElementById('chatArea');
             area.innerHTML = '';
             messages.forEach(msg => {
+                let content = msg.content;
+                
+                // Hide trigger messages from user view
+                if (msg.role === 'user' && content.includes('[TRIGGER:')) {
+                    return;
+                }
+
                 const div = document.createElement('div');
                 div.className = `msg-bubble msg-${msg.role}`;
-                
-                let content = msg.content;
                 
                 // Pipeline Trigger interception
                 if (content.includes('[STEP_2_COMPLETE]')) {
                     content = content.replace('[STEP_2_COMPLETE]', '');
                     unlockPipelineStep(2, 3, 'Video Understanding');
+                }
+                if (content.includes('[STEP_3_COMPLETE]')) {
+                    content = content.replace('[STEP_3_COMPLETE]', '');
+                    unlockPipelineStep(3, 4, 'Script Writing');
                 }
                 
                 // Render with marked if available
@@ -1160,7 +1169,7 @@
             }
         }
 
-        async function sendChatMessage(contentOverride = null) {
+        async function sendChatMessage(contentOverride = null, isHidden = false) {
             await ensureVideoMakerChat();
             if (!currentChatId) return;
             
@@ -1170,13 +1179,15 @@
             
             if (!contentOverride) input.value = '';
 
-            // Optimistic UI
             const area = document.getElementById('chatArea');
-            const userDiv = document.createElement('div');
-            userDiv.className = `msg-bubble msg-user`;
-            userDiv.textContent = text;
-            area.appendChild(userDiv);
-            area.scrollTop = area.scrollHeight;
+            if (!isHidden) {
+                // Optimistic UI
+                const userDiv = document.createElement('div');
+                userDiv.className = `msg-bubble msg-user`;
+                userDiv.textContent = text;
+                area.appendChild(userDiv);
+                area.scrollTop = area.scrollHeight;
+            }
 
             // Show loading state
             const loadingDiv = document.createElement('div');
@@ -1192,6 +1203,11 @@
                 primaryAction = "Analyzing video content with Gemini Multimodal API...";
                 secondaryTool = "extract_frames.py";
                 secondaryAction = "Extracting frame-accurate character faces via ffmpeg...";
+            } else if (text.includes('S3_Script_Writing')) {
+                primaryTool = "S3_Script_Writing Skill";
+                primaryAction = "Drafting video direction concepts & reading contexts...";
+                secondaryTool = "features.json / script.md";
+                secondaryAction = "Generating structured Markdown outlines...";
             }
             
             loadingDiv.innerHTML = `
@@ -1263,6 +1279,12 @@
                 if (aiContent.includes('[STEP_2_COMPLETE]')) {
                     aiContent = aiContent.replace('[STEP_2_COMPLETE]', '');
                     unlockPipelineStep(2, 3, 'Video Understanding');
+                    setTimeout(() => sendChatMessage('[TRIGGER: S3_Script_Writing]', true), 1000);
+                }
+                if (aiContent.includes('[STEP_3_COMPLETE]')) {
+                    aiContent = aiContent.replace('[STEP_3_COMPLETE]', '');
+                    unlockPipelineStep(3, 4, 'Script Writing');
+                    setTimeout(() => sendChatMessage('[TRIGGER: S4_Content_Extraction]', true), 1000);
                 }
                 
                 if (typeof marked !== 'undefined') {
@@ -1310,6 +1332,14 @@
                                 const lastMsg = chatData.messages[chatData.messages.length - 1];
                                 if (lastMsg && lastMsg.role === 'assistant') {
                                     clearInterval(pollInterval);
+                                    // Handle auto-triggers if they exist in the recovered message
+                                    let content = lastMsg.content;
+                                    if (content.includes('[STEP_2_COMPLETE]')) {
+                                        setTimeout(() => sendChatMessage('[TRIGGER: S3_Script_Writing]', true), 1000);
+                                    }
+                                    if (content.includes('[STEP_3_COMPLETE]')) {
+                                        setTimeout(() => sendChatMessage('[TRIGGER: S4_Content_Extraction]', true), 1000);
+                                    }
                                     // Agent has finished responding! Re-render everything.
                                     renderMessages(chatData.messages);
                                 }

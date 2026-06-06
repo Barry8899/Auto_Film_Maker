@@ -45,5 +45,7 @@ It must include:
 - `# Scene List`
 - `# Character List` (MUST embed the local image paths using `![name](/files/...)` format and include their backgrounds).
 
-At the very end of your final chat message confirming the file is saved, you MUST append:
-`[STEP_2_COMPLETE]`
+Tell the user: "The video understanding report has been saved. You can check the file on the left. If no changes are needed, please reply 'Proceed to next stage' or '继续'."
+
+### Step 6: Transition to S3
+When the user replies 'Proceed to next stage' or '继续' after Step 5, reply with a simple "Okay, starting the next step immediately!" and APPEND exactly `[STEP_2_COMPLETE]` at the very end of your message.

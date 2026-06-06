@@ -122,4 +122,11 @@
 - **渐进式确认 (Progressive Disclosure) 与一次性确认 (One-Shot Confirmation)**: Agent 自动调用 Gemini 提取视频情节和主要角色时间戳，利用专用的 `tools/extract_frames.py` 工具静默截取正脸帧，并在聊天框**一次性抛出**“简要剧情 + 带图的人物表”。避免冗长的分批次问答带来的用户疲劳 (HITL Fatigue)。
 - **精准的 JSON 握手截帧**: `gemini_video_understanding.py` 现在会生成结构化的 JSON 数据（包含准确的 `time_stamp` 和 `source_video` 路径）。`extract_frames.py` 直接读取该 JSON 文件，使用 `ffmpeg -y -ss <timestamp> -i <video>` 实现**高精度的准确截帧**，解决了此前截取到错位帧或无效画面的痛点。
 - **语言自适应**: 尽管底层 `SKILL.md` 的系统指令为统一的英文，但规定了 Agent **必须跟随用户输入的语言**进行回答与文档编写，保证用户界面的亲和力。
-- **动态搜索与完成流转**: 赋予用户修改命名或要求 Agent 进行 Web Search（背景设定检索）的权限。一切确认无误后，Agent 将包含图文的最终内容写入 `repo/S2_Video_Understanding/<video_name>/<video_name>.md` 文档，并在消息末尾抛出 `[STEP_2_COMPLETE]` 信号，前端 JS 拦截该信号后自动将 Step 2 标记为完成（绿勾）并点亮 Step 3。
+- **动态搜索与完成流转**: 赋予用户修改命名或要求 Agent 进行 Web Search（背景设定检索）的权限。一切确认无误后，Agent 将包含图文的最终内容写入 `repo/S2_Video_Understanding/<video_name>/<video_name>.md` 文档。
+- **无缝流转 (S2 -> S3)**：改变了原来依靠用户手动点击下一步的割裂感。当用户针对报告回复“进入下一阶段”后，Agent 才会打出隐式信号 `[STEP_2_COMPLETE]`。前端 JS 拦截该信号后自动将 Step 2 标记为完成（绿勾），点亮 Step 3，**并静默在后台为用户发送 `[TRIGGER: S3_Script_Writing]` 指令**，瞬间无缝唤起 S3 技能，开启对话流。
+
+**Step 3 (Script Writing) 交互机制:**
+- **消除白纸综合征 (Direction Advisor)**：被静默唤起后，Agent 不会像填表一样盘问用户，而是主动根据 S2 剧情，抛出 2~3 种带有明显差异的风格预案（如高燃快剪、治愈回忆），引导用户做选择题。
+- **五维特征采集 (Phase 1)**：在对话中不断采集并更新 `style`, `emotion_curve`, `pacing`, `aesthetic`, `duration` 五个维度，直至全部明确并落盘至 `features.json`。
+- **三幕剧大纲构思 (Phase 2)**：基于特征 JSON 和素材，自动撰写包含 Logline、节奏策略、人物弧光和三幕剧结构的 `script.md`。经过和用户的多轮对话修改直至确认。
+- **无缝流转 (S3 -> S4)**：大纲定稿后，系统再次发起确认询问。用户同意后抛出 `[STEP_3_COMPLETE]`，利用同样的静默拦截机制瞬间点亮并唤醒 S4 环节。
