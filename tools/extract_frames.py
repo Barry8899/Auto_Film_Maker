@@ -4,6 +4,33 @@ import subprocess
 import json
 import sys
 
+def add_500ms_to_timestamp(ts):
+    try:
+        parts = ts.split(':')
+        if len(parts) == 3:
+            h, m, s = int(parts[0]), int(parts[1]), float(parts[2])
+            s += 0.5
+            if s >= 60:
+                s -= 60
+                m += 1
+                if m >= 60:
+                    m -= 60
+                    h += 1
+            return f"{h:02d}:{m:02d}:{s:06.3f}"
+        elif len(parts) == 2:
+            m, s = int(parts[0]), float(parts[1])
+            s += 0.5
+            if s >= 60:
+                s -= 60
+                m += 1
+            return f"{m:02d}:{s:06.3f}"
+        else:
+            # Maybe just seconds
+            s = float(ts) + 0.5
+            return f"{s:.3f}"
+    except ValueError:
+        return ts
+
 def extract_frames(json_file):
     if not os.path.exists(json_file):
         print(json.dumps({"error": f"JSON file not found: {json_file}"}))
@@ -17,7 +44,11 @@ def extract_frames(json_file):
     
     for item in characters:
         name = str(item.get("person_name", "unknown")).replace(" ", "_")
-        timestamp = str(item.get("time_stamp", "00:00:00"))
+        original_timestamp = str(item.get("time_stamp", "00:00:00"))
+        
+        # Add 500ms to the timestamp for more robust frame extraction
+        timestamp = add_500ms_to_timestamp(original_timestamp)
+        
         video_path = item.get("source_video")
         
         if not video_path or not os.path.exists(video_path):
@@ -40,7 +71,7 @@ def extract_frames(json_file):
         try:
             subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             if os.path.exists(out_path):
-                results.append({"name": name, "timestamp": timestamp, "path": out_path, "status": "success"})
+                results.append({"name": name, "original_timestamp": original_timestamp, "extracted_timestamp": timestamp, "path": out_path, "status": "success"})
                 item["face_image_path"] = out_path # Update JSON with local path
             else:
                 results.append({"name": name, "timestamp": timestamp, "error": "File not generated", "status": "failed"})
