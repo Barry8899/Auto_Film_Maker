@@ -113,7 +113,9 @@
 - **上传弹窗 (Upload Modal) 增强:** 点击 Step 1 会在屏幕中央弹出一个定制的 Modal 覆盖层，而不是干瘪的系统文件选择器。它包含一个支持拖拽风格的浏览区，选择文件后会以绿勾图标确认，并提供一个带有加载动画的“Upload File”按钮。
 - **已有视频复用逻辑 (Existing Video Bypass):** 上传弹窗内包含一个 "Use Existing Videos" 按钮。点击后，系统会扫描 `repo/S1_uploaded_video` 目录。如果该目录下已经存在视频文件，则跳过上传流程。
 - **自动会话初始化 (Zero-Friction Chat Init)**: 修复了用户在点击管线按钮或上传视频时，由于未建立聊天室而导致的阻断弹窗 (`Please select or create a chat first`)。系统会智能检测当前是否选中了会话；如果没有，会自动创建/加载一个名为 `🎬 video_maker` 的专属会话。
-- **双语握手协议 (Bilingual Handshake Protocol)**: S1完成后不再粗暴弹窗，而是通过注入 `(System) 视频上传完成...` 的双语破冰消息，引导用户自然输入偏好语言（如"中文"或"Continue"）。前端拦截用户的回复后，再点亮 S2 按钮并自动弹出视频选择器。这样 Agent 的上下文中就提前锚定了用户的语言基调，后续的分析报告将完美遵循该语言。
+- **双语握手协议 (Bilingual Handshake Protocol)**: S1完成后不再粗暴弹窗，而是通过注入 `(System) 视频上传完成...` 的双语破冰消息，引导用户自然输入偏好语言（如"中文"或"Continue"）。
+  - **性能优化 (Skip Agent Boot)**: 为了避免一句简单的 "继续" 导致底层 OpenClaw Agent 进行耗时极长（30s+）的冷启动推理，我们在前后端通信中引入了 `skip_agent` 标记拦截器。对于这步纯流程性的握手，直接跳过模型推断、秒级写入聊天历史并模拟出 System 确认，实现毫秒级解锁 S2 与唤起弹窗，彻底消除卡顿感。
+- **Agent 执行状态 UI 优化**: 重新打磨了拟物化工具调用框 (`Tool Exec Container`) 的尺寸。移除了默认的全宽拉伸和自动间距，采用 `width: fit-content` 以及严格限定的高宽图标 (`14px`)，避免了黑框过大、中间文字空洞的问题，整体视觉更加紧凑专业。
 
 **Step 2 (Video Understanding) 交互机制:**
 - **触发与 UI 承载**: 点击 Step 2 后，前端自动向 M 区聊天框发送 `Run Video Understanding` 指令。视频人物截图作为 Markdown 附件 (`![name](/files/...)`) 直接渲染在现有的 M 区聊天流中。Markdown 解析已修复，支持保留原生的换行符和空行，保证阅读体验。
