@@ -53,6 +53,8 @@ uvicorn app:app --reload --host 0.0.0.0 --port 8000
 ```
 - `--reload`: 开发模式下，代码修改后服务会自动重启。
 
+
 ### 5. 访问网页
 打开浏览器，访问以下地址即可看到 UI 界面：
 [http://localhost:8000](http://localhost:8000)
+

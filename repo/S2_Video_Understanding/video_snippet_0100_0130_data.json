@@ -1,0 +1,47 @@
+{
+  "plot_summary": "This video is a montage of scenes from various Marvel Cinematic Universe films, edited together like a trailer. It establishes universe-ending threats from villains like Surtur and Kaecilius, prompting heroes such as Tony Stark, Doctor Strange, and Captain America to assemble and prepare for a massive battle to save the world.",
+  "main_characters": [
+    {
+      "person_name": "Tony Stark",
+      "time_stamp": "00:08",
+      "source_video": "repo/S1_uploaded_video/video_snippet_0100_0130.mp4",
+      "face_image_path": "repo/S2_Video_Understanding/video_snippet_0100_0130/faces/Tony_Stark.jpg"
+    },
+    {
+      "person_name": "Doctor Strange",
+      "time_stamp": "00:09",
+      "source_video": "repo/S1_uploaded_video/video_snippet_0100_0130.mp4",
+      "face_image_path": "repo/S2_Video_Understanding/video_snippet_0100_0130/faces/Doctor_Strange.jpg"
+    },
+    {
+      "person_name": "Heimdall",
+      "time_stamp": "00:10",
+      "source_video": "repo/S1_uploaded_video/video_snippet_0100_0130.mp4",
+      "face_image_path": "repo/S2_Video_Understanding/video_snippet_0100_0130/faces/Heimdall.jpg"
+    },
+    {
+      "person_name": "Steve Rogers",
+      "time_stamp": "00:14",
+      "source_video": "repo/S1_uploaded_video/video_snippet_0100_0130.mp4",
+      "face_image_path": "repo/S2_Video_Understanding/video_snippet_0100_0130/faces/Steve_Rogers.jpg"
+    },
+    {
+      "person_name": "Bucky Barnes",
+      "time_stamp": "00:22",
+      "source_video": "repo/S1_uploaded_video/video_snippet_0100_0130.mp4",
+      "face_image_path": "repo/S2_Video_Understanding/video_snippet_0100_0130/faces/Bucky_Barnes.jpg"
+    },
+    {
+      "person_name": "T'Challa",
+      "time_stamp": "00:23",
+      "source_video": "repo/S1_uploaded_video/video_snippet_0100_0130.mp4",
+      "face_image_path": "repo/S2_Video_Understanding/video_snippet_0100_0130/faces/T'Challa.jpg"
+    },
+    {
+      "person_name": "Ivan Vanko",
+      "time_stamp": "00:26",
+      "source_video": "repo/S1_uploaded_video/video_snippet_0100_0130.mp4",
+      "face_image_path": "repo/S2_Video_Understanding/video_snippet_0100_0130/faces/Ivan_Vanko.jpg"
+    }
+  ]
+}

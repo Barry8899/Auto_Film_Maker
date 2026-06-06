@@ -31,7 +31,7 @@ def analyze_video(video_path, out_json):
             sys.exit(1)
             
         # Call the model
-        model = genai.GenerativeModel(model_name="gemini-1.5-pro")
+        model = genai.GenerativeModel(model_name="gemini-2.5-pro")
         prompt = """
         Analyze this video. Return a strictly valid JSON object with the following schema:
         {

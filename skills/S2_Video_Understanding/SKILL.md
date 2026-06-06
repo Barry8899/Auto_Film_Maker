@@ -4,19 +4,20 @@
 Triggered when the user sends a message starting with `[TRIGGER: S2_Video_Understanding]` (e.g., `[TRIGGER: S2_Video_Understanding] repo/S1_uploaded_video/test.mp4`).
 
 ## Core Responsibilities
-Analyze the video to extract the plot and the timestamps of main characters. Extract facial frames, present them to the user for one-shot confirmation, and finally output a structured Markdown report.
+Analyze the video to extract the plot and the timestamps of MAIN characters ONLY. Minor or fleeting characters should be ignored. Extract facial frames (auto-appending .500 to timestamps for clarity), present them to the user for one-shot confirmation, and finally output a structured Markdown report.
 **Language Rule**: All your chat responses and the final Markdown document MUST match the user's language (e.g., if the user prompts in Chinese, respond and write the report in Chinese).
 
 ## Workflow
 
 ### Step 1: Video Analysis & JSON Generation
 Call the dedicated understanding script to analyze the video and save the results as a JSON file.
+Ensure you instruct Gemini to ONLY identify the primary/main characters of the video. The extracted timestamps should represent their FIRST clear frontal appearance. 
 ```bash
 python tools/gemini_video_understanding.py --video <path_to_video> --out_json repo/S2_Video_Understanding/<video_name>_data.json
 ```
 
 ### Step 2: Extract Character Frames
-Call the extraction script passing the generated JSON file. This script will read the accurate timestamps and extract frame-accurate images to the `faces/` directory.
+Call the extraction script passing the generated JSON file. This script will read the accurate timestamps, append '.500' to target the middle of the second, and extract frame-accurate images to the `faces/` directory.
 ```bash
 python tools/extract_frames.py --json_file repo/S2_Video_Understanding/<video_name>_data.json
 ```
@@ -29,7 +30,7 @@ Output this exact structure in the chat (translate to the user's language):
 [Plot Summary]
 
 I extracted [N] main characters:
-🙎‍♂️ ![Name1](/files/repo/S2_Video_Understanding/<video_name>/faces/char1.jpg) : [Name1] (Appears at [Timestamp])
+🙎♂️ ![Name1](/files/repo/S2_Video_Understanding/<video_name>/faces/char1.jpg) : [Name1] (Appears at [Timestamp])
 ...
 
 Are these names accurate? Would you like me to search the web for their background settings? (If everything looks good, just reply 'Proceed' or '直接生成文档')"
