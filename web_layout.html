@@ -356,7 +356,7 @@
                 <div class="input-box">
                     <i data-lucide="paperclip" style="cursor:pointer;" onclick="document.getElementById('chatFileInput').click()"></i>
                     <input type="file" id="chatFileInput" style="display:none" onchange="uploadChatAttachment(event)">
-                    <input type="text" id="chatInput" placeholder="Type a command or ask a question..." onkeypress="if(event.key === 'Enter') sendChatMessage()">
+                    <textarea id="chatInput" placeholder="Type a command or ask a question... (Shift+Enter for newline)" onkeydown="if(event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); sendChatMessage(); }" style="flex:1; background:transparent; border:none; color:var(--text-main); font-family:inherit; font-size:14px; outline:none; resize:none; padding:18px 0; max-height:100px; height:56px;"></textarea>
                     <i data-lucide="send" style="cursor:pointer;color:var(--brand-blue);" onclick="sendChatMessage()"></i>
                 </div>
             </div>

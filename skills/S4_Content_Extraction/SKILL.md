@@ -26,16 +26,19 @@ You MUST NOT execute all phases at once. You must perform Phase 1, wait for the 
 
 4. **Refine (If needed)**: If the user provides feedback or supplement info, update `extract_content.md` and save their supplementary context to a variable (`supplement_infos`). Again, **DO NOT automatically run Phase 2** unless they explicitly say "proceed to next phase" or "start extraction".
 
-### Phase 2 & 3: Target Clip Extraction & Clipping
+### Phase 2: Target Clip Extraction (VLM Time-Stamping)
 Only execute this when the user explicitly agrees to proceed from Phase 1.
 1. **Execution**: Tell the user you are analyzing the video to find the exact timestamps. Run the Gemini extraction script:
    ```bash
    python tools/gemini_content_extraction.py --target_content_list "repo/S4_Content_Extraction/<video_name>/extract_content.md" --video_path "repo/S1_uploaded_video/<video_name>.mp4" --supplement_infos "<user_provided_supplement_infos>"
    ```
-2. **Output**: The script will output a JSON file: `repo/S4_Content_Extraction/<video_name>/extracted_clip_details.json`. It contains the start/end time, duration, tags, reasoning, and descriptions of the clips.
+2. **Output & STOP**: The script will output a JSON file: `repo/S4_Content_Extraction/<video_name>/extracted_clip_details.json`. It contains the start/end time, duration, tags, reasoning, and descriptions of the clips.
+   **CRITICAL RULE**: Once the JSON is generated, YOU MUST STOP AND YIELD. Tell the user: *"The video has been analyzed and timestamps have been generated. Should I proceed to cut the video clips?"*
+   DO NOT proceed to Phase 3 automatically. Wait for user confirmation.
 
 ### Phase 3: Video Clipping & Dashboard Review
-1. **Clipping**: Once Phase 2 is complete, immediately run the FFmpeg clipping script:
+Only execute this when the user explicitly agrees to proceed from Phase 2.
+1. **Clipping**: Run the FFmpeg clipping script:
    ```bash
    python tools/extract_clips.py --json_path "repo/S4_Content_Extraction/<video_name>/extracted_clip_details.json" --video_path "repo/S1_uploaded_video/<video_name>.mp4" --out_dir "repo/S4_Content_Extraction/<video_name>/"
    ```
