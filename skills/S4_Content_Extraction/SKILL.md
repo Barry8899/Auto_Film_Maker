@@ -33,7 +33,8 @@ Based on the style and script outline defined in Step 3, generate a structured 3
    python tools/extract_clips.py --json_path "repo/S4_Content_Extraction/<video_name>/extracted_clip_details.json" --video_path "repo/S1_uploaded_video/<video_name>.mp4" --out_dir "repo/S4_Content_Extraction/<video_name>/"
    ```
    This script will cut the `.mp4` clips and generate an `extraction_report.md` (A Markdown table with embedded video links for review).
-2. **Dashboard Presentation**: DO NOT flood the chat with multiple video files. Tell the user:
-   *"The clips have been successfully extracted! Please check the dashboard report here: `repo/S4_Content_Extraction/<video_name>/extraction_report.md`."*
+2. **Dashboard Presentation**: DO NOT flood the chat with multiple video files or direct `<video>` tags. To prevent UI freezing, read the generated `extraction_report.md` and **output the Markdown table text directly in the chat**. 
+   - Ensure the links remain as text hyperlinks (e.g., `[👉 点击预览](/files/...)`).
+   - Tell the user: *"The clips have been successfully extracted! You can click the links below to preview them individually without overloading the page."*
 3. **Confirmation**: Ask if they are satisfied with the clips or if any adjustments are needed.
 4. **Transition to S5**: When the user explicitly agrees to proceed, reply with a simple confirmation and APPEND the exact string `[STEP_4_COMPLETE]` at the very end of your message.
