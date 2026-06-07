@@ -28,13 +28,14 @@ You MUST NOT execute all phases at once. You must perform Phase 1, wait for the 
 
 ### Phase 2: Target Clip Extraction (VLM Time-Stamping)
 Only execute this when the user explicitly agrees to proceed from Phase 1.
-1. **Execution**: Tell the user you are analyzing the video to find the exact timestamps. Run the Gemini extraction script:
+1. **Execution**: Tell the user you are analyzing the video to find the exact timestamps. Run the Gemini extraction script (be sure to pass the user's language using `--lang`):
    ```bash
-   python tools/gemini_content_extraction.py --target_content_list "repo/S4_Content_Extraction/<video_name>/extract_content.md" --video_path "repo/S1_uploaded_video/<video_name>.mp4" --supplement_infos "<user_provided_supplement_infos>"
+   python tools/gemini_content_extraction.py --target_content_list "repo/S4_Content_Extraction/<video_name>/extract_content.md" --video_path "repo/S1_uploaded_video/<video_name>.mp4" --supplement_infos "<user_provided_supplement_infos>" --lang "<user_language>"
    ```
-2. **Output & STOP**: The script will output a JSON file: `repo/S4_Content_Extraction/<video_name>/extracted_clip_details.json`. It contains the start/end time, duration, tags, reasoning, and descriptions of the clips.
-   **CRITICAL RULE**: Once the JSON is generated, YOU MUST STOP AND YIELD. Tell the user: *"The video has been analyzed and timestamps have been generated. Should I proceed to cut the video clips?"*
-   DO NOT proceed to Phase 3 automatically. Wait for user confirmation.
+2. **Output & HARD STOP**: The script will output a JSON file: `repo/S4_Content_Extraction/<video_name>/extracted_clip_details.json`. 
+   **CRITICAL RULE**: Once `gemini_content_extraction.py` finishes, you are **ABSOLUTELY FORBIDDEN** from running `extract_clips.py` in the same response. You MUST END YOUR TURN.
+   Tell the user: *"The video has been analyzed and timestamps have been generated. Should I proceed to cut the video clips with FFmpeg?"*
+   DO NOT perform any actions from Phase 3. Wait for the user to reply.
 
 ### Phase 3: Video Clipping & Dashboard Review
 Only execute this when the user explicitly agrees to proceed from Phase 2.

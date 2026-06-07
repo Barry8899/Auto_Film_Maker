@@ -1,80 +1,92 @@
 [
   {
     "segment_id": "seg_001",
-    "start_sec": 28.5,
-    "end_sec": 34.5,
-    "duration_sec": 6.0,
-    "emotion_score": 0.3,
+    "start_sec": 1.0,
+    "end_sec": 14.28,
+    "duration_sec": 13.28,
+    "emotion_score": 0.8,
     "tags": [
-      "Space/Environment",
-      "Full Shot",
-      "Vintage Scene"
+      "Facial Close-up",
+      "Key Dialogue"
     ],
-    "description": "A wide shot of a cluttered, retro-style laboratory corridor. A man in a suit, Howard Stark, walks from the background towards the foreground where Tony Stark is waiting. The lighting is dim with a greenish, vintage color grade, establishing a nostalgic and mysterious atmosphere.",
-    "reasoning": "This segment was selected as it perfectly encapsulates the '大全景' and '标志性场景' tags. The long, dim corridor is a key environmental element that sets the tone for this journey into the past. The distinct retro visual style and color grading also align with the '冷暖色调' and memory-like atmosphere described in the prompt.",
+    "description": "Tony Stark recalls his father, Howard, describing him as cold and calculating. The scene shows close-ups of Tony's face, filled with a sense of lingering hurt and misunderstanding as he recounts how his father never expressed love or even affection towards him.",
+    "reasoning": "This segment establishes the core emotional conflict of the story: Tony's complicated relationship with his father. The close-up on his face clearly captures the 'complex眼神' and '情绪流露' mentioned in the brief, setting the stage for the healing that occurs later in the video.",
     "output_path": "/home/admin/.openclaw/workspace/auto_film_maker/repo/S4_Content_Extraction/stark_and_dad/seg_001.mp4"
   },
   {
     "segment_id": "seg_002",
-    "start_sec": 78.19,
-    "end_sec": 84.19,
-    "duration_sec": 6.0,
+    "start_sec": 100.51,
+    "end_sec": 110.84,
+    "duration_sec": 10.33,
     "emotion_score": 0.6,
     "tags": [
-      "People/Emotions",
-      "Close-up",
-      "Emotional Dialogue"
+      "Enclosed Space",
+      "Key Dialogue",
+      "Facial Close-up"
     ],
-    "description": "A close-up on Howard Stark's face as he discusses his anxieties about his wife's pregnancy. His expression is a mixture of fatigue, worry, and a hint of resigned humor as he mentions she can't stand the sound of his chewing. This reveals a vulnerable side to his character.",
-    "reasoning": "This clip is a prime example of the '面部特写' and '情绪呼号' tags. Howard's subtle expressions and his weary sigh convey his anxiety and the pressure he feels as an expectant father, making it a key character moment that reveals his humanity.",
+    "description": "Inside an elevator, Howard Stark confides in Tony (who is in disguise) about his wife's pregnancy and the pressure he feels, mentioning he spends too much time at the office. The confined space enhances the intimacy and vulnerability of the conversation.",
+    "reasoning": "This scene perfectly matches the '封闭空间: 略显局促的电梯内部' tag. It captures Howard's anxiety about becoming a father ('Howard 透露焦虑时的微表情') and Tony's attentive listening, fulfilling the '关键对话' requirement as Howard begins to open up.",
     "output_path": "/home/admin/.openclaw/workspace/auto_film_maker/repo/S4_Content_Extraction/stark_and_dad/seg_002.mp4"
   },
   {
     "segment_id": "seg_003",
-    "start_sec": 115.77,
-    "end_sec": 122.77,
-    "duration_sec": 7.0,
-    "emotion_score": 0.8,
+    "start_sec": 114.07,
+    "end_sec": 139.11,
+    "duration_sec": 25.04,
+    "emotion_score": 0.7,
     "tags": [
-      "People/Emotions",
-      "Close-up",
-      "Emotional Dialogue",
-      "Quiet Moment"
+      "Transitional Space",
+      "Key Dialogue",
+      "Heartfelt Moment"
     ],
-    "description": "A close-up on Tony Stark's face, filled with a soft, nostalgic, and deeply understanding expression. He is reflecting on his own father, admitting that despite thinking he was tough, he now only remembers the good things. His delivery is gentle and full of emotion.",
-    "reasoning": "This segment was chosen for its powerful emotional weight, perfectly matching the '面部特写' tag with Tony's complex expression of love and regret. His gentle words of comfort act as an '情绪呼号'. The quiet, reflective pacing of the dialogue creates a '呼吸感留白', allowing the poignant message to resonate, representing Tony's moment of reconciliation.",
+    "description": "As they walk down a long corridor, Howard expresses his deepest fears and self-doubts about fatherhood, worrying his child will turn out like him and admitting to his selfishness. Tony listens, absorbing this new perspective on the father he thought he knew.",
+    "reasoning": "This segment represents the '过渡空间: 两人并肩走过的走廊'. The '走心时刻' is captured through their increasingly personal conversation, fulfilling the '关键对话' element where Howard吐露即将为人父的焦虑. The '边走边谈的放松肢体语言' shows their emotional guards beginning to lower.",
     "output_path": "/home/admin/.openclaw/workspace/auto_film_maker/repo/S4_Content_Extraction/stark_and_dad/seg_003.mp4"
   },
   {
     "segment_id": "seg_004",
-    "start_sec": 134.0,
-    "end_sec": 141.5,
-    "duration_sec": 7.5,
+    "start_sec": 151.78,
+    "end_sec": 164.08,
+    "duration_sec": 12.3,
     "emotion_score": 0.9,
     "tags": [
-      "Actions/Behavior",
-      "Emotional Climax",
-      "Closing Distance",
-      "Still Frame"
+      "Emotional Expression",
+      "Key Dialogue",
+      "Breathing Room/Pacing"
     ],
-    "description": "Tony Stark closes the distance and embraces his father, Howard, in a heartfelt hug. The camera focuses on Howard's initially surprised, then calm and accepting expression over Tony's shoulder. Tony thanks him for everything he's done.",
-    "reasoning": "This is the emotional peak of their interaction, selected for its fulfillment of the '情感距离' tag as the physical and emotional gap between them is closed. Howard's reaction provides a crucial '眼神细节' (facial detail), and the lingering hug serves as the '定格收束' of their cathartic meeting.",
+    "description": "Tony, drawing from his own painful memories, offers his father profound comfort. He reframes his past, stating that looking back, he only remembers the good things and that his own father 'did his best'. His face is a mask of resolved pain and gentle empathy.",
+    "reasoning": "This moment is the emotional turning point, perfectly capturing 'Tony 给出安慰时隐忍且释然的面容'. The dialogue is the crux of Tony's healing journey, where he articulates his newfound understanding to the person who needed to hear it most, fulfilling the '关键对话: Tony 的安慰与感谢' tag.",
     "output_path": "/home/admin/.openclaw/workspace/auto_film_maker/repo/S4_Content_Extraction/stark_and_dad/seg_004.mp4"
   },
   {
     "segment_id": "seg_005",
-    "start_sec": 151.78,
-    "end_sec": 158.28,
-    "duration_sec": 6.5,
+    "start_sec": 209.68,
+    "end_sec": 220.57,
+    "duration_sec": 10.89,
     "emotion_score": 1.0,
     "tags": [
-      "Dialogue/Sound",
-      "Classic Quote",
-      "Monologue",
-      "Close-up"
+      "Detail Capture",
+      "Final Shot",
+      "Farewell Scene",
+      "收束定格"
     ],
-    "description": "The scene cuts to an old film recording of Howard Stark. He looks directly into the camera with a serious yet loving fatherly expression and delivers the iconic line, 'What is, and always will be, my greatest creation... is you.'",
-    "reasoning": "This segment was extracted as it contains the specific '经典台词' mandated by the supplementary instructions. It serves as the ultimate emotional resolution and is the most famous line associated with the father-son relationship in the Iron Man IP. It perfectly matches the '旁白/独白' and '面部特写' tags, providing a powerful conclusion.",
+    "description": "In their final farewell, Tony hugs his father, thanking him for everything he's done for the country. As Howard gets into the car, Tony lingers, watching him with a long, profound gaze filled with love, closure, and understanding. Howard, in turn, looks back, sensing a strange familiarity.",
+    "reasoning": "This is the most critical element requested. It directly captures the '重点提取元素: 影片结尾，父子两人长久对对方的凝望，无声胜有声'. The long take and the silent exchange of looks provide the '收束定格' and '呼吸感留白' that the prompt emphasized, serving as the emotional and narrative climax of their encounter.",
     "output_path": "/home/admin/.openclaw/workspace/auto_film_maker/repo/S4_Content_Extraction/stark_and_dad/seg_005.mp4"
+  },
+  {
+    "segment_id": "seg_006",
+    "start_sec": 230.13,
+    "end_sec": 238.41,
+    "duration_sec": 8.28,
+    "emotion_score": 0.9,
+    "tags": [
+      "Core Line",
+      "Core Voiceover",
+      "Warm, Retro Feel"
+    ],
+    "description": "In an old film recording, Howard Stark looks directly into the camera, his expression serious but full of pride. He states that his greatest creation, the thing that will always be his legacy, is his son, Tony. The screen shows a close-up of his face as he says, 'is you'.",
+    "reasoning": "This segment explicitly extracts the specific IP element requested: '核心台词: Howard 说的：“你是我最伟大的创作”'. It also functions as the '核心画外音' that provides the ultimate emotional resolution, re-contextualizing Tony's entire memory of his father and validating his worth in his father's eyes.",
+    "output_path": "/home/admin/.openclaw/workspace/auto_film_maker/repo/S4_Content_Extraction/stark_and_dad/seg_006.mp4"
   }
 ]

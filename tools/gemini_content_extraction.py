@@ -39,6 +39,7 @@ def main():
     parser.add_argument("--target_content_list", required=True, help="Path to the markdown file containing the 3-layer checklist.")
     parser.add_argument("--video_path", required=True, help="Path to the source video.")
     parser.add_argument("--supplement_infos", default="", help="Optional supplementary info (who is who, context, etc.).")
+    parser.add_argument("--lang", default="English", help="The language to use for the JSON descriptions, tags, and reasoning (e.g., Chinese, English).")
     args = parser.parse_args()
 
     setup_gemini()
@@ -84,7 +85,8 @@ INSTRUCTIONS & RULES:
    - end_sec = exact_end + 1.5
    - duration_sec = end_sec - start_sec
 4. REASONING (Chain of Thought): For each segment, provide a "reasoning" field explaining your thought process on why this specific timestamp accurately represents the tags and how you identified the subjects based on the supplementary info.
-5. OUTPUT FORMAT: You must return ONLY a valid JSON array. No markdown blocks, no extra text.
+5. LANGUAGE REQUIREMENT: All human-readable text in the JSON (tags, description, reasoning) MUST be written in {args.lang}.
+6. OUTPUT FORMAT: You must return ONLY a valid JSON array. No markdown blocks, no extra text.
 
 Expected JSON Schema (Array of Objects):
 [
