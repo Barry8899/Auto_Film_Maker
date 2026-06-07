@@ -11,8 +11,8 @@ Based on the style and script outline defined in Step 3, generate a structured 3
 ## Workflow
 
 ### Step 1: Checklist Generation (V0 Draft)
-1. **Initialize**: Upon trigger, read `repo/S3_Script_Writing/<video_name>/features.json`, `script.md`, and `auto_film_maker/skills/S4_Content_Extraction/references/extraction_example.md`.
-2. **Drafting V0**: Generate a 3-layer content extraction checklist draft and save it to `repo/S4_Content_Extraction/<video_name>/extract_content.md` (MUST follow the 3-layer structure from the example).
+1. **Initialize**: Upon trigger, read `/home/admin/.openclaw/workspace/auto_film_maker/repo/S3_Script_Writing/<video_name>/features.json`, `script.md`, and `auto_film_maker/skills/S4_Content_Extraction/references/extraction_example.md`.
+2. **Drafting V0**: Generate a 3-layer content extraction checklist draft and save it to `/home/admin/.openclaw/workspace/auto_film_maker/repo/S4_Content_Extraction/<video_name>/extract_content.md` (MUST follow the 3-layer structure from the example).
 3. **Present & STOP**: Show the user a brief summary of the checklist. Ask the user for **Supplement Infos** (e.g., character appearances) AND ask if the checklist needs changes.
    *DO NOT run any Python scripts yet. Wait for the user's reply.*
 
@@ -23,19 +23,19 @@ Based on the style and script outline defined in Step 3, generate a structured 3
 
 ### Step 3: Target Clip Extraction (VLM Time-Stamping)
 **ONLY trigger this step when the user explicitly says "Proceed" or "Yes" after Step 1 or Step 2.**
-1. **Execution**: Run the Gemini extraction script (pass `--lang "<user_language>"`):
+1. **Execution**: Run the Gemini extraction script using absolute paths (pass `--lang "<user_language>"`):
    ```bash
-   python tools/gemini_content_extraction.py --target_content_list "repo/S4_Content_Extraction/<video_name>/extract_content.md" --video_path "repo/S1_uploaded_video/<video_name>.mp4" --supplement_infos "<user_provided_supplement_infos>" --lang "<user_language>"
+   python auto_film_maker/tools/gemini_content_extraction.py --target_content_list "/home/admin/.openclaw/workspace/auto_film_maker/repo/S4_Content_Extraction/<video_name>/extract_content.md" --video_path "/home/admin/.openclaw/workspace/auto_film_maker/repo/S1_uploaded_video/<video_name>.mp4" --supplement_infos "<user_provided_supplement_infos>" --lang "<user_language>"
    ```
-2. **Output & HARD STOP**: The script outputs `extracted_clip_details.json`. 
+2. **Output & HARD STOP**: The script outputs `extracted_clip_details.json` to the correct folder. 
    Tell the user: *"The video analysis is complete and timestamps have been generated. Should I proceed to cut the final video clips using FFmpeg?"*
    **CRITICAL RULE**: YOU MUST END YOUR TURN HERE. Absolutely DO NOT run `extract_clips.py` in the same response. Wait for the user to explicitly authorize the clipping.
 
 ### Step 4: Video Clipping & Dashboard Review
 **ONLY trigger this step when the user explicitly authorizes clipping after Step 3.**
-1. **Clipping**: Run the FFmpeg clipping script:
+1. **Clipping**: Run the FFmpeg clipping script using absolute paths:
    ```bash
-   python tools/extract_clips.py --json_path "repo/S4_Content_Extraction/<video_name>/extracted_clip_details.json" --video_path "repo/S1_uploaded_video/<video_name>.mp4" --out_dir "repo/S4_Content_Extraction/<video_name>/"
+   python auto_film_maker/tools/extract_clips.py --json_path "/home/admin/.openclaw/workspace/auto_film_maker/repo/S4_Content_Extraction/<video_name>/extracted_clip_details.json" --video_path "/home/admin/.openclaw/workspace/auto_film_maker/repo/S1_uploaded_video/<video_name>.mp4" --out_dir "/home/admin/.openclaw/workspace/auto_film_maker/repo/S4_Content_Extraction/<video_name>/"
    ```
 2. **Dashboard Presentation**: Read the generated `extraction_report.md` and **output the Markdown table text directly in the chat**. (Ensure links remain text hyperlinks, do NOT use `<video>` tags).
 3. **Transition to S5**: Ask if they are satisfied. When they explicitly agree to proceed, reply with a confirmation and APPEND exactly `[STEP_4_COMPLETE]` at the end of your message.

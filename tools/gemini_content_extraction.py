@@ -59,9 +59,8 @@ def main():
         target_content_list = f.read()
 
     video_name = video_path.stem
-    # Standard output directory: repo/S4_Content_Extraction/<video_name>
-    # Note: ensure we write relative to the workspace correctly.
-    output_dir = Path("repo/S4_Content_Extraction") / video_name
+    # Standard output directory: auto_film_maker/repo/S4_Content_Extraction/<video_name>
+    output_dir = Path("auto_film_maker/repo/S4_Content_Extraction") / video_name
     output_dir.mkdir(parents=True, exist_ok=True)
     out_json_path = output_dir / "extracted_clip_details.json"
 

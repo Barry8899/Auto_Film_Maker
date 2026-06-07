@@ -126,6 +126,11 @@
         .msg-bubble strong { font-weight: 600; color: inherit; }
         .msg-bubble code { background: rgba(0,0,0,0.15); padding: 2px 4px; border-radius: 4px; font-family: var(--font-code); font-size: 13px; }
         .msg-bubble pre { background: rgba(0,0,0,0.25); padding: 12px; border-radius: 6px; overflow-x: auto; font-family: var(--font-code); font-size: 13px; margin: 8px 0; }
+        .msg-bubble table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+        .msg-bubble th, .msg-bubble td { border: 1px solid rgba(255,255,255,0.2); padding: 8px 12px; text-align: left; }
+        .msg-bubble th { background-color: rgba(255,255,255,0.1); font-weight: 600; }
+        [data-theme="light"] .msg-bubble th, [data-theme="light"] .msg-bubble td { border-color: rgba(0,0,0,0.1); }
+        [data-theme="light"] .msg-bubble th { background-color: rgba(0,0,0,0.05); }
         
         .msg-user { align-self: flex-end; background-color: var(--brand-blue); color: #fff; border-bottom-right-radius: 2px; }
         .msg-assistant { align-self: flex-start; background-color: var(--bg-surface-hover); color: var(--text-main); border-bottom-left-radius: 2px; border: 1px solid var(--border-color); }

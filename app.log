@@ -1,23 +1,143 @@
 INFO:     Will watch for changes in these directories: ['/home/admin/.openclaw/workspace/auto_film_maker']
 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process [4120453] using StatReload
-INFO:     Started server process [4120456]
+INFO:     Started reloader process [4121004] using StatReload
+INFO:     Started server process [4121009]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     216.236.41.91:0 - "GET / HTTP/1.1" 200 OK
 INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
 INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
 INFO:     216.236.41.91:0 - "GET /favicon.ico HTTP/1.1" 404 Not Found
-INFO:     216.236.41.91:0 - "DELETE /api/chat/2e9d08c2-0dd1-4733-8d5b-ed616f602d0c HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "DELETE /api/chat/ed45d15d-82db-462a-84d8-fae3229ebcb3 HTTP/1.1" 200 OK
 INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
 INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
 INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
 INFO:     216.236.41.91:0 - "POST /api/chat HTTP/1.1" 200 OK
 INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
-INFO:     216.236.41.91:0 - "GET /api/chat/ed45d15d-82db-462a-84d8-fae3229ebcb3 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/a3b0ff99-2cd9-496b-bccb-2e6df1aaedef HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /files/vobile_logo.png HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "POST /api/chat/a3b0ff99-2cd9-496b-bccb-2e6df1aaedef/message HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "POST /api/chat/a3b0ff99-2cd9-496b-bccb-2e6df1aaedef/message HTTP/1.1" 409 Conflict
+INFO:     216.236.41.91:0 - "GET /api/chat/a3b0ff99-2cd9-496b-bccb-2e6df1aaedef?t=1780829553952 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/a3b0ff99-2cd9-496b-bccb-2e6df1aaedef?t=1780829558952 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/a3b0ff99-2cd9-496b-bccb-2e6df1aaedef?t=1780829563950 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/a3b0ff99-2cd9-496b-bccb-2e6df1aaedef?t=1780829568951 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/a3b0ff99-2cd9-496b-bccb-2e6df1aaedef?t=1780829573949 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/a3b0ff99-2cd9-496b-bccb-2e6df1aaedef?t=1780829578949 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/a3b0ff99-2cd9-496b-bccb-2e6df1aaedef?t=1780829583950 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/a3b0ff99-2cd9-496b-bccb-2e6df1aaedef?t=1780829588950 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/a3b0ff99-2cd9-496b-bccb-2e6df1aaedef?t=1780829593953 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/a3b0ff99-2cd9-496b-bccb-2e6df1aaedef?t=1780829598947 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/a3b0ff99-2cd9-496b-bccb-2e6df1aaedef?t=1780829603948 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/a3b0ff99-2cd9-496b-bccb-2e6df1aaedef?t=1780829608946 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "POST /api/chat/a3b0ff99-2cd9-496b-bccb-2e6df1aaedef/message HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET / HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/a3b0ff99-2cd9-496b-bccb-2e6df1aaedef HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET / HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     216.236.41.91:0 - "DELETE /api/chat/a3b0ff99-2cd9-496b-bccb-2e6df1aaedef HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "POST /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/4cbf6f62-c9bc-44de-8b56-6deabee129e2 HTTP/1.1" 200 OK
 INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
 INFO:     216.236.41.91:0 - "GET /files/vobile_logo.png HTTP/1.1" 200 OK
-INFO:     216.236.41.91:0 - "POST /api/chat/ed45d15d-82db-462a-84d8-fae3229ebcb3/message HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "POST /api/chat/4cbf6f62-c9bc-44de-8b56-6deabee129e2/message HTTP/1.1" 200 OK
 INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
-INFO:     216.236.41.91:0 - "POST /api/chat/ed45d15d-82db-462a-84d8-fae3229ebcb3/message HTTP/1.1" 409 Conflict
-INFO:     216.236.41.91:0 - "POST /api/chat/ed45d15d-82db-462a-84d8-fae3229ebcb3/message HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "POST /api/chat/4cbf6f62-c9bc-44de-8b56-6deabee129e2/message HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/file?path=skills%2FS2_Video_Understanding%2FSKILL.md HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/4cbf6f62-c9bc-44de-8b56-6deabee129e2 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/4cbf6f62-c9bc-44de-8b56-6deabee129e2 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/4cbf6f62-c9bc-44de-8b56-6deabee129e2 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "POST /api/chat/4cbf6f62-c9bc-44de-8b56-6deabee129e2/message HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/file?path=skills%2FS3_script_writing%2FSKILL.md HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "POST /api/chat/4cbf6f62-c9bc-44de-8b56-6deabee129e2/message HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/4cbf6f62-c9bc-44de-8b56-6deabee129e2 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "POST /api/chat/4cbf6f62-c9bc-44de-8b56-6deabee129e2/message HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/file?path=skills%2FS4_Content_Extraction%2Freferences%2Fextraction_example.md HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/4cbf6f62-c9bc-44de-8b56-6deabee129e2 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/4cbf6f62-c9bc-44de-8b56-6deabee129e2 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "POST /api/chat/4cbf6f62-c9bc-44de-8b56-6deabee129e2/message HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/file?path=repo%2FS4_Content_Extraction%2Fstark_and_dad%2Fextract_content.md HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/4cbf6f62-c9bc-44de-8b56-6deabee129e2 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/file?path=repo%2FS4_Content_Extraction%2Fstark_and_dad%2Fextract_content.md HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/4cbf6f62-c9bc-44de-8b56-6deabee129e2 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "POST /api/chat/4cbf6f62-c9bc-44de-8b56-6deabee129e2/message HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/file?path=repo%2FS4_Content_Extraction%2Fstark_and_dad%2Fextract_content.md HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/4cbf6f62-c9bc-44de-8b56-6deabee129e2 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "POST /api/chat/4cbf6f62-c9bc-44de-8b56-6deabee129e2/message HTTP/1.1" 409 Conflict
+INFO:     216.236.41.91:0 - "GET /api/chat/4cbf6f62-c9bc-44de-8b56-6deabee129e2?t=1780833025534 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/4cbf6f62-c9bc-44de-8b56-6deabee129e2?t=1780833030531 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "POST /api/chat/4cbf6f62-c9bc-44de-8b56-6deabee129e2/message HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/4cbf6f62-c9bc-44de-8b56-6deabee129e2?t=1780833035534 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/4cbf6f62-c9bc-44de-8b56-6deabee129e2 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "POST /api/chat/4cbf6f62-c9bc-44de-8b56-6deabee129e2/message HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "POST /api/chat/4cbf6f62-c9bc-44de-8b56-6deabee129e2/message HTTP/1.1" 409 Conflict
+INFO:     216.236.41.91:0 - "GET /api/chat/4cbf6f62-c9bc-44de-8b56-6deabee129e2?t=1780833204530 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/4cbf6f62-c9bc-44de-8b56-6deabee129e2?t=1780833209530 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/4cbf6f62-c9bc-44de-8b56-6deabee129e2?t=1780833214529 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "POST /api/chat/4cbf6f62-c9bc-44de-8b56-6deabee129e2/message HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/4cbf6f62-c9bc-44de-8b56-6deabee129e2?t=1780833219529 HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'tools/gemini_content_extraction.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [4121009]
+INFO:     Started server process [4126915]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
