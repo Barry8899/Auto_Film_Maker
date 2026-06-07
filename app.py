@@ -385,7 +385,11 @@ def send_message(chat_id: str, data: SendMessage):
                 check=True
             )
             output_json = json.loads(result.stdout)
-            ai_text = output_json.get("result", {}).get("payloads", [{}])[0].get("text", "(No response generated)")
+            payloads = output_json.get("result", {}).get("payloads", [])
+            if payloads and len(payloads) > 0:
+                ai_text = payloads[0].get("text", "(No response generated)")
+            else:
+                ai_text = "(No response generated)"
         except Exception as e:
             ai_text = f"(System Error: Failed to contact OpenClaw Agent. {str(e)})"
         
