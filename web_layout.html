@@ -1054,6 +1054,10 @@
                     content = content.replace('[STEP_3_COMPLETE]', '');
                     unlockPipelineStep(3, 4, 'Script Writing');
                 }
+                if (content.includes('[STEP_4_COMPLETE]')) {
+                    content = content.replace('[STEP_4_COMPLETE]', '');
+                    unlockPipelineStep(4, 5, 'Content Extraction');
+                }
                 
                 // Render with marked if available
                 if (typeof marked !== 'undefined') {
@@ -1305,6 +1309,11 @@
                     unlockPipelineStep(3, 4, 'Script Writing');
                     setTimeout(() => sendChatMessage('[TRIGGER: S4_Content_Extraction]', true), 1000);
                 }
+                if (aiContent.includes('[STEP_4_COMPLETE]')) {
+                    aiContent = aiContent.replace('[STEP_4_COMPLETE]', '');
+                    unlockPipelineStep(4, 5, 'Content Extraction');
+                    setTimeout(() => sendChatMessage('[TRIGGER: S5_Storyboarding]', true), 1000);
+                }
                 
                 if (typeof marked !== 'undefined') {
                     marked.setOptions({ breaks: true });
@@ -1358,6 +1367,9 @@
                                     }
                                     if (content.includes('[STEP_3_COMPLETE]')) {
                                         setTimeout(() => sendChatMessage('[TRIGGER: S4_Content_Extraction]', true), 1000);
+                                    }
+                                    if (content.includes('[STEP_4_COMPLETE]')) {
+                                        setTimeout(() => sendChatMessage('[TRIGGER: S5_Storyboarding]', true), 1000);
                                     }
                                     // Agent has finished responding! Re-render everything.
                                     renderMessages(chatData.messages);

@@ -142,3 +142,4 @@
 - **思维链打点与切割 (CoT & Clipping)**：底层使用带有强 System Prompt 的 Gemini 脚本定位素材。强制输出 `reasoning` (思维链) 字段。
 - **幂等与防并发锁 (Idempotency & Execution Lock)**：由于公网代理（如 Pinggy / Nginx）在遇到长耗时任务（如 Gemini 分析视频需 60s+）时，会在超时后自动重发 POST 请求。这会导致 Agent 被二次唤醒，从而产生“用户幽灵发言”（两次 `嗯嗯继续`）并错乱工作流状态。目前已在 `app.py` 中加入了线程级别的请求锁 (`chat_locks`)，遇到重发的并发请求直接返回 409 拦截，彻底根治了公网弱网环境下的 Agent 鬼畜抢跑问题。
 - **Dashboard 级验收面板 (防卡顿超链接设计)**：为了防止多个切片视频在 M 区聊天框内直接渲染造成“多媒体轰炸”与浏览器卡死，裁剪完成后输出一个优雅的 `extraction_report.md`。Agent 会将 Markdown 表格直接输出在聊天流中，但**坚决避免**嵌入 `<video>` 或 `![vid]()`，而是采用文字超链接 `[👉 点击预览](/files/...)`，让用户像审阅 Dashboard 一样按需点击、集中验收。
+- **无缝流转 (S4 -> S5)**：切片阶段并经用户同意后，S4 抛出 `[STEP_4_COMPLETE]`。前端拦截该信号，点亮 Step 5，并静默发送 `[TRIGGER: S5_Storyboarding]` 唤醒 S5 技能 (Storyboarding)。
