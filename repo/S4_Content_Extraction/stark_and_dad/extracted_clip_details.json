@@ -1,0 +1,91 @@
+[
+  {
+    "segment_id": "seg_001",
+    "start_sec": 0.0,
+    "end_sec": 9.5,
+    "duration_sec": 9.5,
+    "emotion_score": 0.7,
+    "tags": [
+      "面部特写",
+      "核心对话"
+    ],
+    "description": "Tony Stark, with a pained and weary expression, describes his father as cold and calculating, mentioning he never felt loved or even liked. This sets up the central emotional conflict of the story.",
+    "reasoning": "This segment was selected to establish the initial emotional premise. It's a close-up on Tony's face, fulfilling the '面部特写' tag, and his dialogue about his father is the '核心对话' that frames the entire subsequent interaction, highlighting his unresolved feelings.",
+    "output_path": "/home/admin/.openclaw/workspace/auto_film_maker/repo/S4_Content_Extraction/stark_and_dad/seg_001.mp4"
+  },
+  {
+    "segment_id": "seg_002",
+    "start_sec": 21.0,
+    "end_sec": 31.5,
+    "duration_sec": 10.5,
+    "emotion_score": 0.6,
+    "tags": [
+      "标志性场景",
+      "面部特写",
+      "复古光影"
+    ],
+    "description": "After emerging from a vault, Tony Stark comes face-to-face with a younger version of his father, Howard Stark. Tony's expression shifts to one of shock, caution, and guarded curiosity. The scene is set in a retro, dimly lit S.H.I.E.L.D. laboratory.",
+    "reasoning": "This segment captures the pivotal moment of their encounter. It fulfills '标志性场景' by showing the retro S.H.I.E.L.D. base, '面部特写' with Tony's complex reaction, and '复古光影' through the atmospheric lighting, creating a sense of stepping into the past.",
+    "output_path": "/home/admin/.openclaw/workspace/auto_film_maker/repo/S4_Content_Extraction/stark_and_dad/seg_002.mp4"
+  },
+  {
+    "segment_id": "seg_003",
+    "start_sec": 104.5,
+    "end_sec": 113.0,
+    "duration_sec": 8.5,
+    "emotion_score": 0.8,
+    "tags": [
+      "面部特写",
+      "核心对话",
+      "空间压迫与松弛感对比"
+    ],
+    "description": "In the confined space of an elevator, Howard Stark expresses his anxieties about becoming a father, mentioning his wife is expecting. His nervous expression reveals a vulnerability Tony has never seen before.",
+    "reasoning": "This clip was chosen for its raw emotional honesty. It features a '面部特写' of Howard's anxious expression, and the dialogue about his impending fatherhood is a '核心对话' topic. The scene's setting in an elevator provides the requested '空间压迫' that enhances the intimacy of the confession.",
+    "output_path": "/home/admin/.openclaw/workspace/auto_film_maker/repo/S4_Content_Extraction/stark_and_dad/seg_003.mp4"
+  },
+  {
+    "segment_id": "seg_004",
+    "start_sec": 115.5,
+    "end_sec": 124.5,
+    "duration_sec": 9.0,
+    "emotion_score": 0.9,
+    "tags": [
+      "面部特写",
+      "眼神细节",
+      "治愈回忆风/科幻片"
+    ],
+    "description": "Tony, with a profound look of understanding and hindsight, tells Howard that he used to think his own dad was tough but now only remembers the good things. His gaze is filled with empathy and forgiveness.",
+    "reasoning": "This segment is the turning point for Tony's character arc. The '面部特写' and '眼神细节' perfectly capture his emotional catharsis and the '治愈回忆' theme. He's not just talking to Howard; he's speaking about him, offering a peace offering across time.",
+    "output_path": "/home/admin/.openclaw/workspace/auto_film_maker/repo/S4_Content_Extraction/stark_and_dad/seg_004.mp4"
+  },
+  {
+    "segment_id": "seg_005",
+    "start_sec": 133.0,
+    "end_sec": 142.5,
+    "duration_sec": 9.5,
+    "emotion_score": 1.0,
+    "tags": [
+      "主角高光",
+      "手部/眼神细节",
+      "情感高光"
+    ],
+    "description": "In an incredibly poignant moment, Tony Stark pulls his father, Howard, into a hug, thanking him for everything. This is the 'century hug,' a gesture of closure and love that transcends time. The moment is held, focusing on their expressions.",
+    "reasoning": "This is the emotional climax of the entire film. It perfectly encapsulates '主角高光' (Tony's ultimate moment of reconciliation), '手部/眼神细节' with the meaningful embrace, and is the definitive '情感高光' of the scene.",
+    "output_path": "/home/admin/.openclaw/workspace/auto_film_maker/repo/S4_Content_Extraction/stark_and_dad/seg_005.mp4"
+  },
+  {
+    "segment_id": "seg_006",
+    "start_sec": 149.0,
+    "end_sec": 159.5,
+    "duration_sec": 10.5,
+    "emotion_score": 0.9,
+    "tags": [
+      "定格收束",
+      "旁白/独白",
+      "经典台词"
+    ],
+    "description": "The scene cuts to an old, grainy video recording of Howard Stark. He looks directly into the camera and says the iconic line, 'What is, and always will be, my greatest creation... is you.' This provides the ultimate emotional resolution.",
+    "reasoning": "This segment serves as the perfect '定格收束'. The old recording fulfills the '情感高光' and '科技界面' tags with its grainy, retro feel. Howard's line is the most '经典台词' and '旁白/独白' of the sequence, delivering the final, powerful message of a father's love.",
+    "output_path": "/home/admin/.openclaw/workspace/auto_film_maker/repo/S4_Content_Extraction/stark_and_dad/seg_006.mp4"
+  }
+]

@@ -19,7 +19,8 @@ Based on the style and script outline defined in Step 3, generate a structured 3
    - **Layer 3: IP-Specific Elements** (Specific to this video, e.g., "Avengers assemble", Iron Man's armor).
 3. **Present & Ask for Supplement**: Show the user a brief summary of the extraction checklist you created. Then, explicitly ask the user for **Supplement Infos**:
    *"I have generated the V0 extraction checklist based on our script. To help my visual engine perfectly recognize the video, are there any specific visual cues you can provide? (e.g., 'The one in the red armor is Iron Man', or 'Make sure not to miss the specific hug scene')."*
-4. **Refine**: Update `extract_content.md` based on user feedback. Save the user's supplementary context to a variable/file (`supplement_infos`) for the next step.
+4. **Refine & STOP (Checkpoint)**: Update `extract_content.md` based on user feedback. Save the user's supplementary context to a variable/file (`supplement_infos`) for the next step. 
+   **CRITICAL RULE**: DO NOT proceed to Phase 2 automatically! You MUST stop here and ask for permission: *"I have updated the checklist. Should we proceed to analyze the video and extract the clips?"*. Wait for the user's explicit command before running any Python scripts.
 
 ### Phase 2: Target Clip Extraction (VLM Time-Stamping)
 1. **Execution**: Tell the user you are analyzing the video to find the exact timestamps. Run the Gemini extraction script:

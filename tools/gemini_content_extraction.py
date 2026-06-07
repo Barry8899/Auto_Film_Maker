@@ -104,7 +104,7 @@ Expected JSON Schema (Array of Objects):
     
     print("Analyzing video and generating extraction JSON (This may take a while depending on video length)...")
     # Gemini 1.5 Pro is best for complex long-context reasoning
-    model = genai.GenerativeModel(model_name="models/gemini-1.5-pro")
+    model = genai.GenerativeModel(model_name="models/gemini-2.5-pro")
     
     # We force JSON output using response_mime_type
     response = model.generate_content(

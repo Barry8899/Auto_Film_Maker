@@ -1,11 +1,11 @@
 {
-  "plot_summary": "Tony Stark, who remembers his father as cold and distant, time-travels to the past and meets a younger version of him. Disguised, Tony has a conversation with his father, Howard, who is nervously expecting the birth of his own son (Tony). This interaction allows Tony to see a different, more vulnerable side of his father, leading to a moment of understanding and closure about their relationship.",
+  "plot_summary": "Tony Stark, who remembers his father as cold and distant, travels back in time and meets a younger version of him. Disguised, Tony has a conversation with his father, Howard, who is anxious about his own impending fatherhood. Through this interaction, Tony gains a new perspective, offering his father reassurance and finding a sense of closure. He thanks his father for everything he did, and the video culminates with an old recording of Howard expressing that his greatest creation is his son, Tony.",
   "main_characters": [
     {
       "person_name": "Tony Stark",
-      "time_stamp": "00:00:01",
+      "time_stamp": "00:00:05",
       "source_video": "repo/S1_uploaded_video/stark_and_dad.mp4",
-      "face_image_path": "repo/S2_Video_Understanding/stark_and_dad/faces/Tony_Stark.jpg"
+      "face_image_path": "repo/S2_Video_Understanding/stark_and_dad/faces/Tony_Stark_new.jpg"
     },
     {
       "person_name": "Howard Stark",

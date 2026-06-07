@@ -9,6 +9,11 @@ Analyze the video to extract the plot and the timestamps of MAIN characters ONLY
 
 ## Workflow
 
+### Step 0: Check Existing Data (Bypass Logic)
+Before running any scripts, check if the final output file `repo/S2_Video_Understanding/<video_name>/<video_name>.md` already exists. 
+- If it exists, tell the user: *"I detected an existing video understanding report for this video. Would you like to use the existing report and skip this step, or regenerate it from scratch?"*
+- If the user explicitly chooses to skip/use the existing one, IMMEDIATELY proceed to Step 6 and output `[STEP_2_COMPLETE]`. Do not run Step 1-5.
+
 ### Step 1: Video Analysis & JSON Generation
 Call the dedicated understanding script to analyze the video and save the results as a JSON file.
 Ensure you instruct Gemini to ONLY identify the primary/main characters of the video (only indentify the main characters is enough, ignore those minor or fleeting characters in the video). The extracted timestamps should represent their FIRST clear frontal appearance. 
