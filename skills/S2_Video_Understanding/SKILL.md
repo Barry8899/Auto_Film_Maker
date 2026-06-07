@@ -10,7 +10,7 @@ Analyze the video to extract the plot and the timestamps of MAIN characters ONLY
 ## Workflow
 
 ### Step 0: Check Existing Data (Bypass Logic)
-Before running any scripts, DO NOT overthink or explain. Immediately check if the final output file `repo/S2_Video_Understanding/<video_name>/<video_name>.md` already exists. 
+Before running any scripts, DO NOT overthink or explain. Immediately check if the final output file `/home/admin/.openclaw/workspace/auto_film_maker/repo/S2_Video_Understanding/<video_name>/<video_name>.md` already exists. 
 - If it exists, immediately tell the user: *"I detected an existing video understanding report for this video. Would you like to use the existing report and skip this step, or regenerate it from scratch?"*
 - If the user explicitly chooses to skip/use the existing one, IMMEDIATELY proceed to Step 6 and output `[STEP_2_COMPLETE]`. Do not run Step 1-5.
 

@@ -1276,6 +1276,14 @@
                 });
                 const data = await res.json();
                 
+                if (res.status === 409) {
+                    // Proxy retried while agent is still running, treat as timeout to trigger polling recovery
+                    throw new Error("timeout");
+                }
+                if (!res.ok) {
+                    throw new Error(data.detail || 'Request failed');
+                }
+                
                 clearTimeout(fakeToolTimeout);
                 // Replace loading div with actual content
                 loadingDiv.innerHTML = '';
