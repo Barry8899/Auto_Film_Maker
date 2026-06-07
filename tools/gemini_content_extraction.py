@@ -60,7 +60,7 @@ def main():
     video_name = video_path.stem
     # Standard output directory: repo/S4_Content_Extraction/<video_name>
     # Note: ensure we write relative to the workspace correctly.
-    output_dir = Path("auto_film_maker/repo/S4_Content_Extraction") / video_name
+    output_dir = Path("repo/S4_Content_Extraction") / video_name
     output_dir.mkdir(parents=True, exist_ok=True)
     out_json_path = output_dir / "extracted_clip_details.json"
 
@@ -123,7 +123,7 @@ Expected JSON Schema (Array of Objects):
             # ensure start_sec is never negative
             item["start_sec"] = max(0.0, float(item.get("start_sec", 0.0)))
             item["duration_sec"] = round(float(item.get("end_sec", 0.0)) - item["start_sec"], 2)
-            item["output_path"] = f"/home/admin/.openclaw/workspace/{output_dir}/{item['segment_id']}.mp4"
+            item["output_path"] = f"/home/admin/.openclaw/workspace/auto_film_maker/{output_dir}/{item['segment_id']}.mp4"
             
         with open(out_json_path, "w", encoding="utf-8") as f:
             json.dump(result_json, f, ensure_ascii=False, indent=2)

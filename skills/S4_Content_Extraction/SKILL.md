@@ -10,6 +10,9 @@ Based on the style and script outline defined in Step 3, generate a structured 3
 
 ## Workflow
 
+## Workflow Constraints (CRITICAL)
+You MUST NOT execute all phases at once. You must perform Phase 1, wait for the user, then perform Phase 2, wait for the user, and so on.
+
 ### Phase 1: Checklist Generation (The 3-Layer Draft)
 1. **Initialize & Read**: Upon trigger, read `repo/S3_Script_Writing/<video_name>/features.json` and `repo/S3_Script_Writing/<video_name>/script.md`. Also read the reference structure from `auto_film_maker/skills/S4_Content_Extraction/references/extraction_example.md`.
 2. **Drafting V0**: DO NOT ask the user empty questions. Instead, directly generate a 3-layer content extraction checklist draft and save it to `repo/S4_Content_Extraction/<video_name>/extract_content.md`.
@@ -17,12 +20,14 @@ Based on the style and script outline defined in Step 3, generate a structured 3
    - **Layer 1: Generic Elements** (Space/Environment, Character/Emotion, Action/Behavior, Voice/Dialogue, Lighting/Atmosphere).
    - **Layer 2: Type-Specific Elements** (e.g., Sci-Fi: HUD, mecha; Suspense: peephole, mirrors; Action: weapons, slow-mo).
    - **Layer 3: IP-Specific Elements** (Specific to this video, e.g., "Avengers assemble", Iron Man's armor).
-3. **Present & Ask for Supplement**: Show the user a brief summary of the extraction checklist you created. Then, explicitly ask the user for **Supplement Infos**:
-   *"I have generated the V0 extraction checklist based on our script. To help my visual engine perfectly recognize the video, are there any specific visual cues you can provide? (e.g., 'The one in the red armor is Iron Man', or 'Make sure not to miss the specific hug scene')."*
-4. **Refine & STOP (Checkpoint)**: Update `extract_content.md` based on user feedback. Save the user's supplementary context to a variable/file (`supplement_infos`) for the next step. 
-   **CRITICAL RULE**: DO NOT proceed to Phase 2 automatically! You MUST stop here and ask for permission: *"I have updated the checklist. Should we proceed to analyze the video and extract the clips?"*. Wait for the user's explicit command before running any Python scripts.
+3. **Present & STOP**: Show the user a brief summary of the extraction checklist you created. Then, explicitly ask the user for **Supplement Infos** AND to confirm before moving to Phase 2.
+   *"I have generated the V0 extraction checklist based on our script. To help my visual engine perfectly recognize the video, are there any specific visual cues you can provide? (e.g., 'The one in the red armor is Iron Man'). Once you are satisfied with this list and any supplements, let me know to proceed to the extraction phase."*
+   **CRITICAL RULE**: YIELD your turn here. DO NOT run any python scripts. DO NOT move to Phase 2.
 
-### Phase 2: Target Clip Extraction (VLM Time-Stamping)
+4. **Refine (If needed)**: If the user provides feedback or supplement info, update `extract_content.md` and save their supplementary context to a variable (`supplement_infos`). Again, **DO NOT automatically run Phase 2** unless they explicitly say "proceed to next phase" or "start extraction".
+
+### Phase 2 & 3: Target Clip Extraction & Clipping
+Only execute this when the user explicitly agrees to proceed from Phase 1.
 1. **Execution**: Tell the user you are analyzing the video to find the exact timestamps. Run the Gemini extraction script:
    ```bash
    python tools/gemini_content_extraction.py --target_content_list "repo/S4_Content_Extraction/<video_name>/extract_content.md" --video_path "repo/S1_uploaded_video/<video_name>.mp4" --supplement_infos "<user_provided_supplement_infos>"

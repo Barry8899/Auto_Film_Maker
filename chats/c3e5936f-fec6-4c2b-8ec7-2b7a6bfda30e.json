@@ -117,6 +117,26 @@
     {
       "role": "assistant",
       "content": "您好，我注意到您再次强调了“突出两人长久的凝望眼神”。\n\n在刚才为您提取的视频切片中，我已经将这个要求作为核心重点注入到了视觉引擎中。特别是 **seg_004**（包含 Tony 释然的眼神细节）和 **seg_005**（两人充满深意的拥抱与长久对视），都是专门为了捕捉这种“无声胜有声的凝望感”而截取的。\n\n您可以点击上面的链接预览一下这两个片段：\n- [👉 点击预览 seg_004](/files/repo/S4_Content_Extraction/stark_and_dad/seg_004.mp4)\n- [👉 点击预览 seg_005](/files/repo/S4_Content_Extraction/stark_and_dad/seg_005.mp4)\n\n**如果您觉得这两个片段的凝望时间或情绪还不够**，我可以为您重新调整提取策略并再次截取。\n**如果您对当前的切片满意**，请直接回复“继续”或“下一步”，我们将为您进入最后的环节！"
+    },
+    {
+      "role": "user",
+      "content": "继续"
+    },
+    {
+      "role": "assistant",
+      "content": "(System) Acknowledged. Proceeding to the next step..."
+    },
+    {
+      "role": "user",
+      "content": "Run Content Extraction"
+    },
+    {
+      "role": "user",
+      "content": "Run Content Extraction"
+    },
+    {
+      "role": "assistant",
+      "content": "刚才已经为您成功执行了“内容提取 (Content Extraction)”并生成了最新的 9 个切片（包含充足的眼神凝望和对视特写）。\n\n如果您对上面的提取结果（特别是 seg_006 和 seg_008）满意，**请回复“继续”或“下一步”**，我将为您开启下一个阶段。\n\n如果您是希望**重新提取**，请告诉我您还需要补充或修改哪些具体的视觉特征？"
     }
   ]
 }

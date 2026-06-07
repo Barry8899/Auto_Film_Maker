@@ -167,3 +167,59 @@ INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
 INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
 INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
 INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET / HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     216.236.41.91:0 - "DELETE /api/fs/delete HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/c3e5936f-fec6-4c2b-8ec7-2b7a6bfda30e HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /files/vobile_logo.png HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "POST /api/chat/c3e5936f-fec6-4c2b-8ec7-2b7a6bfda30e/message HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/c3e5936f-fec6-4c2b-8ec7-2b7a6bfda30e?t=1780823634406 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/c3e5936f-fec6-4c2b-8ec7-2b7a6bfda30e?t=1780823639404 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/c3e5936f-fec6-4c2b-8ec7-2b7a6bfda30e?t=1780823644403 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/c3e5936f-fec6-4c2b-8ec7-2b7a6bfda30e?t=1780823649405 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/c3e5936f-fec6-4c2b-8ec7-2b7a6bfda30e?t=1780823654402 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/c3e5936f-fec6-4c2b-8ec7-2b7a6bfda30e?t=1780823659398 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/c3e5936f-fec6-4c2b-8ec7-2b7a6bfda30e?t=1780823664404 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/c3e5936f-fec6-4c2b-8ec7-2b7a6bfda30e?t=1780823669402 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/c3e5936f-fec6-4c2b-8ec7-2b7a6bfda30e?t=1780823674403 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/c3e5936f-fec6-4c2b-8ec7-2b7a6bfda30e?t=1780823679402 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/c3e5936f-fec6-4c2b-8ec7-2b7a6bfda30e?t=1780823684982 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/c3e5936f-fec6-4c2b-8ec7-2b7a6bfda30e?t=1780823689986 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/c3e5936f-fec6-4c2b-8ec7-2b7a6bfda30e?t=1780823694984 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "POST /api/chat/c3e5936f-fec6-4c2b-8ec7-2b7a6bfda30e/message HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/c3e5936f-fec6-4c2b-8ec7-2b7a6bfda30e?t=1780823699977 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "POST /api/chat/c3e5936f-fec6-4c2b-8ec7-2b7a6bfda30e/message HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/file?path=repo%2FS4_Content_Extraction%2Fstark_and_dad%2Fextract_content.md HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/file?path=repo%2FS4_Content_Extraction%2Fstark_and_dad%2Fextracted_clip_details.json HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/c3e5936f-fec6-4c2b-8ec7-2b7a6bfda30e HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'tools/gemini_content_extraction.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [4110567]
+INFO:     Started server process [4112264]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'tools/gemini_content_extraction.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [4112264]
+INFO:     Started server process [4112273]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.

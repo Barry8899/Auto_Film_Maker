@@ -2,90 +2,132 @@
   {
     "segment_id": "seg_001",
     "start_sec": 0.0,
-    "end_sec": 9.5,
-    "duration_sec": 9.5,
+    "end_sec": 13.5,
+    "duration_sec": 13.5,
     "emotion_score": 0.7,
     "tags": [
       "面部特写",
       "核心对话"
     ],
-    "description": "Tony Stark, with a pained and weary expression, describes his father as cold and calculating, mentioning he never felt loved or even liked. This sets up the central emotional conflict of the story.",
-    "reasoning": "This segment was selected to establish the initial emotional premise. It's a close-up on Tony's face, fulfilling the '面部特写' tag, and his dialogue about his father is the '核心对话' that frames the entire subsequent interaction, highlighting his unresolved feelings.",
+    "description": "托尼·斯塔克面带疲惫和失落，向尼克·弗瑞诉说他记忆中父亲的冷漠形象：冷酷、精于算计，从未表达过爱意。",
+    "reasoning": "此片段通过托尼的面部特写和核心对话，精准地捕捉了他对父亲的复杂情感，为后续与父亲相遇并和解的剧情奠定了情感基调。这是维度B中“面部特写”的直接体现。",
     "output_path": "/home/admin/.openclaw/workspace/auto_film_maker/repo/S4_Content_Extraction/stark_and_dad/seg_001.mp4"
   },
   {
     "segment_id": "seg_002",
     "start_sec": 21.0,
-    "end_sec": 31.5,
-    "duration_sec": 10.5,
-    "emotion_score": 0.6,
+    "end_sec": 34.5,
+    "duration_sec": 13.5,
+    "emotion_score": 0.3,
     "tags": [
       "标志性场景",
-      "面部特写",
       "复古光影"
     ],
-    "description": "After emerging from a vault, Tony Stark comes face-to-face with a younger version of his father, Howard Stark. Tony's expression shifts to one of shock, caution, and guarded curiosity. The scene is set in a retro, dimly lit S.H.I.E.L.D. laboratory.",
-    "reasoning": "This segment captures the pivotal moment of their encounter. It fulfills '标志性场景' by showing the retro S.H.I.E.L.D. base, '面部特写' with Tony's complex reaction, and '复古光影' through the atmospheric lighting, creating a sense of stepping into the past.",
+    "description": "穿越时空后，托尼进入了70年代的神盾局旧址。镜头跟随他穿过充满复古科技设备和暖黄色灯光的走廊，营造出强烈的时代感和回忆氛围。",
+    "reasoning": "该片段完全符合维度A和E的要求。通过展现“神盾局旧址的复古走廊”这一标志性场景，并运用“暖黄色/偏暗的灯光”，成功营造了“复古光影”和回忆感，为父子相遇提供了完美的时代背景。",
     "output_path": "/home/admin/.openclaw/workspace/auto_film_maker/repo/S4_Content_Extraction/stark_and_dad/seg_002.mp4"
   },
   {
     "segment_id": "seg_003",
-    "start_sec": 104.5,
-    "end_sec": 113.0,
-    "duration_sec": 8.5,
+    "start_sec": 48.6,
+    "end_sec": 55.6,
+    "duration_sec": 7.0,
     "emotion_score": 0.8,
     "tags": [
-      "面部特写",
-      "核心对话",
-      "空间压迫与松弛感对比"
+      "手部/眼神细节",
+      "跨越时空的世纪拥抱/握手",
+      "情怀符号"
     ],
-    "description": "In the confined space of an elevator, Howard Stark expresses his anxieties about becoming a father, mentioning his wife is expecting. His nervous expression reveals a vulnerability Tony has never seen before.",
-    "reasoning": "This clip was chosen for its raw emotional honesty. It features a '面部特写' of Howard's anxious expression, and the dialogue about his impending fatherhood is a '核心对话' topic. The scene's setting in an elevator provides the requested '空间压迫' that enhances the intimacy of the confession.",
+    "description": "托尼与年轻的父亲霍华德·斯塔克相遇。霍华德自我介绍后伸出手，托尼迟疑了一下，握住了父亲的手。镜头特写了这次跨越时空的握手，以及两人初次见面时的对视。",
+    "reasoning": "这个片段是父子关系的核心瞬间，完美契合了维度B和第三层IP元素。它不仅展现了“充满深意的握手”，还是“跨越时空的世纪握手”，同时霍华德的“经典胡子造型”也是重要的情怀符号。",
     "output_path": "/home/admin/.openclaw/workspace/auto_film_maker/repo/S4_Content_Extraction/stark_and_dad/seg_003.mp4"
   },
   {
     "segment_id": "seg_004",
-    "start_sec": 115.5,
-    "end_sec": 124.5,
-    "duration_sec": 9.0,
-    "emotion_score": 0.9,
+    "start_sec": 104.5,
+    "end_sec": 110.0,
+    "duration_sec": 5.5,
+    "emotion_score": 0.8,
     "tags": [
       "面部特写",
-      "眼神细节",
-      "治愈回忆风/科幻片"
+      "Howard Stark 提到未出世孩子时焦虑和期盼的神情",
+      "核心对话"
     ],
-    "description": "Tony, with a profound look of understanding and hindsight, tells Howard that he used to think his own dad was tough but now only remembers the good things. His gaze is filled with empathy and forgiveness.",
-    "reasoning": "This segment is the turning point for Tony's character arc. The '面部特写' and '眼神细节' perfectly capture his emotional catharsis and the '治愈回忆' theme. He's not just talking to Howard; he's speaking about him, offering a peace offering across time.",
+    "description": "在电梯的封闭空间里，霍华德透露妻子即将生产，他的脸上流露出隐藏不住的焦虑、紧张和对未来的期盼。托尼在一旁静静地听着，眼神复杂。",
+    "reasoning": "此片段精准捕捉了维度B中要求的“Howard Stark 提到未出世孩子时焦虑和期盼的神情”。通过面部特写和核心对话，展现了一个与托尼记忆中完全不同的、充满人情味的父亲形象。",
     "output_path": "/home/admin/.openclaw/workspace/auto_film_maker/repo/S4_Content_Extraction/stark_and_dad/seg_004.mp4"
   },
   {
     "segment_id": "seg_005",
-    "start_sec": 133.0,
-    "end_sec": 142.5,
-    "duration_sec": 9.5,
-    "emotion_score": 1.0,
+    "start_sec": 120.0,
+    "end_sec": 124.0,
+    "duration_sec": 4.0,
+    "emotion_score": 0.7,
     "tags": [
-      "主角高光",
-      "手部/眼神细节",
-      "情感高光"
+      "Tony 释然微笑的特写",
+      "Tony 极力隐藏身份却又难掩感情的微表情"
     ],
-    "description": "In an incredibly poignant moment, Tony Stark pulls his father, Howard, into a hug, thanking him for everything. This is the 'century hug,' a gesture of closure and love that transcends time. The moment is held, focusing on their expressions.",
-    "reasoning": "This is the emotional climax of the entire film. It perfectly encapsulates '主角高光' (Tony's ultimate moment of reconciliation), '手部/眼神细节' with the meaningful embrace, and is the definitive '情感高光' of the scene.",
+    "description": "听到父亲抱怨妻子怀孕后连他咀嚼的声音都无法忍受时，托尼忍不住露出了一个发自内心的、释然的微笑。这个微笑包含了理解、心疼和和解。",
+    "reasoning": "这个镜头是托尼情感转变的关键，完全符合维度B中“Tony 释然微笑的特写”和第三层中“Tony 极力隐藏身份却又难掩感情的微表情”的要求。它细腻地展示了托尼开始理解父亲的内心世界。",
     "output_path": "/home/admin/.openclaw/workspace/auto_film_maker/repo/S4_Content_Extraction/stark_and_dad/seg_005.mp4"
   },
   {
     "segment_id": "seg_006",
-    "start_sec": 149.0,
-    "end_sec": 159.5,
-    "duration_sec": 10.5,
+    "start_sec": 129.5,
+    "end_sec": 139.0,
+    "duration_sec": 9.5,
+    "emotion_score": 0.9,
+    "tags": [
+      "手部/眼神细节",
+      "核心对话"
+    ],
+    "description": "霍华德表达了对自己能否成为一个好父亲的担忧，托尼凝视着父亲，眼神中充满了理解和鼓励。这是两人之间一次深刻的眼神交流，充满了未言说的情感。",
+    "reasoning": "根据补充信息中“强烈要求突出提取两人长久的凝望眼神”的指令，这个片段是最佳选择。它包含了长时间的对视特写，通过“眼神细节”和“核心对话”，深刻地探讨了“做父亲的恐惧与责任”这一主题。",
+    "output_path": "/home/admin/.openclaw/workspace/auto_film_maker/repo/S4_Content_Extraction/stark_and_dad/seg_006.mp4"
+  },
+  {
+    "segment_id": "seg_007",
+    "start_sec": 152.0,
+    "end_sec": 203.0,
+    "duration_sec": 51.0,
+    "emotion_score": 0.9,
+    "tags": [
+      "核心对话",
+      "面部特写"
+    ],
+    "description": "托尼以一个过来人的身份，向父亲分享了自己的感悟：“我曾以为我爸对我很严厉，但现在回想起来，我只记得那些美好的事。他已经尽力了。”",
+    "reasoning": "这段对话是托尼与自己、与父亲彻底和解的宣言。通过“核心对话”和“面部特写”，展现了托尼的成长与释然，是整个故事的情感升华点。",
+    "output_path": "/home/admin/.openclaw/workspace/auto_film_maker/repo/S4_Content_Extraction/stark_and_dad/seg_007.mp4"
+  },
+  {
+    "segment_id": "seg_008",
+    "start_sec": 214.0,
+    "end_sec": 222.0,
+    "duration_sec": 8.0,
+    "emotion_score": 1.0,
+    "tags": [
+      "跨越时空的世纪拥抱/握手",
+      "核心对话",
+      "手部/眼神细节"
+    ],
+    "description": "在分别之际，托尼主动拥抱了父亲，并在他耳边轻声说：“谢谢你……为了一切。” 这个拥抱弥补了他一生的遗憾。",
+    "reasoning": "这是影片的情感最高潮，完美诠释了“跨越时空的世纪拥抱”。它集合了“拥抱细节”、“核心对话”和“眼神细节”，将父子间的情感张力推向顶峰，是第三层IP元素中的“主角高光”时刻。",
+    "output_path": "/home/admin/.openclaw/workspace/auto_film_maker/repo/S4_Content_Extraction/stark_and_dad/seg_008.mp4"
+  },
+  {
+    "segment_id": "seg_009",
+    "start_sec": 230.5,
+    "end_sec": 238.5,
+    "duration_sec": 8.0,
     "emotion_score": 0.9,
     "tags": [
       "定格收束",
       "旁白/独白",
-      "经典台词"
+      "经典台词",
+      "情感高光"
     ],
-    "description": "The scene cuts to an old, grainy video recording of Howard Stark. He looks directly into the camera and says the iconic line, 'What is, and always will be, my greatest creation... is you.' This provides the ultimate emotional resolution.",
-    "reasoning": "This segment serves as the perfect '定格收束'. The old recording fulfills the '情感高光' and '科技界面' tags with its grainy, retro feel. Howard's line is the most '经典台词' and '旁白/独白' of the sequence, delivering the final, powerful message of a father's love.",
-    "output_path": "/home/admin/.openclaw/workspace/auto_film_maker/repo/S4_Content_Extraction/stark_and_dad/seg_006.mp4"
+    "description": "影片结尾，回放到霍华德·斯塔克生前录制的影像。他凝视着镜头，仿佛穿越时空对托尼说：“我此生最伟大的创造，就是你。” 画面带有颗粒感，聚光灯效果突出。",
+    "reasoning": "这个片段是完美的“定格收束”，通过老旧录像带的形式，传递了霍华德最经典的独白：“My greatest creation is you.” 它符合维度C、D、E和第三层IP元素的全部要求，用“情感高光”的方式为整个故事画上了圆满的句号。",
+    "output_path": "/home/admin/.openclaw/workspace/auto_film_maker/repo/S4_Content_Extraction/stark_and_dad/seg_009.mp4"
   }
 ]
