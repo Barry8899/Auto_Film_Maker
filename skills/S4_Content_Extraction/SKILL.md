@@ -10,6 +10,11 @@ Based on the style and script outline defined in Step 3, generate a structured 3
 
 ## Workflow
 
+### Step 0: Check Existing Data (Bypass Logic)
+Before doing anything else, DO NOT overthink or explain. Immediately check if `/home/admin/.openclaw/workspace/auto_film_maker/repo/S4_Content_Extraction/<video_name>/extraction_report.md` already exists (which implies clips are also extracted).
+- If it exists, immediately tell the user: *"I detected existing extracted clips and an extraction report for this video. Would you like to use them and skip this step, or start over?"*
+- If the user explicitly chooses to skip/use existing files, IMMEDIATELY ask if they want to proceed to Step 5. Upon confirmation, output `[STEP_4_COMPLETE]`. Do not run Step 1, 2, 3, or 4.
+
 ### Step 1: Checklist Generation (V0 Draft)
 1. **Initialize**: Upon trigger, read `/home/admin/.openclaw/workspace/auto_film_maker/repo/S3_Script_Writing/<video_name>/features.json`, `script.md`, and `auto_film_maker/skills/S4_Content_Extraction/references/extraction_example.md`.
 2. **Drafting V0**: Generate a 3-layer content extraction checklist draft and save it to `/home/admin/.openclaw/workspace/auto_film_maker/repo/S4_Content_Extraction/<video_name>/extract_content.md` (MUST follow the 3-layer structure from the example).

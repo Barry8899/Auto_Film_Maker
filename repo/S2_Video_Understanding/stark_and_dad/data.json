@@ -1,6 +1,12 @@
 {
-  "plot_summary": "Tony Stark, who harbors negative feelings about his emotionally distant father, travels back in time and meets a younger version of him. Disguised, Tony has a conversation with his father, Howard, who is nervously awaiting the birth of his own son. This encounter gives Tony a new perspective, allowing him to see his father's love and insecurities, leading to a moment of reconciliation and understanding. The clip concludes with an old video of Howard telling Tony he is his greatest creation.",
+  "plot_summary": "Tony Stark, reflecting on his cold and distant father, travels back in time to 1970. He encounters a younger Howard Stark, who is anxiously awaiting the birth of his son. Posing as a visitor, Tony has a heartfelt conversation with his father, offering him reassurance about fatherhood. This interaction allows Tony to see his father in a new light, understand his love, and find closure, ending with a posthumous message from Howard calling Tony his greatest creation.",
   "main_characters": [
+    {
+      "person_name": "Nick Fury",
+      "time_stamp": "00:00:00",
+      "source_video": "repo/S1_uploaded_video/stark_and_dad.mp4",
+      "face_image_path": "repo/S2_Video_Understanding/stark_and_dad/faces/Nick_Fury.jpg"
+    },
     {
       "person_name": "Tony Stark",
       "time_stamp": "00:00:01",
