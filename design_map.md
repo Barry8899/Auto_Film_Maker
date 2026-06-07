@@ -134,3 +134,9 @@
 - **五维特征采集 (Phase 1)**：在对话中不断采集并更新 `style`, `emotion_curve`, `pacing`, `aesthetic`, `duration` 五个维度，直至全部明确并落盘至 `features.json`。
 - **三幕剧大纲构思 (Phase 2)**：基于特征 JSON 和素材，自动撰写包含 Logline、节奏策略、人物弧光和三幕剧结构的 `script.md`。经过和用户的多轮对话修改直至确认。
 - **无缝流转 (S3 -> S4)**：大纲定稿后，系统再次发起确认询问。用户同意后抛出 `[STEP_3_COMPLETE]`，利用同样的静默拦截机制瞬间点亮并唤醒 S4 环节 (Content Extraction)。
+
+**Step 4 (Content Extraction) 交互机制:**
+- **消除白纸综合征 (V0 Draft Push)**：Agent 被静默唤醒后，直接在后台读取 S3 的 `features.json` 和 `script.md`，不再用空洞的问题盘问用户，而是直接生成一份“三层结构”（通用元素、类型专属、IP专属）的待抽取清单初稿 (`extract_content.md`) 推送给用户。
+- **防幻觉上下文注入 (Context Injection)**：推送完清单初稿后，Agent 顺势向用户索要 `supplement_infos` (如："穿红盔甲的是钢铁侠")，这一步为后续视觉引擎提供了强有力的文本锚点，大幅降低 VLM 的识别幻觉。
+- **思维链打点与切割 (CoT & Clipping)**：底层使用带有强 System Prompt 的 Gemini 脚本定位素材。强制输出 `reasoning` (思维链) 字段，有效减少了视频时间戳理解过程中的“秒数漂移”。随后由 FFmpeg 脚本基于 JSON 自动裁剪对应片段。
+- **Dashboard 级验收面板**：为了防止多个切片视频在 M 区聊天框内造成“多媒体轰炸”与渲染卡死，裁剪完成后输出一个优雅的 `extraction_report.md`。以表格与超链接的形式，让用户像审阅 Dashboard 一样集中验收素材并做出最终确认。
