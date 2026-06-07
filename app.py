@@ -335,54 +335,69 @@ def delete_chat(chat_id: str):
         os.remove(path)
     return {"status": "success"}
 
+import threading
+
+# Add a simple in-memory lock to prevent duplicate execution from proxy retries
+chat_locks = {}
+
 @app.post("/api/chat/{chat_id}/message")
-
 def send_message(chat_id: str, data: SendMessage):
-    path = os.path.join(CHATS_DIR, f"{chat_id}.json")
-    if not os.path.exists(path):
-        raise HTTPException(status_code=404, detail="Chat not found")
+    if chat_id not in chat_locks:
+        chat_locks[chat_id] = threading.Lock()
         
-    with open(path, "r", encoding="utf-8") as f:
-        chat_data = json.load(f)
+    # If the lock is already acquired, it means a previous request is still running.
+    # This prevents reverse proxies (like Pinggy/Nginx) from triggering duplicate agent runs on timeout retries.
+    if not chat_locks[chat_id].acquire(blocking=False):
+        raise HTTPException(status_code=409, detail="Agent is already processing a message for this chat.")
         
-    # Append user message
-    user_msg = {"role": "user", "content": data.content}
-    chat_data["messages"].append(user_msg)
-    
-    # Save user msg immediately so UI feels responsive or if process fails
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(chat_data, f, ensure_ascii=False, indent=2)
-
-    # Call OpenClaw agent
-    if data.skip_agent:
-        # Just return a simulated system acknowledgment to save time
-        ai_text = "(System) Acknowledged. Proceeding to the next step..."
-        ai_msg = {"role": "assistant", "content": ai_text}
-        chat_data["messages"].append(ai_msg)
+    try:
+        path = os.path.join(CHATS_DIR, f"{chat_id}.json")
+        if not os.path.exists(path):
+            raise HTTPException(status_code=404, detail="Chat not found")
+            
+        with open(path, "r", encoding="utf-8") as f:
+            chat_data = json.load(f)
+            
+        # Append user message
+        user_msg = {"role": "user", "content": data.content}
+        chat_data["messages"].append(user_msg)
+        
+        # Save user msg immediately so UI feels responsive or if process fails
         with open(path, "w", encoding="utf-8") as f:
             json.dump(chat_data, f, ensure_ascii=False, indent=2)
-        return {"user_message": user_msg, "assistant_message": ai_msg}
 
-    import subprocess
-    try:
-        result = subprocess.run(
-            ["openclaw", "agent", "--session-id", f"webchat_{chat_id}", "--message", data.content, "--json"],
-            capture_output=True,
-            text=True,
-            check=True
-        )
-        output_json = json.loads(result.stdout)
-        ai_text = output_json.get("result", {}).get("payloads", [{}])[0].get("text", "(No response generated)")
-    except Exception as e:
-        ai_text = f"(System Error: Failed to contact OpenClaw Agent. {str(e)})"
-    
-    ai_msg = {"role": "assistant", "content": ai_text}
-    chat_data["messages"].append(ai_msg)
-    
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(chat_data, f, ensure_ascii=False, indent=2)
+        # Call OpenClaw agent
+        if data.skip_agent:
+            # Just return a simulated system acknowledgment to save time
+            ai_text = "(System) Acknowledged. Proceeding to the next step..."
+            ai_msg = {"role": "assistant", "content": ai_text}
+            chat_data["messages"].append(ai_msg)
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump(chat_data, f, ensure_ascii=False, indent=2)
+            return {"user_message": user_msg, "assistant_message": ai_msg}
+
+        import subprocess
+        try:
+            result = subprocess.run(
+                ["openclaw", "agent", "--session-id", f"webchat_{chat_id}", "--message", data.content, "--json"],
+                capture_output=True,
+                text=True,
+                check=True
+            )
+            output_json = json.loads(result.stdout)
+            ai_text = output_json.get("result", {}).get("payloads", [{}])[0].get("text", "(No response generated)")
+        except Exception as e:
+            ai_text = f"(System Error: Failed to contact OpenClaw Agent. {str(e)})"
         
-    return {"user_message": user_msg, "assistant_message": ai_msg}
+        ai_msg = {"role": "assistant", "content": ai_text}
+        chat_data["messages"].append(ai_msg)
+        
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(chat_data, f, ensure_ascii=False, indent=2)
+            
+        return {"user_message": user_msg, "assistant_message": ai_msg}
+    finally:
+        chat_locks[chat_id].release()
 
 if __name__ == "__main__":
     uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)

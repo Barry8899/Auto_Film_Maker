@@ -95,3 +95,82 @@ INFO:     Finished server process [4117846]
 INFO:     Started server process [4117855]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
+INFO:     216.236.41.91:0 - "GET / HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     216.236.41.91:0 - "DELETE /api/chat/6f49bcb3-8177-4a54-9488-1177df0505f3 HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "DELETE /api/fs/delete HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "POST /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/9215b0bf-29f0-4b5a-bb88-99e9a60e55ed HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /files/vobile_logo.png HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "POST /api/chat/9215b0bf-29f0-4b5a-bb88-99e9a60e55ed/message HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "POST /api/chat/9215b0bf-29f0-4b5a-bb88-99e9a60e55ed/message HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "POST /api/chat/9215b0bf-29f0-4b5a-bb88-99e9a60e55ed/message HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "POST /api/chat/9215b0bf-29f0-4b5a-bb88-99e9a60e55ed/message HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "POST /api/chat/9215b0bf-29f0-4b5a-bb88-99e9a60e55ed/message HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "POST /api/chat/9215b0bf-29f0-4b5a-bb88-99e9a60e55ed/message HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "POST /api/chat/9215b0bf-29f0-4b5a-bb88-99e9a60e55ed/message HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "POST /api/chat/9215b0bf-29f0-4b5a-bb88-99e9a60e55ed/message HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/file?path=repo%2FS4_Content_Extraction%2Fstark_and_dad%2Fextract_content.md HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/9215b0bf-29f0-4b5a-bb88-99e9a60e55ed HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/9215b0bf-29f0-4b5a-bb88-99e9a60e55ed HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "POST /api/chat/9215b0bf-29f0-4b5a-bb88-99e9a60e55ed/message HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/file?path=repo%2FS4_Content_Extraction%2Fstark_and_dad%2Fextract_content.md HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/9215b0bf-29f0-4b5a-bb88-99e9a60e55ed HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "POST /api/chat/9215b0bf-29f0-4b5a-bb88-99e9a60e55ed/message HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/file?path=repo%2FS4_Content_Extraction%2Fstark_and_dad%2Fextract_content.md HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/9215b0bf-29f0-4b5a-bb88-99e9a60e55ed HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/file?path=repo%2FS4_Content_Extraction%2Fstark_and_dad%2Fextracted_clip_details.json HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/9215b0bf-29f0-4b5a-bb88-99e9a60e55ed HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "POST /api/chat/9215b0bf-29f0-4b5a-bb88-99e9a60e55ed/message HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/fs/file?path=repo%2FS4_Content_Extraction%2Fstark_and_dad%2Fextraction_report.md HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat/9215b0bf-29f0-4b5a-bb88-99e9a60e55ed HTTP/1.1" 200 OK
+INFO:     216.236.41.91:0 - "GET /api/chat HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'app.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [4117855]
+INFO:     Started server process [4119873]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
