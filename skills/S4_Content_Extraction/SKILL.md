@@ -5,14 +5,15 @@ Triggered when the user sends a message starting with `[TRIGGER: S4_Content_Extr
 
 ## Core Responsibilities
 Based on the style and script outline defined in Step 3, generate a structured 3-layer extraction checklist, run visual understanding to locate these elements in the original video, and extract the precise video clips.
-**Language Rule**: All your chat responses and generated documents MUST match the user's language.
+
+**Language Rule (CRITICAL)**: All your chat responses, as well as the generated files (`extract_content.md`, `extracted_clip_details.json`, and `extraction_report.md`), MUST match the user's language (e.g., if the user speaks Chinese, all outputs and internal document text must be in Chinese).
 
 ## Workflow
 
 ### Phase 1: Checklist Generation (The 3-Layer Draft)
-1. **Initialize & Read**: Upon trigger, read `repo/S3_Script_Writing/<video_name>/features.json` and `repo/S3_Script_Writing/<video_name>/script.md`.
+1. **Initialize & Read**: Upon trigger, read `repo/S3_Script_Writing/<video_name>/features.json` and `repo/S3_Script_Writing/<video_name>/script.md`. Also read the reference structure from `auto_film_maker/skills/S4_Content_Extraction/references/extraction_example.md`.
 2. **Drafting V0**: DO NOT ask the user empty questions. Instead, directly generate a 3-layer content extraction checklist draft and save it to `repo/S4_Content_Extraction/<video_name>/extract_content.md`.
-   The 3 layers are:
+   The 3 layers MUST follow the structure shown in the `extraction_example.md` reference file:
    - **Layer 1: Generic Elements** (Space/Environment, Character/Emotion, Action/Behavior, Voice/Dialogue, Lighting/Atmosphere).
    - **Layer 2: Type-Specific Elements** (e.g., Sci-Fi: HUD, mecha; Suspense: peephole, mirrors; Action: weapons, slow-mo).
    - **Layer 3: IP-Specific Elements** (Specific to this video, e.g., "Avengers assemble", Iron Man's armor).
