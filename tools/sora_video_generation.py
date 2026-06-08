@@ -24,7 +24,7 @@ def update_manifest(manifest_path, shot_id, updates):
 def main():
     parser = argparse.ArgumentParser(description="Generate video using Sora API")
     parser.add_argument("--prompt", required=True, help="Text prompt for video generation")
-    parser.add_argument("--model", default="sora-2", choices=["sora-2", "sora-2-pro"], help="Model selection")
+    parser.add_argument("--model", default="sora-2", help="Model selection")
     parser.add_argument("--reference", default=None, help="Path to reference image or video (optional)")
     parser.add_argument("--seconds", default="4", help="Duration of the video in seconds (default 4)")
     parser.add_argument("--resolution", default="1280x720", help="Resolution of the video (e.g. 1280x720)")
@@ -69,6 +69,7 @@ def main():
         if 'response' in locals() and response is not None:
             print(f"Response: {response.text}")
         update_manifest(args.manifest_path, args.shot_id, {"status": "failed"})
+        print("Note: The API seems to be returning 'model_not_found'. The testing might fail due to provider availability. Exiting.")
         sys.exit(1)
 
     video_id = res_json.get("id")
