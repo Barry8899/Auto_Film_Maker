@@ -21,8 +21,19 @@ S6（Video Generation）是“加工厂”，纯粹负责素材填补。它只�
    - **提示词定稿**：根据 S5 的初步要求和用户的最新意图，构思具体的视频生成模型 Prompt（包括尺寸比例、动作、风格），并与用户确认。敲定后写入 JSON 的 `prompt` 字段。
 
 3. **执行生成与产出维护 (Generation & Output Maintenance)**
-   - 确定好 Prompt 与参考图/视频后，执行实际的视频生成工具（如使用对应的 API 脚本，这部分根据系统后续接入的模型工具而定，目前模拟或执行实际生成流程）。
-   - 将生成的视频文件放置在对应的 `shot_id` 目录下，并确保将最新定稿的路径更新至 `asset_manifest.json` 的 `output_path` 字段中。
+   - 确定好 Prompt 与参考图/视频后，使用 `sora_video_generation.py` 工具发起视频生成并自动下载至目标路径。
+   - **执行命令格式**: 
+     ```bash
+     python /home/admin/.openclaw/workspace/auto_film_maker/tools/sora_video_generation.py \
+       --prompt "<打磨后的提示词>" \
+       --model "sora-2" \
+       --seconds "4" \
+       --resolution "1280x720" \
+       --reference "<参考图像/视频的绝对路径，如果有的话>" \
+       --output_path "/home/admin/.openclaw/workspace/auto_film_maker/repo/S6_Video_Generation/<video_name>/<shot_id>/output.mp4"
+     ```
+   - 脚本会自动轮询等待生成完成并下载到 `--output_path`。
+   - 将成功生成的视频路径更新至 `asset_manifest.json` 的 `output_path` 字段中。
 
 4. **实时更新与确认 (Manifest Updates)**
    - 每完成一个镜头的参考图确认、Prompt 修改或最终视频生成定稿，你都必须**实时更新 `asset_manifest.json` 文件**。
