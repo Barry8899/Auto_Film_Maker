@@ -8,6 +8,11 @@ The core function of S6 is to generate high-quality video clips for the `TO_BE_G
 
 **Language Rule:** The agent MUST strictly communicate and output results in the language used by the user (e.g., if the user communicates in Chinese, the agent must reply and structure reports in Chinese).
 
+## Critical Constraints & Rules
+- **Copyright Avoidance**: Do NOT use copyrighted names, IP characters, or real celebrity names in the prompts (e.g., do not write "Tony Stark" or "Howard"). Use generic visual descriptors instead (e.g., "Person 1, a middle-aged man with a goatee in a 1970s suit").
+- **Reference Image Limitation**: The video generation API only accepts **ONE** reference image per generation. DO NOT silently combine or stitch multiple images into one. If the user provides multiple images, explicitly inform them of this limitation and ask them to choose ONE, or suggest breaking the shot into two separate shots.
+- **Strict Manifest Updating**: When the user approves a prompt and reference, you MUST update `asset_manifest.json` with the exact choices. You must save the EXACT and FULL text of the prompt (do not truncate) and the exact file path of the reference image.
+
 ## Workflow
 
 ### Step 0: Bypass Check
