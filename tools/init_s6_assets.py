@@ -40,14 +40,15 @@ def main():
                     "newshot_content": content,
                     "reference_path": [],
                     "prompt": "",
-                    "output_path": ""
+                    "output_path": "",
+                    "status": "pending",
+                    "user_notified": False
                 })
 
     if not shots_to_generate:
         print("No TO_BE_GENERATED shots found in S5 storyboard.")
         sys.exit(0)
 
-    # Create S6 directory and subdirectories for each shot
     s6_dir.mkdir(parents=True, exist_ok=True)
 
     for shot in shots_to_generate:
@@ -56,8 +57,6 @@ def main():
 
     manifest_path = s6_dir / "asset_manifest.json"
     
-    # If manifest already exists, we might want to merge or skip. For now, overwrite or initialize empty fields.
-    # To be safe, let's just write the initial structure.
     try:
         with open(manifest_path, "w", encoding="utf-8") as f:
             json.dump(shots_to_generate, f, indent=4, ensure_ascii=False)

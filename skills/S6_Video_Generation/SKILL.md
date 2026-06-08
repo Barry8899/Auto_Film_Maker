@@ -3,42 +3,42 @@
 ## Trigger
 Triggered when the user sends a message starting with `[TRIGGER: S6_Video_Generation]`.
 
-## 核心定位 (Core Responsibility)
-S6（Video Generation）是“加工厂”，纯粹负责素材填补。它只处理 S5 分镜表里被标记为 `TO_BE_GENERATED` 的新视频片段。
-核心任务是陪伴用户打磨每一个新生成的素材，完成“找参考 -> 定 Prompt -> 生成 -> 修改 -> 定稿”的互动循环，并且管理好产出的文件路径。
+## Core Responsibility
+The core function of S6 is to generate high-quality video clips for the `TO_BE_GENERATED` shots identified in the S5 Storyboard. Through iterative communication with the user, the agent determines the exact reference image/video and fine-tunes the text prompt for each shot. The final outputs and generation metadata are maintained in `asset_manifest.json`.
 
-## 执行流转要求 (Execution Rules)
+**Language Rule:** The agent MUST strictly communicate and output results in the language used by the user (e.g., if the user communicates in Chinese, the agent must reply and structure reports in Chinese).
 
-1. **初始化资源目录与Manifest (Initialization)**
-   - 收到触发指令后，第一件事必须**使用提供的初始化工具脚本**，自动读取 S5 分镜表，生成对应的 S6 子目录与初始 JSON。
-   - **执行命令**: `python /home/admin/.openclaw/workspace/auto_film_maker/tools/init_s6_assets.py --video_name <视频名称>`
-   - 这会为所有 `TO_BE_GENERATED` 镜头在 `/repo/S6_Video_Generation/<video_name>/<shot_id>/` 创建专属目录，并生成一个整合记录所有待生成镜头信息的 `/repo/S6_Video_Generation/<video_name>/asset_manifest.json`。
+## Workflow
 
-2. **打磨循环与参考指引 (Polishing Loop with User)**
-   - 根据初始化的 `asset_manifest.json`，按顺序与用户沟通需要生成的 `shot_id`。
-   - 向用户展示 `newshot_content` 的要求。
-   - **参考图像/视频**：主动询问用户是否需要提供参考图像或参考视频（用户可以利用工作区的本地文件，也可以现场传图）。如果用户确认了参考文件，将其记录在对应 `shot_id` 的 `reference_path` 数组中。
-   - **提示词定稿**：根据 S5 的初步要求和用户的最新意图，构思具体的视频生成模型 Prompt（包括尺寸比例、动作、风格），并与用户确认。敲定后写入 JSON 的 `prompt` 字段。
+### Step 0: Bypass Check
+Check if the file `/home/admin/.openclaw/workspace/auto_film_maker/repo/S6_Video_Generation/<video_name>/asset_manifest.json` already exists. If it does, inform the user that S6 assets already exist and offer an option to skip S6 or overwrite.
 
-3. **执行生成与产出维护 (Generation & Output Maintenance)**
-   - 确定好 Prompt 与参考图/视频后，使用 `sora_video_generation.py` 工具发起视频生成并自动下载至目标路径。
-   - **执行命令格式**: 
-     ```bash
-     python /home/admin/.openclaw/workspace/auto_film_maker/tools/sora_video_generation.py \
-       --prompt "<打磨后的提示词>" \
-       --model "sora-2" \
-       --seconds "4" \
-       --resolution "1280x720" \
-       --reference "<参考图像/视频的绝对路径，如果有的话>" \
-       --output_path "/home/admin/.openclaw/workspace/auto_film_maker/repo/S6_Video_Generation/<video_name>/<shot_id>/output.mp4"
-     ```
-   - 脚本会自动轮询等待生成完成并下载到 `--output_path`。
-   - 将成功生成的视频路径更新至 `asset_manifest.json` 的 `output_path` 字段中。
+### Step 1: Initialization
+Execute the initialization script to read the S5 `storyboard.json` and generate the S6 folder structure and `asset_manifest.json`.
+**Command:** `python /home/admin/.openclaw/workspace/auto_film_maker/tools/init_s6_assets.py --video_name <video_name>`
 
-4. **实时更新与确认 (Manifest Updates)**
-   - 每完成一个镜头的参考图确认、Prompt 修改或最终视频生成定稿，你都必须**实时更新 `asset_manifest.json` 文件**。
-   - 所有的更新只允许针对当前 `shot_id` 的条目。
+### Step 2: Iterative Preparation & Async Dispatch
+- For each pending shot in `asset_manifest.json`, discuss the prompt and optional reference files with the user.
+- Once the user approves the prompt and references, **dispatch the generation asynchronously**. DO NOT wait for it to finish.
+- **Command (Async execution using nohup):**
+  ```bash
+  nohup python /home/admin/.openclaw/workspace/auto_film_maker/tools/sora_video_generation.py \
+    --prompt "<finalized_prompt>" \
+    --model "sora-2" \
+    --seconds "4" \
+    --resolution "1280x720" \
+    --reference "<optional_reference_path>" \
+    --output_path "/home/admin/.openclaw/workspace/auto_film_maker/repo/S6_Video_Generation/<video_name>/<shot_id>/output.mp4" \
+    --manifest_path "/home/admin/.openclaw/workspace/auto_film_maker/repo/S6_Video_Generation/<video_name>/asset_manifest.json" \
+    --shot_id "<shot_id>" > /dev/null 2>&1 &
+  ```
+- Immediately inform the user that the shot is generating in the background, and seamlessly move on to discuss the next shot.
 
-5. **完结反馈 (Completion)**
-   - 当 `asset_manifest.json` 中的所有条目均获得了满意的 `output_path` 后，通知用户本环节全部完成。
-   - 等待用户指令。当用户确认进入最终剪辑后，抛出隐式信号 `[STEP_6_COMPLETE]`。
+### Step 3: Generation Status Tracking & Smart Notify
+- **CRITICAL RULE:** Before sending *any* reply to the user, you MUST first read the current `asset_manifest.json`.
+- Check for any shots where `"status": "completed"` AND `"user_notified": false`.
+- If found, include a polite "by the way" notification in your reply (e.g., "💡 By the way, Shot_A has finished generating! You can check it in the sidebar."), and then update the `asset_manifest.json` to set `"user_notified": true` for those shots.
+
+### Step 4: Final Review & Completion
+- Allow the user to review the generated videos. If any shot needs adjustments, loop back to Step 2 for that specific shot.
+- Once all shots are completed and the user is satisfied, output the implicit signal `[STEP_6_COMPLETE]` to transition to S7 (Video Editing).
