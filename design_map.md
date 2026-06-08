@@ -146,8 +146,8 @@ S5 (分镜表) 是衔接素材提炼与最终成片的核心枢纽。
 - **轨道分离与非破坏性裁剪 (Non-destructive trimming)**: JSON 结构被拆分为 `Visual Track` 和 `Audio Track`。对于存在冗余或噪音的旧素材，摒弃了“重新剪切 MP4”的重负载思路，而是引入了 `trim_start` 和 `trim_end` 标记参数。这些轻量级标记将在 S7 (最终剪切) 中指导 FFmpeg 进行毫秒级去噪过滤。
 - **单向数据流与 S6 的蓝图预埋**: 彻底消灭“系统循环依赖”。在 Visual Track 中，资产被划分为两类：
   1. `EXTRACTED`: 直接引用 S4 生成好的本地资产 `seg_001.mp4`。
-  2. `TO_BE_GENERATED`: 对于需要二创或原片没有的情节，只在蓝图里留下 Prompt 坑位。
-  **S6 (Video Generation) 开发预览**: S6 被定性为“加工厂”。它不会去修改 S5 的蓝图，而是只负责遍历 `storyboard.json` 中所有 `TO_BE_GENERATED` 的项，并发调用 Aliyun / Wan2.1 API 生产视频，然后输出一份 `asset_manifest.json`。最后，在 S7 环节将 S5(蓝图) 和 S6(资产映射表) 合并，完成自动混剪。
+  2. `TO_BE_GENERATED`: 对于需要二创或原片没有的情节，只在蓝图里留下初步的内容方向坑位。
+  **S6 (Video Generation) 开发预览**: S6 被定性为“加工厂”。它不会去修改 S5 的蓝图，而是只负责遍历 `storyboard.json` 中所有 `TO_BE_GENERATED` 的项，创建 `asset_manifest.json`。在 S6 阶段，AI 核心任务是陪伴用户进行“找参考 -> 定 Prompt -> 生成 -> 抽卡 -> 定稿”的互动循环。在这个过程中确定的参考图、参考视频和最终生成的视频产物路径都会记录在独立的 `asset_manifest.json` 中。从而将 S5 的结构设计和 S6 的生产填坑完美隔离。最终在 S7 环节将 S5(蓝图) 和 S6(资产映射表) 合并，完成自动混剪。
 - **思维链打点与切割 (CoT & Clipping)**：底层使用带有强 System Prompt 的 Gemini 脚本定位素材。强制输出 `reasoning` (思维链) 字段。
 - **幂等与防并发锁 (Idempotency & Execution Lock)**：由于公网代理（如 Pinggy / Nginx）在遇到长耗时任务（如 Gemini 分析视频需 60s+）时，会在超时后自动重发 POST 请求。这会导致 Agent 被二次唤醒，从而产生“用户幽灵发言”（两次 `嗯嗯继续`）并错乱工作流状态。目前已在 `app.py` 中加入了线程级别的请求锁 (`chat_locks`)，遇到重发的并发请求直接返回 409 拦截，彻底根治了公网弱网环境下的 Agent 鬼畜抢跑问题。
 - **Dashboard 级验收面板 (防卡顿超链接设计)**：为了防止多个切片视频在 M 区聊天框内直接渲染造成“多媒体轰炸”与浏览器卡死，裁剪完成后输出一个优雅的 `extraction_report.md`。Agent 会将 Markdown 表格直接输出在聊天流中，但**坚决避免**嵌入 `<video>` 或 `![vid]()`，而是采用文字超链接 `[👉 点击预览](/files/...)`，让用户像审阅 Dashboard 一样按需点击、集中验收。
