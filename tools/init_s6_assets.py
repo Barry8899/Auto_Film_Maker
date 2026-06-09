@@ -38,7 +38,7 @@ def main():
                 shots_to_generate.append({
                     "shot_id": shot_id,
                     "newshot_content": content,
-                    "reference_path": [],
+                    "reference_path": "",
                     "prompt": "",
                     "output_path": "",
                     "status": "pending",

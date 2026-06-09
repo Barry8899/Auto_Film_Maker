@@ -1,0 +1,128 @@
+[
+  {
+    "shot_id": "Shot_01",
+    "duration_sec": 10.0,
+    "visual_track": {
+      "type": "EXTRACTED",
+      "source_or_prompt": "seg_002.mp4",
+      "description": "相遇：1970年代神盾局基地，托尼偶遇年轻的父亲。",
+      "camera": "大全景转中景"
+    },
+    "audio_track": {
+      "voiceover": "环境音及初见时的简单对话",
+      "bgm": "音乐保持克制，节奏平缓"
+    },
+    "trimming": {
+      "trim_start": 0.0,
+      "trim_end": 4.0
+    },
+    "transition": {
+      "effect": "黑场淡入 (Fade In)"
+    }
+  },
+  {
+    "shot_id": "Shot_02",
+    "duration_sec": 14.0,
+    "visual_track": {
+      "type": "EXTRACTED",
+      "source_or_prompt": "seg_003.mp4",
+      "description": "对话：电梯内的深情凝视，霍华德表达对未出生孩子的焦虑。",
+      "camera": "过肩镜头及面部特写切换"
+    },
+    "audio_track": {
+      "voiceover": "霍华德与托尼的对话原音",
+      "bgm": "情感逐渐递进，加入弦乐"
+    },
+    "trimming": {
+      "trim_start": 0.0,
+      "trim_end": 0.0
+    },
+    "transition": {
+      "effect": "淡入淡出 (Crossfade)"
+    }
+  },
+  {
+    "shot_id": "Shot_03",
+    "duration_sec": 6.0,
+    "visual_track": {
+      "type": "EXTRACTED",
+      "source_or_prompt": "seg_004.mp4",
+      "description": "释怀：托尼面带温和谅解，告诉父亲他记得的都是好的一面。",
+      "camera": "面部特写"
+    },
+    "audio_track": {
+      "voiceover": "托尼原音释怀",
+      "bgm": "音乐进入短暂的留白与沉淀"
+    },
+    "trimming": {
+      "trim_start": 0.0,
+      "trim_end": 8.0
+    },
+    "transition": {
+      "effect": "硬切 (Cut)"
+    }
+  },
+  {
+    "shot_id": "Shot_04",
+    "duration_sec": 9.5,
+    "visual_track": {
+      "type": "EXTRACTED",
+      "source_or_prompt": "seg_005.mp4",
+      "description": "拥抱：临别之际，托尼主动拥抱父亲，霍华德从惊讶转为感动。",
+      "camera": "中景转特写"
+    },
+    "audio_track": {
+      "voiceover": "托尼表达感谢的原音及拥抱时的无声停顿",
+      "bgm": "情感推向饱满的高潮"
+    },
+    "trimming": {
+      "trim_start": 0.0,
+      "trim_end": 9.0
+    },
+    "transition": {
+      "effect": "淡入淡出 (Crossfade)"
+    }
+  },
+  {
+    "shot_id": "Shot_05",
+    "duration_sec": 10.0,
+    "visual_track": {
+      "type": "EXTRACTED",
+      "source_or_prompt": "seg_006.mp4",
+      "description": "高潮：霍华德生前录像的经典告白，“最伟大的创造是你”。",
+      "camera": "固定特写镜头"
+    },
+    "audio_track": {
+      "voiceover": "霍华德经典台词原声",
+      "bgm": "音乐推向高潮后缓缓收束"
+    },
+    "trimming": {
+      "trim_start": 0.0,
+      "trim_end": 9.5
+    },
+    "transition": {
+      "effect": "淡入淡出 (Crossfade)"
+    }
+  },
+  {
+    "shot_id": "Shot_06",
+    "duration_sec": 8.0,
+    "visual_track": {
+      "type": "TO_BE_GENERATED",
+      "source_or_prompt": "Cinematic sequence: 0-4 seconds shows a portrait of Tony Stark in 1970s attire looking into the distance with a relieved expression, transitioning smoothly at 4-8 seconds to young Howard Stark looking hopeful into the distance. Soft nostalgic lighting, photorealistic.",
+      "description": "尾声：两人凝视远方（0-4秒展示托尼特写，眼神彻底释怀平静；4-8秒展示年轻霍华德特写，带着对未来的期盼）（AI生成）。",
+      "camera": "缓慢推近并柔和切换 (Slow zoom and soft transition)"
+    },
+    "audio_track": {
+      "voiceover": "无",
+      "bgm": "深情、时光悠扬的BGM，在结尾处逐渐减弱淡出"
+    },
+    "trimming": {
+      "trim_start": 0.0,
+      "trim_end": 0.0
+    },
+    "transition": {
+      "effect": "黑场淡出 (Fade Out to Black)"
+    }
+  }
+]

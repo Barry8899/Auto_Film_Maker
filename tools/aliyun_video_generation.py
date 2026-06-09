@@ -49,7 +49,7 @@ def main():
     parser.add_argument("--prompt", required=True, help="Text prompt for video generation")
     parser.add_argument("--model", default="wan2.6-i2v-us", help="Model selection")
     parser.add_argument("--reference", default=None, help="Path to reference image (ONLY ONE SUPPORTED)")
-    parser.add_argument("--seconds", default="5", help="Duration of the video in seconds (5, 10, or 15)")
+    parser.add_argument("--seconds", default="5", help="Duration of the video in seconds (2~15)")
     parser.add_argument("--resolution", default="720P", help="Resolution of the video")
     parser.add_argument("--output_path", required=True, help="Local path to save the generated mp4 video")
     parser.add_argument("--manifest_path", required=True, help="Path to asset_manifest.json")
@@ -57,7 +57,11 @@ def main():
     
     args = parser.parse_args()
 
-    update_manifest(args.manifest_path, args.shot_id, {"status": "generating"})
+    update_manifest(args.manifest_path, args.shot_id, {
+        "status": "generating",
+        "prompt": args.prompt,
+        "reference_path": args.reference
+    })
 
     try:
         import dashscope

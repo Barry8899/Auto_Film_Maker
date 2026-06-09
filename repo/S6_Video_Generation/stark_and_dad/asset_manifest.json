@@ -1,0 +1,13 @@
+[
+    {
+        "shot_id": "Shot_06",
+        "newshot_content": "尾声：两人凝视远方（0-4秒展示托尼特写，眼神彻底释怀平静；4-8秒展示年轻霍华德特写，带着对未来的期盼）（AI生成）。",
+        "reference_path": [
+            "/home/admin/.openclaw/workspace/auto_film_maker/repo/S6_Video_Generation/stark_and_dad/Shot_06/refs/combined.jpg"
+        ],
+        "prompt": "Cinematic close-up sequence...",
+        "output_path": "/home/admin/.openclaw/workspace/outputs/test_aliyun_smile.mp4",
+        "status": "completed",
+        "user_notified": false
+    }
+]
