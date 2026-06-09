@@ -38,12 +38,11 @@ def normalize_duration(seconds):
         duration = int(seconds)
     except ValueError:
         duration = 5
-    if duration <= 5:
-        return 5
-    elif duration <= 10:
-        return 10
-    else:
+    if duration < 2:
+        return 2
+    elif duration > 15:
         return 15
+    return duration
 
 def main():
     parser = argparse.ArgumentParser(description="Generate video using Aliyun DashScope Wanx API")
