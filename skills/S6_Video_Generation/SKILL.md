@@ -27,11 +27,11 @@ Execute the initialization script to read the S5 `storyboard.json` and generate 
 - Once the user approves the prompt and references, **dispatch the generation asynchronously**. DO NOT wait for it to finish.
 - **Command (Async execution using nohup):**
   ```bash
-  nohup python /home/admin/.openclaw/workspace/auto_film_maker/tools/sora_video_generation.py \
+  nohup python /home/admin/.openclaw/workspace/auto_film_maker/tools/aliyun_video_generation.py \
     --prompt "<finalized_prompt>" \
-    --model "sora-2" \
-    --seconds "4" \
-    --resolution "1280x720" \
+    --model "wan2.6-i2v-us" \
+    --seconds "5" \
+    --resolution "720P" \
     --reference "<optional_reference_path>" \
     --output_path "/home/admin/.openclaw/workspace/auto_film_maker/repo/S6_Video_Generation/<video_name>/<shot_id>/output.mp4" \
     --manifest_path "/home/admin/.openclaw/workspace/auto_film_maker/repo/S6_Video_Generation/<video_name>/asset_manifest.json" \
