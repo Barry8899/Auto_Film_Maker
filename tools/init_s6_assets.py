@@ -35,28 +35,36 @@ def main():
                  content = visual.get("source_or_prompt")
             
             if shot_id:
+                # 按照新的 sub_clips 嵌套结构初始化
                 shots_to_generate.append({
                     "shot_id": shot_id,
-                    "newshot_content": content,
-                    "reference_path": "",
-                    "prompt": "",
-                    "output_path": "",
-                    "status": "pending",
-                    "user_notified": False
+                    "shot_content": content,
+                    "sub_clips": [
+                        {
+                            "sub_clip_id": 1,
+                            "sub_clip_content": content, # 默认初始化与主 shot 内容一致，后续 agent 可修改
+                            "reference_path": "",
+                            "prompt": "",
+                            "output_path": "",
+                            "status": "pending",
+                            "user_notified": False
+                        }
+                    ]
                 })
 
-    if not shots_to_generate:
-        print("No TO_BE_GENERATED shots found in S5 storyboard.")
-        sys.exit(0)
-
     s6_dir.mkdir(parents=True, exist_ok=True)
+    manifest_path = s6_dir / "asset_manifest.json"
+
+    if not shots_to_generate:
+        print("No TO_BE_GENERATED shots found in S5 storyboard. Initializing empty manifest.")
+        with open(manifest_path, "w", encoding="utf-8") as f:
+            json.dump([], f, indent=4, ensure_ascii=False)
+        sys.exit(0)
 
     for shot in shots_to_generate:
         shot_dir = s6_dir / shot["shot_id"]
         shot_dir.mkdir(exist_ok=True)
 
-    manifest_path = s6_dir / "asset_manifest.json"
-    
     try:
         with open(manifest_path, "w", encoding="utf-8") as f:
             json.dump(shots_to_generate, f, indent=4, ensure_ascii=False)

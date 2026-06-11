@@ -1,0 +1,86 @@
+{
+  "id": "4ee373de-2fa1-480e-8e59-ad3ba10c36bf",
+  "name": "🎬 video_maker",
+  "messages": [
+    {
+      "role": "user",
+      "content": "继续"
+    },
+    {
+      "role": "assistant",
+      "content": "(System) Acknowledged. Proceeding to the next step..."
+    },
+    {
+      "role": "user",
+      "content": "[TRIGGER: S2_Video_Understanding] repo/S1_uploaded_video/stark_and_dad.mp4"
+    },
+    {
+      "role": "assistant",
+      "content": "I detected an existing video understanding report for this video. Would you like to use the existing report and skip this step, or regenerate it from scratch?"
+    },
+    {
+      "role": "user",
+      "content": "使用已有的文件，直接进入下一阶段"
+    },
+    {
+      "role": "assistant",
+      "content": "好的，马上开始下一步！ [STEP_2_COMPLETE]"
+    },
+    {
+      "role": "user",
+      "content": "[TRIGGER: S3_Script_Writing]"
+    },
+    {
+      "role": "assistant",
+      "content": "我检测到该视频已经存在脚本（script.md）和风格特征文件（features.json）。您是希望使用现有的文件跳过此步骤，还是重新开始？"
+    },
+    {
+      "role": "user",
+      "content": "使用现有文件即可"
+    },
+    {
+      "role": "assistant",
+      "content": "好的，我们将使用现有文件。大纲已准备就绪。请问我们可以进入第四步（内容提取）了吗？"
+    },
+    {
+      "role": "user",
+      "content": "嗯嗯"
+    },
+    {
+      "role": "assistant",
+      "content": "好的，马上进入下一阶段！ [STEP_3_COMPLETE]"
+    },
+    {
+      "role": "user",
+      "content": "[TRIGGER: S4_Content_Extraction]"
+    },
+    {
+      "role": "assistant",
+      "content": "我检测到该视频已经存在提取的片段和提取报告。您是希望使用它们并跳过此步骤，还是重新开始？"
+    },
+    {
+      "role": "user",
+      "content": "使用它们，并跳过步骤"
+    },
+    {
+      "role": "assistant",
+      "content": "好的。请问我们要进入第五步（分镜设计）吗？"
+    },
+    {
+      "role": "user",
+      "content": "对的"
+    },
+    {
+      "role": "assistant",
+      "content": "好的，马上进入下一阶段！ [STEP_4_COMPLETE]"
+    },
+    {
+      "role": "user",
+      "content": "[TRIGGER: S5_Storyboarding]"
+    },
+    {
+      "role": "assistant",
+      "content": "我检测到该视频已经存在分镜设计蓝图。您是希望使用现有的文件并跳过此步骤，还是重新开始？"
+    }
+  ]
+}

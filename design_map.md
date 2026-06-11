@@ -148,7 +148,19 @@ S5 (分镜表) 是衔接素材提炼与最终成片的核心枢纽。
   1. `EXTRACTED`: 直接引用 S4 生成好的本地资产 `seg_001.mp4`。
   2. `TO_BE_GENERATED`: 对于需要二创或原片没有的情节，只在蓝图里留下初步的内容方向坑位。
   **S6 (Video Generation) 开发预览**: S6 被定性为“加工厂”。它不会去修改 S5 的蓝图，而是只负责遍历 `storyboard.json` 中所有 `TO_BE_GENERATED` 的项，创建 `asset_manifest.json`。在 S6 阶段，AI 核心任务是陪伴用户进行“找参考 -> 定 Prompt -> 生成 -> 抽卡 -> 定稿”的互动循环。在这个过程中确定的参考图、参考视频和最终生成的视频产物路径都会记录在独立的 `asset_manifest.json` 中。
-  - **异步生成与前端 Toast 通知 (Async Generation & UI Toast)**：为防止由于耗时过长导致用户阻塞，Agent 会将 `sora_video_generation.py` 置于后台异步运行。与此同时，前端会静默轮询 `asset_manifest.json` 的更新。当某个镜头状态变为 `completed` 时，前端界面右上角会弹出带有关闭按钮【X】的绿色 Toast 通知（`✅ Shot_X 视频已生成完成`），左侧文件树也会实时打上状态微标。从而将 S5 的结构设计和 S6 的生产填坑完美隔离。最终在 S7 环节将 S5(蓝图) 和 S6(资产映射表) 合并，完成自动混剪。
+  - **异步生成与前端 Toast 通知 (Async Generation & UI Toast)**：为防止由于耗时过长导致用户阻塞，Agent 会将 `aliyun_video_generation.py` 置于后台异步运行。与此同时，前端会静默轮询 `asset_manifest.json` 的更新。当某个镜头状态变为 `completed` 时，前端界面右上角会弹出带有关闭按钮【X】的绿色 Toast 通知（`✅ Shot_X 视频已生成完成`），左侧文件树也会实时打上状态微标。从而将 S5 的结构设计和 S6 的生产填坑完美隔离。最终在 S7 环节将 S5(蓝图) 和 S6(资产映射表) 合并，完成自动混剪。
+
+## 3.11 S6 视频生成 (Sub-clip 拆解架构)
+考虑到阿里云视频生成 API 的物理限制（单次最多 15s 且只能使用一张参考图），S6 阶段引入了 **Sub-clip (子片段) 拆解架构**：
+- **嵌套数据结构**: `asset_manifest.json` 从扁平的 shot 列表升级为嵌套结构。每个 Shot 包含一个 `sub_clips` 数组。对于复杂或超长的 Shot，Agent 会与用户沟通一个“拆分方案”，并将其裂变为多个子片段（如 `sub_clip_id: 1`, `sub_clip_id: 2`）。
+- **执行顺序解耦 (Agent -> JSON -> Script -> Agent)**：
+  1. Agent 与用户沟通提示词和参考图。
+  2. 达成一致后，Agent **优先修改** `asset_manifest.json`，将数据填入坑位。
+  3. Agent 串行调用底层脚本 `aliyun_video_generation.py`，传入具体的 `shot_id` 和 `sub_clip_id`。
+  4. 脚本直接读取 JSON 内部指定的提示词和路径执行生成。
+  5. 脚本生成成功后回写 JSON 状态。
+  6. Agent 轮询到状态完成，向用户发送提示进行审核。
+- **强制逐一审核**: 为保证成片质量并避免并行 API 竞争，同一个 Shot 下的多个子片段必须**串行生成并逐一审核**。用户对片段 1 满意后，Agent 才会发起片段 2 的生成调用。
 - **思维链打点与切割 (CoT & Clipping)**：底层使用带有强 System Prompt 的 Gemini 脚本定位素材。强制输出 `reasoning` (思维链) 字段。
 - **幂等与防并发锁 (Idempotency & Execution Lock)**：由于公网代理（如 Pinggy / Nginx）在遇到长耗时任务（如 Gemini 分析视频需 60s+）时，会在超时后自动重发 POST 请求。这会导致 Agent 被二次唤醒，从而产生“用户幽灵发言”（两次 `嗯嗯继续`）并错乱工作流状态。目前已在 `app.py` 中加入了线程级别的请求锁 (`chat_locks`)，遇到重发的并发请求直接返回 409 拦截，彻底根治了公网弱网环境下的 Agent 鬼畜抢跑问题。
 - **Dashboard 级验收面板 (防卡顿超链接设计)**：为了防止多个切片视频在 M 区聊天框内直接渲染造成“多媒体轰炸”与浏览器卡死，裁剪完成后输出一个优雅的 `extraction_report.md`。Agent 会将 Markdown 表格直接输出在聊天流中，但**坚决避免**嵌入 `<video>` 或 `![vid]()`，而是采用文字超链接 `[👉 点击预览](/files/...)`，让用户像审阅 Dashboard 一样按需点击、集中验收。

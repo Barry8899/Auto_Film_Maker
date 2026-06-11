@@ -646,3 +646,60 @@ INFO:     Finished server process [148765]
 INFO:     Started server process [148769]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
+INFO:     118.142.77.238:0 - "GET / HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     118.142.77.238:0 - "GET /api/chat/5b9601ae-9d5a-4ca9-90ff-981307e2f279 HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET /files/vobile_logo.png HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "DELETE /api/chat/5b9601ae-9d5a-4ca9-90ff-981307e2f279 HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "DELETE /api/fs/delete HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET / HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "POST /api/chat HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET /api/chat/4ee373de-2fa1-480e-8e59-ad3ba10c36bf HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "POST /api/chat/4ee373de-2fa1-480e-8e59-ad3ba10c36bf/message HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "POST /api/chat/4ee373de-2fa1-480e-8e59-ad3ba10c36bf/message HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "POST /api/chat/4ee373de-2fa1-480e-8e59-ad3ba10c36bf/message HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "POST /api/chat/4ee373de-2fa1-480e-8e59-ad3ba10c36bf/message HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "POST /api/chat/4ee373de-2fa1-480e-8e59-ad3ba10c36bf/message HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "POST /api/chat/4ee373de-2fa1-480e-8e59-ad3ba10c36bf/message HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "POST /api/chat/4ee373de-2fa1-480e-8e59-ad3ba10c36bf/message HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "POST /api/chat/4ee373de-2fa1-480e-8e59-ad3ba10c36bf/message HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "POST /api/chat/4ee373de-2fa1-480e-8e59-ad3ba10c36bf/message HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "POST /api/chat/4ee373de-2fa1-480e-8e59-ad3ba10c36bf/message HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET /api/fs/file?path=repo%2FS5_Storyboarding%2Fstark_and_dad%2Fstoryboard.md HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET /api/fs/file?path=repo%2FS5_Storyboarding%2Fstark_and_dad%2Fstoryboard.json HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET /api/fs/file?path=repo%2FS6_Video_Generation%2Fstark_and_dad%2Fasset_manifest.json HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET /api/chat HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'tools/aliyun_video_generation.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [148769]
+INFO:     Started server process [326796]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
