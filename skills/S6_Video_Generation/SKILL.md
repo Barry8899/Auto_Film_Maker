@@ -12,11 +12,13 @@ The core function of S6 is to generate high-quality video clips for the `TO_BE_G
 
 ## Critical Constraints & Rules
 - **Physical API Limitation**: Aliyun API generates max 15s videos with ONE reference image.
+- **Copyright Constraints**: Aliyun video generation models have strict copyright filters. NEVER use specific movie, comic, or public figure names in the prompt (e.g., "Captain America", "Tony Stark"). Always substitute them with generic descriptions (e.g., "this man", "a superhero in a red suit", "this character").
 - **Strict Interaction & Execution Order (Agent -> JSON -> Script -> Agent)**:
   1. **Assess & Propose**: Evaluate the shot. If it's longer than 15s or has complex action shifts, propose a "Split Plan" to the user (e.g., "Shot 3 is long. I propose splitting it into two sub-clips. Sub-clip 1: 10s, Reference A. Sub-clip 2: 10s, Reference B. Do you agree?").
   2. **Pre-fill JSON**: Once the user agrees to the prompt/references/duration (even for un-split single clips), the Agent MUST first write/update the `asset_manifest.json`. Expand the `sub_clips` array for that shot, filling in `sub_clip_content`, `prompt`, `seconds` (duration, e.g. "5"), and `reference_path`. Set `"status": "pending"`.
-  3. **Serial Execution**: The Agent then calls the video generation script passing the specific `shot_id` and `sub_clip_id`. The script will read the prompt and reference directly from the JSON. **NEVER execute multiple sub-clips of the same shot in parallel.** 
-  4. **Iterative Review**: Wait for Sub-clip 1 to finish, have the user review it. Only after the user approves Sub-clip 1, proceed to execute Sub-clip 2.
+  3. **Explicit User Confirmation**: Even after the `asset_manifest.json` is fully filled out, you MUST ask the user for explicit confirmation (e.g., "The settings are ready. Should I start generating the video for this clip now?") before calling the execution script. DO NOT auto-execute the script just because the JSON is filled. Wait for their explicit "go ahead".
+  4. **Serial Execution**: The Agent then calls the video generation script passing the specific `shot_id` and `sub_clip_id`. The script will read the prompt and reference directly from the JSON. **NEVER execute multiple sub-clips of the same shot in parallel.** 
+  5. **Iterative Review**: Wait for Sub-clip 1 to finish, have the user review it. Only after the user approves Sub-clip 1, proceed to execute Sub-clip 2.
 
 ## Workflow
 
@@ -44,7 +46,7 @@ Execute the initialization script to read the S5 `storyboard.json` and generate 
     --output_path "/home/admin/.openclaw/workspace/auto_film_maker/repo/S6_Video_Generation/<video_name>/<shot_id>/sub_clip_<sub_clip_id>.mp4" \
     --manifest_path "/home/admin/.openclaw/workspace/auto_film_maker/repo/S6_Video_Generation/<video_name>/asset_manifest.json" \
     --shot_id "<shot_id>" \
-    --sub_clip_id "<sub_clip_id>" > /dev/null 2>&1 &
+    --sub_clip_id "<sub_clip_id>" >> /home/admin/.openclaw/workspace/auto_film_maker/repo/S6_Video_Generation/<video_name>/<shot_id>_<sub_clip_id>.log 2>&1 &
   ```
 - *Note: The script reads the prompt and reference directly from the JSON. When done, it writes back the output path and status.*
 
