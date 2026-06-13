@@ -710,3 +710,47 @@ INFO:     118.142.77.238:0 - "GET /favicon.ico HTTP/1.1" 404 Not Found
 INFO:     118.142.77.238:0 - "GET /api/fs/file?path=skills%2FS6_Video_Generation%2FSKILL.md HTTP/1.1" 200 OK
 INFO:     118.142.77.238:0 - "GET /api/chat HTTP/1.1" 200 OK
 INFO:     118.142.77.238:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41960 - "HEAD / HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:37614 - "GET / HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET / HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     209.248.0.22:0 - "GET /api/fs/file?path=skills%2FS6_Video_Generation%2Freferences%2Fasset_manifest_example.json HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/file?path=repo%2FS6_Video_Generation%2Fstark_and_dad%2Fasset_manifest.json HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/file?path=test_aliyun.py HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/file?path=tools%2Faliyun_video_generation.py HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "DELETE /api/fs/delete HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "DELETE /api/fs/delete HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'tools/init_s6_assets.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [326796]
+INFO:     Started server process [518176]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.

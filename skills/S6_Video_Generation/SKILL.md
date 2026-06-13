@@ -14,7 +14,7 @@ The core function of S6 is to generate high-quality video clips for the `TO_BE_G
 - **Physical API Limitation**: Aliyun API generates max 15s videos with ONE reference image.
 - **Strict Interaction & Execution Order (Agent -> JSON -> Script -> Agent)**:
   1. **Assess & Propose**: Evaluate the shot. If it's longer than 15s or has complex action shifts, propose a "Split Plan" to the user (e.g., "Shot 3 is long. I propose splitting it into two sub-clips. Sub-clip 1: 10s, Reference A. Sub-clip 2: 10s, Reference B. Do you agree?").
-  2. **Pre-fill JSON**: Once the user agrees to the prompt/references (even for un-split single clips), the Agent MUST first write/update the `asset_manifest.json`. Expand the `sub_clips` array for that shot, filling in `sub_clip_content`, `prompt`, and `reference_path`. Set `"status": "pending"`.
+  2. **Pre-fill JSON**: Once the user agrees to the prompt/references/duration (even for un-split single clips), the Agent MUST first write/update the `asset_manifest.json`. Expand the `sub_clips` array for that shot, filling in `sub_clip_content`, `prompt`, `seconds` (duration, e.g. "5"), and `reference_path`. Set `"status": "pending"`.
   3. **Serial Execution**: The Agent then calls the video generation script passing the specific `shot_id` and `sub_clip_id`. The script will read the prompt and reference directly from the JSON. **NEVER execute multiple sub-clips of the same shot in parallel.** 
   4. **Iterative Review**: Wait for Sub-clip 1 to finish, have the user review it. Only after the user approves Sub-clip 1, proceed to execute Sub-clip 2.
 
@@ -30,9 +30,9 @@ Execute the initialization script to read the S5 `storyboard.json` and generate 
 **Command:** `python /home/admin/.openclaw/workspace/auto_film_maker/tools/init_s6_assets.py --video_name <video_name>`
 
 ### Step 2: Iterative Preparation & Pre-fill
-- For the next pending shot, discuss the prompt, reference image, and whether a sub-clip split is needed.
+- For the next pending shot, discuss the prompt, reference image, duration (seconds), and whether a sub-clip split is needed.
 - Remind the user of expressions, actions, and camera movements.
-- **CRITICAL**: Directly edit the file `/home/admin/.openclaw/workspace/auto_film_maker/repo/S6_Video_Generation/<video_name>/asset_manifest.json` using file editing tools to update the agreed `sub_clips` (prompt, reference_path) BEFORE running the script. Do NOT write new Python scripts just to update the json. (You can refer to the structure in `/home/admin/.openclaw/workspace/auto_film_maker/skills/S6_Video_Generation/references/asset_manifest_example.json`).
+- **CRITICAL**: Directly edit the file `/home/admin/.openclaw/workspace/auto_film_maker/repo/S6_Video_Generation/<video_name>/asset_manifest.json` using file editing tools to update the agreed `sub_clips` (prompt, reference_path, seconds) BEFORE running the script. Do NOT write new Python scripts just to update the json. (You can refer to the structure in `/home/admin/.openclaw/workspace/auto_film_maker/skills/S6_Video_Generation/references/asset_manifest_example.json`).
 
 ### Step 3: Async Dispatch (Sub-clip by Sub-clip)
 - Dispatch the generation for the specific `sub_clip_id` asynchronously. 

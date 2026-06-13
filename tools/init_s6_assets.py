@@ -45,6 +45,7 @@ def main():
                             "sub_clip_content": content, # 默认初始化与主 shot 内容一致，后续 agent 可修改
                             "reference_path": "",
                             "prompt": "",
+                            "seconds": "5",
                             "output_path": "",
                             "status": "pending",
                             "user_notified": False

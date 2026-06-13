@@ -8,6 +8,7 @@
                 "sub_clip_content": "Sun begins to set",
                 "reference_path": "/home/admin/.openclaw/workspace/auto_film_maker/repo/S6_Video_Generation/my_video/shot_01/ref1.jpg",
                 "prompt": "Camera pans slowly as the sun touches the mountain peak",
+                "seconds": "5",
                 "output_path": "/home/admin/.openclaw/workspace/auto_film_maker/repo/S6_Video_Generation/my_video/shot_01/sub_clip_1.mp4",
                 "status": "pending",
                 "user_notified": false
@@ -17,6 +18,7 @@
                 "sub_clip_content": "Sun goes behind the mountain, sky turns purple",
                 "reference_path": "/home/admin/.openclaw/workspace/auto_film_maker/repo/S6_Video_Generation/my_video/shot_01/ref2.jpg",
                 "prompt": "Sky turns deep purple, silhouette of the mountain",
+                "seconds": "5",
                 "output_path": "",
                 "status": "pending",
                 "user_notified": false
