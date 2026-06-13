@@ -703,3 +703,10 @@ INFO:     Finished server process [148769]
 INFO:     Started server process [326796]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
+INFO:     118.142.77.238:0 - "GET / HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     118.142.77.238:0 - "GET /api/fs/file?path=skills%2FS6_Video_Generation%2FSKILL.md HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     118.142.77.238:0 - "GET /api/chat HTTP/1.1" 200 OK

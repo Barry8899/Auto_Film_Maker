@@ -22,7 +22,7 @@ The core function of S6 is to generate high-quality video clips for the `TO_BE_G
 
 ### Step 0: Skip Logic (Bypass Check)
 Check the file `/home/admin/.openclaw/workspace/auto_film_maker/repo/S6_Video_Generation/<video_name>/asset_manifest.json`.
-- **Condition A**: If the file contains an empty array `[]` (meaning S5 decided no new videos are needed), immediately output `[STEP_6_COMPLETE]` and skip S6.
+- **Condition A**: If the file contains an empty array `[]` (meaning S5 decided no new videos are needed), DO NOT immediately skip. First, ask the user for confirmation (e.g., "S5看似好像没有新片段需要生成，您确认吗？是否直接跳过 S6，还是您还有新的脚本需要生成？"). Only output `[STEP_6_COMPLETE]` after the user confirms.
 - **Condition B**: If all `sub_clips` in the JSON have `"status": "completed"` and non-empty `output_path`, S6 is done. Output `[STEP_6_COMPLETE]`.
 
 ### Step 1: Initialization
@@ -32,7 +32,7 @@ Execute the initialization script to read the S5 `storyboard.json` and generate 
 ### Step 2: Iterative Preparation & Pre-fill
 - For the next pending shot, discuss the prompt, reference image, and whether a sub-clip split is needed.
 - Remind the user of expressions, actions, and camera movements.
-- **CRITICAL**: Use Python or file editing tools to update `/home/admin/.openclaw/workspace/auto_film_maker/repo/S6_Video_Generation/<video_name>/asset_manifest.json` with the agreed `sub_clips` (prompt, reference_path) BEFORE running the script.
+- **CRITICAL**: Directly edit the file `/home/admin/.openclaw/workspace/auto_film_maker/repo/S6_Video_Generation/<video_name>/asset_manifest.json` using file editing tools to update the agreed `sub_clips` (prompt, reference_path) BEFORE running the script. Do NOT write new Python scripts just to update the json. (You can refer to the structure in `/home/admin/.openclaw/workspace/auto_film_maker/skills/S6_Video_Generation/references/asset_manifest_example.json`).
 
 ### Step 3: Async Dispatch (Sub-clip by Sub-clip)
 - Dispatch the generation for the specific `sub_clip_id` asynchronously. 
