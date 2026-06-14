@@ -562,9 +562,32 @@
             document.addEventListener('dragend', () => { window.isFileTreeDragging = false; });
             document.addEventListener('drop', () => { window.isFileTreeDragging = false; });
             
-            setInterval(() => {
+            setInterval(async () => {
                 if (!window.isFileTreeDragging) {
                     fetchFileTree();
+                }
+                
+                // Auto-refresh all open files that are not unsaved
+                for (const path of Object.keys(openFiles)) {
+                    if (isMediaFile(path)) continue;
+                    const tab = document.getElementById('tab-' + path);
+                    if (!tab || tab.classList.contains('unsaved')) continue;
+                    
+                    try {
+                        const res = await fetch(`/api/fs/file?path=${encodeURIComponent(path)}`);
+                        if (res.ok) {
+                            const data = await res.json();
+                            const newContent = data.content;
+                            if (newContent !== openFiles[path]) {
+                                openFiles[path] = newContent;
+                                if (currentFilePath === path && typeof editor !== 'undefined' && editor) {
+                                    const position = editor.getPosition();
+                                    editor.setValue(newContent);
+                                    if (position) editor.setPosition(position);
+                                }
+                            }
+                        }
+                    } catch(e) {}
                 }
             }, 3000);
         });
