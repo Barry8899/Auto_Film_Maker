@@ -19,13 +19,7 @@ Immediately upon entering S8, the agent must present the following three points 
 ### Step 2: Feedback Collection
 - If the user provides feedback, the agent should interact with them (asking clarifying questions if necessary) to fully understand their thoughts.
 - Once the feedback is clear, the agent must polish the feedback for readability and clarity.
-- The agent must then append this polished feedback to the global feedbacks file at `/home/admin/.openclaw/workspace/auto_film_maker/user_feedbacks.json`.
-- The format for adding to the JSON array is:
-  ```json
-  {
-    "timestamp": "YYYY-MM-DD HH:MM:SS",
-    "feedback": "<polished_feedback_content>"
-  }
-  ```
-  *(Note: Read the existing `user_feedbacks.json` file, append the new object to the list, and overwrite the file. If the file doesn't exist, create it with an initial list containing this object.)*
+- The agent must then append this polished feedback to the global feedbacks file at `/home/admin/.openclaw/workspace/auto_film_maker/user_feedbacks.json` by calling the dedicated tool script.
+- **Command:** `python /home/admin/.openclaw/workspace/auto_film_maker/tools/append_feedback.py --feedback "<polished_feedback_content>"`
+  *(Note: This script automatically handles JSON parsing, array appending, and ensures the timestamp is recorded in Beijing Time UTC+8).*
 - Thank the user again for their valuable feedback.
