@@ -21,13 +21,13 @@ nohup uvicorn app:app --host 0.0.0.0 --port 8000 > uvicorn.log 2>&1 &
 # Wait a moment for the server to spin up
 sleep 3
 
-# 3. Start Public Tunnel
-echo "[3/3] Starting public tunnel..."
-# Note: Temporarily using Pinggy until Ngrok token is provided
-nohup ssh -p 443 -R0:localhost:8000 -o StrictHostKeyChecking=no a.pinggy.io > pinggy.log 2>&1 &
+# 3. Start Public Tunnel (Ngrok)
+echo "[3/3] Starting ngrok public tunnel..."
+nohup ngrok http 8000 --log=stdout > ngrok.log 2>&1 &
 
+# Wait for ngrok to establish connection and fetch the assigned URL
 sleep 5
-PUBLIC_URL=$(grep -o 'https://[a-zA-Z0-9.-]*\.pinggy-free\.link' pinggy.log | head -n 1)
+PUBLIC_URL=$(curl -s http://127.0.0.1:4040/api/tunnels | grep -o 'https://[a-zA-Z0-9.-]*\.ngrok-free\.[a-z]*')
 
 if [ -n "$PUBLIC_URL" ]; then
     echo ""
@@ -35,7 +35,7 @@ if [ -n "$PUBLIC_URL" ]; then
     echo "🎉 Auto Film Maker is Live!"
     echo "🌐 Public Access URL: $PUBLIC_URL"
     echo "====================================================="
-    echo "💡 Note: This is a temporary Pinggy link. We will upgrade to Ngrok shortly."
+    echo "💡 Note: This is a stable Ngrok link. Keep this terminal open/running to maintain access."
 else
-    echo "⚠️ Failed to extract public URL. Check pinggy.log for details."
+    echo "⚠️ Failed to extract public URL. Please check ngrok.log for details."
 fi
