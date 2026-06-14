@@ -291,3 +291,276 @@ INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
 INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
 INFO:     209.248.0.22:0 - "GET /api/chat/4ee373de-2fa1-480e-8e59-ad3ba10c36bf HTTP/1.1" 200 OK
 INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET / HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     209.248.0.22:0 - "DELETE /api/fs/delete HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "DELETE /api/fs/delete HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/file?path=new_file.txt HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "DELETE /api/fs/delete HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/file?path=app.py HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/file?path=app.log HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "DELETE /api/fs/delete HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "DELETE /api/fs/delete HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/file?path=repo%2FS6_Video_Generation%2Fstark_and_dad%2Fasset_manifest.json HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /files/repo/S6_Video_Generation/stark_and_dad/Shot_06/sub_clip_2.mp4 HTTP/1.1" 206 Partial Content
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /files/repo/S6_Video_Generation/stark_and_dad/Shot_06/sub_clip_2.mp4 HTTP/1.1" 206 Partial Content
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /files/repo/S6_Video_Generation/stark_and_dad/Shot_06/sub_clip_2.mp4 HTTP/1.1" 206 Partial Content
+INFO:     209.248.0.22:0 - "DELETE /api/fs/delete HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "DELETE /api/chat/4ee373de-2fa1-480e-8e59-ad3ba10c36bf HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "POST /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8 HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /files/vobile_logo.png HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "POST /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8/message HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "POST /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8/message HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "POST /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8/message HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "POST /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8/message HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "POST /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8/message HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "POST /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8/message HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "POST /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8/message HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "POST /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8/message HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "POST /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8/message HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "POST /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8/message HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /files/repo/S6_Video_Generation/stark_and_dad/Shot_06/refs/new_tony_ref_cropped.jpg HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8 HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "POST /api/fs/rename HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "POST /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8/message HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/file?path=repo%2FS6_Video_Generation%2Fstark_and_dad%2Fasset_manifest.json HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8 HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8 HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8 HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8 HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8 HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8 HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "POST /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8/message HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET / HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8 HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /files/repo/S6_Video_Generation/stark_and_dad/Shot_06/refs/new_tony_ref_cropped_no_text.jpg HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8 HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/file?path=repo%2FS6_Video_Generation%2Fstark_and_dad%2Fasset_manifest.json HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8 HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8 HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "POST /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8/message HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /files/repo/S6_Video_Generation/stark_and_dad/Shot_06/back_plan_tony.mp4 HTTP/1.1" 206 Partial Content
+INFO:     209.248.0.22:0 - "GET /files/repo/S6_Video_Generation/stark_and_dad/Shot_06/sub_clip_2.mp4 HTTP/1.1" 304 Not Modified
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /files/repo/S6_Video_Generation/stark_and_dad/Shot_06/back_plan_tony.mp4 HTTP/1.1" 206 Partial Content
+INFO:     209.248.0.22:0 - "GET /files/repo/S6_Video_Generation/stark_and_dad/Shot_06/sub_clip_2.mp4 HTTP/1.1" 206 Partial Content
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /files/repo/S6_Video_Generation/stark_and_dad/Shot_06/back_plan_tony.mp4 HTTP/1.1" 206 Partial Content
+INFO:     209.248.0.22:0 - "GET /files/repo/S6_Video_Generation/stark_and_dad/Shot_06/sub_clip_2.mp4 HTTP/1.1" 206 Partial Content
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8 HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/file?path=repo%2FS6_Video_Generation%2Fstark_and_dad%2FShot_06_1.log HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8 HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8 HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "POST /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8/message HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/file?path=repo%2FS6_Video_Generation%2Fstark_and_dad%2FShot_06_1.log HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8 HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8 HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /files/repo/S1_uploaded_video/stark_and_dad.mp4 HTTP/1.1" 206 Partial Content
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /files/repo/S1_uploaded_video/captian_america_002.mp4 HTTP/1.1" 206 Partial Content
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /files/repo/S1_uploaded_video/captian_america_002.mp4 HTTP/1.1" 206 Partial Content
+INFO:     209.248.0.22:0 - "GET /files/repo/S1_uploaded_video/captian_america_002.mp4 HTTP/1.1" 206 Partial Content
+INFO:     209.248.0.22:0 - "GET /files/repo/S1_uploaded_video/captian_america_002.mp4 HTTP/1.1" 206 Partial Content
+INFO:     209.248.0.22:0 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     209.248.0.22:0 - "GET /files/repo/S1_uploaded_video/captian_america_002.mp4 HTTP/1.1" 206 Partial Content
+INFO:     209.248.0.22:0 - "GET /files/repo/S1_uploaded_video/captian_america_002.mp4 HTTP/1.1" 206 Partial Content
+INFO:     209.248.0.22:0 - "GET /files/repo/S1_uploaded_video/captian_america_002.mp4 HTTP/1.1" 206 Partial Content
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /files/repo/S1_uploaded_video/video_snippet_0100_0130.mp4 HTTP/1.1" 206 Partial Content
+INFO:     209.248.0.22:0 - "GET /files/repo/S1_uploaded_video/video_snippet_0100_0130.mp4 HTTP/1.1" 206 Partial Content
+INFO:     209.248.0.22:0 - "GET /files/repo/S1_uploaded_video/video_snippet_0100_0130.mp4 HTTP/1.1" 206 Partial Content
+INFO:     209.248.0.22:0 - "GET /files/repo/S1_uploaded_video/video_snippet_0100_0130.mp4 HTTP/1.1" 206 Partial Content
+INFO:     209.248.0.22:0 - "GET /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8 HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8 HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8 HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "POST /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8/message HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /files/repo/S6_Video_Generation/stark_and_dad/Shot_06/refs/frame_08s.jpg HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /files/repo/S6_Video_Generation/stark_and_dad/Shot_06/refs/frame_11s.jpg HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /files/repo/S1_uploaded_video/stark_and_dad.mp4 HTTP/1.1" 206 Partial Content
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8 HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /files/repo/S6_Video_Generation/stark_and_dad/Shot_06/refs/new_tony_ref_cropped_no_text.jpg HTTP/1.1" 304 Not Modified
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/file?path=repo%2FS6_Video_Generation%2Fstark_and_dad%2Fasset_manifest.json HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/file?path=repo%2FS6_Video_Generation%2Fstark_and_dad%2FShot_06_1_retry.log HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8 HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/file?path=repo%2FS6_Video_Generation%2Fstark_and_dad%2Fasset_manifest.json HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8 HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "POST /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8/message HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/file?path=repo%2FS6_Video_Generation%2Fstark_and_dad%2FShot_06_1_retry2.log HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8 HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/file?path=repo%2FS6_Video_Generation%2Fstark_and_dad%2FShot_06_1_retry2.log HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8 HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/file?path=repo%2FS6_Video_Generation%2Fstark_and_dad%2FShot_06_1_retry2.log HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/tree HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /files/repo/S6_Video_Generation/stark_and_dad/Shot_06/sub_clip_1.mp4 HTTP/1.1" 206 Partial Content
+INFO:     209.248.0.22:0 - "GET /files/repo/S6_Video_Generation/stark_and_dad/Shot_06/sub_clip_1.mp4 HTTP/1.1" 206 Partial Content
+INFO:     209.248.0.22:0 - "GET /files/repo/S6_Video_Generation/stark_and_dad/Shot_06/sub_clip_1.mp4 HTTP/1.1" 206 Partial Content
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8 HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /files/repo/S6_Video_Generation/stark_and_dad/Shot_06/sub_clip_1.mp4 HTTP/1.1" 304 Not Modified
+INFO:     209.248.0.22:0 - "GET /files/repo/S6_Video_Generation/stark_and_dad/Shot_06/sub_clip_1.mp4 HTTP/1.1" 206 Partial Content
+INFO:     209.248.0.22:0 - "GET /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8 HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "POST /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8/message HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/fs/file?path=repo%2FS6_Video_Generation%2Fstark_and_dad%2FShot_06_1_retry2.log HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat/0cb8d5ee-f63a-4a69-8e3f-85c6aa9a16d8 HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK
+INFO:     209.248.0.22:0 - "GET /api/chat HTTP/1.1" 200 OK

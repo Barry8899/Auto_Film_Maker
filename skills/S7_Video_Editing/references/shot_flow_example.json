@@ -1,0 +1,23 @@
+[
+    {
+        "shot_id": "shot_01",
+        "content": "A wide view of the city at night",
+        "resource_path": "/home/admin/.openclaw/workspace/auto_film_maker/repo/S5_Storyboarding/my_video/source_materials/city_night.mp4",
+        "trim_start": 0,
+        "trim_end": ""
+    },
+    {
+        "shot_id": "shot_02_sub_1",
+        "content": "The hero looking at the sky",
+        "resource_path": "/home/admin/.openclaw/workspace/auto_film_maker/repo/S6_Video_Generation/my_video/shot_02/sub_clip_1.mp4",
+        "trim_start": 1.5,
+        "trim_end": 5.0
+    },
+    {
+        "shot_id": "shot_02_sub_2",
+        "content": "The hero starts walking",
+        "resource_path": "/home/admin/.openclaw/workspace/auto_film_maker/repo/S6_Video_Generation/my_video/shot_02/sub_clip_2.mp4",
+        "trim_start": 0,
+        "trim_end": ""
+    }
+]

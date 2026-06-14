@@ -5,9 +5,9 @@
         "sub_clips": [
             {
                 "sub_clip_id": 1,
-                "sub_clip_content": "一个在1970年代装束下的男人的特写，眼神依依不舍、望眼欲穿地凝视远方。",
-                "reference_path": "/home/admin/.openclaw/workspace/auto_film_maker/repo/S6_Video_Generation/stark_and_dad/Shot_06/refs/new_tony_ref_cropped.jpg",
-                "prompt": "Cinematic sequence: A close-up portrait of a man in 1970s attire looking into the distance. His eyes are filled with reluctance to part and a deep, longing gaze. His facial expression remains subtle and restrained without any drastic movements. Soft nostalgic 1970s lighting, photorealistic, slow zoom in.",
+                "sub_clip_content": "展示这位男士的特写，眼神彻底释怀且平静。突出凝望远方、充满不舍与深情，画面聚焦表情。",
+                "reference_path": "/home/admin/.openclaw/workspace/auto_film_maker/repo/S6_Video_Generation/stark_and_dad/Shot_06/refs/frame_11s.jpg",
+                "prompt": "An extreme close-up of this man's face looking into the distance, his expression filled with deep affection, emotional longing, and a profound reluctance to let go. Cinematic lighting, highly detailed facial features, camera focused entirely on his emotional expression.",
                 "seconds": "5",
                 "output_path": "/home/admin/.openclaw/workspace/auto_film_maker/repo/S6_Video_Generation/stark_and_dad/Shot_06/sub_clip_1.mp4",
                 "status": "completed",
@@ -15,9 +15,9 @@
             },
             {
                 "sub_clip_id": 2,
-                "sub_clip_content": "一个年轻男人的特写，眼神依依不舍、望眼欲穿地凝视远方。",
-                "reference_path": "/home/admin/.openclaw/workspace/auto_film_maker/repo/S6_Video_Generation/stark_and_dad/Shot_06/refs/howard_1_4_cropped.jpg",
-                "prompt": "Cinematic sequence: A close-up portrait of a young man looking into the distance. His eyes are filled with reluctance to part and a deep, longing gaze. His facial expression remains subtle and restrained without any drastic movements. Soft nostalgic 1970s lighting, photorealistic, slow zoom in.",
+                "sub_clip_content": "展示另一位男士的特写，带着对未来的期盼。",
+                "reference_path": "",
+                "prompt": "A close-up of this man looking into the distance with a hopeful and anticipating expression about the future.",
                 "seconds": "5",
                 "output_path": "/home/admin/.openclaw/workspace/auto_film_maker/repo/S6_Video_Generation/stark_and_dad/Shot_06/sub_clip_2.mp4",
                 "status": "completed",
