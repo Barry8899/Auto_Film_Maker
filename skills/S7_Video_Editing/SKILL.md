@@ -10,8 +10,13 @@ The core function of S7 is to assemble the individual clips from S5 (Existing Vi
 
 ## Workflow
 
-### Step 1: Generate `shot_flow.json`
-Execute the tool script to gather video data from S5 (`storyboard.json`) and S6 (`asset_manifest.json`) to create a unified timeline sequence JSON file (`shot_flow.json`).
+### Step 0: Initial Check & Skip Option
+When `[TRIGGER: S7_Video_Editing]` is received, first use the `exec` tool to check if BOTH `shot_flow.json` and `final_video.mp4` exist in `/home/admin/.openclaw/workspace/auto_film_maker/repo/S7_Video_Editing/<video_name>/`.
+- **Condition A (Files Exist):** If both files are found, ask the user (in their language): "已检测到已有的 `shot_flow.json` 和 `final_video.mp4` 文件。您是希望使用已有文件直接跳过 S7，还是重新开始生成时间线？". If the user chooses to skip, output `[STEP_7_COMPLETE]`.
+- **Condition B (Files Missing or User Chooses Restart):** If either file is missing, or if the user chooses to restart, automatically proceed immediately to Step 1 without waiting for another prompt.
+
+### Step 1: Automatically Generate `shot_flow.json`
+Execute the tool script immediately (do not wait for the user to ask you to do this) to gather video data from S5 (`storyboard.json`) and S6 (`asset_manifest.json`) and create a unified timeline sequence JSON file (`shot_flow.json`).
 **Command:** `python /home/admin/.openclaw/workspace/auto_film_maker/tools/generate_shot_flow.py --video_name <video_name>`
 
 *Note: The generated `shot_flow.json` will merge all multi-clip `sub_clips` from S6 into flattened independent shots named `shot_0X_sub_0Y`.*
