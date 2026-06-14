@@ -1066,7 +1066,36 @@
             } catch(e) { alert('Failed to rename chat'); }
         }
 
+        function resetPipeline() {
+            const stepNames = ["Video Upload", "Video Understanding", "Script Writing", "Content Extraction", "Storyboarding", "Video Generation", "Video Editing", "Review & Export"];
+            const icons = ["upload-cloud", "brain", "file-text", "archive", "layout", "video", "scissors", "check-circle"];
+            for (let i = 1; i <= 8; i++) {
+                const step = document.getElementById(`step-${i}`);
+                if (step) {
+                    step.className = `action-btn pipeline-btn ${i === 1 ? 'active' : 'inactive'}`;
+                    step.innerHTML = `<i data-lucide="${icons[i-1]}" style="width:16px;"></i> ${i}. ${stepNames[i-1]}`;
+                }
+            }
+            lucide.createIcons();
+        }
+
         function renderMessages(messages) {
+            resetPipeline();
+            if (messages.length > 0) {
+                const step1 = document.getElementById('step-1');
+                if (step1) {
+                    step1.classList.remove('active');
+                    step1.classList.add('completed');
+                    step1.innerHTML = `<i data-lucide="check-circle" style="width:16px; color:#10b981;"></i> 1. Video Upload`;
+                }
+                const step2 = document.getElementById('step-2');
+                if (step2) {
+                    step2.classList.remove('inactive');
+                    step2.classList.add('active');
+                }
+                lucide.createIcons();
+            }
+
             const area = document.getElementById('chatArea');
             area.innerHTML = '';
             messages.forEach(msg => {
