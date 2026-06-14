@@ -252,7 +252,7 @@
             height: 32px;
             border-radius: 50%;
             background-color: #F15A24;
-            background-image: url('/files/vobile_logo.png');
+            background-image: url('/files/vobile_logo_new.png');
             background-color: transparent;
             background-size: cover;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -380,6 +380,7 @@
                     <span class="icon-btn" title="New File" onclick="createNewItem(false)"><i data-lucide="file-plus" style="width:16px;"></i></span>
                     <span class="icon-btn" title="New Folder" onclick="createNewItem(true)"><i data-lucide="folder-plus" style="width:16px;"></i></span>
                     <span class="icon-btn" title="Refresh" onclick="fetchFileTree()"><i data-lucide="refresh-cw" style="width:16px;"></i></span>
+                    <span class="icon-btn" id="toggleTreeBtn" title="Show Root Directory" onclick="toggleFileTreeMode()"><i data-lucide="folder-tree" style="width:16px;"></i></span>
                 </div>
             </div>
             <div class="file-tree" id="fileTreeContainer">
@@ -394,16 +395,16 @@
         </div>
         <div class="m-content">
             <div id="welcome-container" style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; text-align:center; height:100%; width:100%;">
-                <img src="/files/vobile_logo.png" alt="Vobile" style="width: 72px; height: 72px; object-fit: contain; margin-top: 60px; margin-bottom: 60px;">
+                <img src="/files/vobile_logo_new.png" alt="Vobile" style="width: 72px; height: 72px; object-fit: contain; margin-top: 60px; margin-bottom: 60px;">
                 <h1 style="font-size: 28px; font-weight: 700; margin: 0 0 12px 0; color: var(--text-main);">Auto Film Maker</h1>
-                <p style="font-size: 16px; color: var(--text-muted); margin: 0; max-width: 500px; line-height: 1.5;">全自动 AI 视频生成流水线。上传素材，喝杯咖啡，AI 为您搞定分镜、生成与剪辑。</p>
+                <p style="font-size: 16px; color: var(--text-muted); margin: 0; max-width: 500px; line-height: 1.5;">Fully automated AI video generation Agent pipeline. Upload assets, chat with the AI, and let it handle scripting, storyboarding, generation, and editing across 8 steps.</p>
                 
                 <button class="welcome-btn" onclick="openUploadModal()">
                     <i data-lucide="folder-plus" style="width: 20px;"></i> Start New Video Project
                 </button>
                 
                 <p class="welcome-text-muted">
-                    或者在左侧 <b>Chat History</b> 中点击已有的 <code>🎬 video_maker_X</code> 会话<br>恢复过往项目的制作进度与记录。
+                    Or click an existing <code>🎬 video_maker_X</code> session in the <b>Chat History</b> on the left<br>to resume the progress and records of previous projects.
                 </p>
             </div>
             <div class="editor-actions" id="editorActions" style="display:none;">
@@ -650,6 +651,21 @@
         
         // API Calls
         let expandedFolders = new Set();
+        let showFullTree = false;
+
+        function toggleFileTreeMode() {
+            showFullTree = !showFullTree;
+            const btn = document.getElementById('toggleTreeBtn');
+            if (showFullTree) {
+                btn.style.color = '#F15A24';
+                btn.title = "Show Repo Directory Only";
+            } else {
+                btn.style.color = '';
+                btn.title = "Show Root Directory";
+            }
+            fetchFileTree();
+        }
+
         async function fetchFileTree() {
             try {
                 // Collect currently open folders before re-render
@@ -658,8 +674,15 @@
                 });
 
                 const res = await fetch('/api/fs/tree');
-                const treeData = await res.json();
-                renderFileTree(treeData, document.getElementById('fileTreeContainer'));
+                const fullTree = await res.json();
+                
+                let displayTree = fullTree;
+                if (!showFullTree) {
+                    const repoNode = fullTree.find(n => n.name === 'repo');
+                    displayTree = repoNode && repoNode.children ? repoNode.children : [];
+                }
+                
+                renderFileTree(displayTree, document.getElementById('fileTreeContainer'));
                 lucide.createIcons();
             } catch (e) {
                 console.error(e);
