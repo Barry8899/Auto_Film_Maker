@@ -3,14 +3,17 @@
 ## 🚀 Quick Start for Vobile Reviewers
 
 本项目为 Agentic 应用，强依赖本地 OpenClaw 智能体环境与沙盒文件系统。
-评委可以直接在沙盒终端运行以下命令，一键启动后端服务并获取公网体验链接：
+为方便评委体验，服务已配置为长效稳定的公网访问链路。您可以直接通过浏览器访问以下链接（二者等效）：
 
-```bash
-cd /home/admin/.openclaw/workspace/auto_film_maker
-bash start_auto_film_maker.sh
-```
+- **🔗 专属体验链接 (推荐):** [https://bit.ly/vobile-auto-film-maker](https://bit.ly/vobile-auto-film-maker)
+- **🌐 底层直连链接 (Ngrok):** [https://fountain-handmade-backwash.ngrok-free.dev](https://fountain-handmade-backwash.ngrok-free.dev)
 
-启动后，终端将自动配置环境并输出一个可供直接访问的公网 HTTPS 链接。
+> **⚠️ 注意：** 上述体验链接依赖于沙盒后台服务的持续运行。如果发现链接失效或服务意外终止，评委可以直接在沙盒终端运行以下命令，一键重新启动后端服务与公网穿透：
+>
+> ```bash
+> cd /home/admin/.openclaw/workspace/auto_film_maker
+> bash start_auto_film_maker.sh
+> ```
 
 ---
 
