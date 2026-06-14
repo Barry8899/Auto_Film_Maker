@@ -174,3 +174,12 @@ S7 负责收集所有环节准备完毕的视频素材，进行结构化合并�
 - **幂等与防并发锁 (Idempotency & Execution Lock)**：由于公网代理（如 Pinggy / Nginx）在遇到长耗时任务（如 Gemini 分析视频需 60s+）时，会在超时后自动重发 POST 请求。这会导致 Agent 被二次唤醒，从而产生“用户幽灵发言”（两次 `嗯嗯继续`）并错乱工作流状态。目前已在 `app.py` 中加入了线程级别的请求锁 (`chat_locks`)，遇到重发的并发请求直接返回 409 拦截，彻底根治了公网弱网环境下的 Agent 鬼畜抢跑问题。
 - **Dashboard 级验收面板 (防卡顿超链接设计)**：为了防止多个切片视频在 M 区聊天框内直接渲染造成“多媒体轰炸”与浏览器卡死，裁剪完成后输出一个优雅的 `extraction_report.md`。Agent 会将 Markdown 表格直接输出在聊天流中，但**坚决避免**嵌入 `<video>` 或 `![vid]()`，而是采用文字超链接 `[👉 点击预览](/files/...)`，让用户像审阅 Dashboard 一样按需点击、集中验收。
 - **无缝流转 (S4 -> S5)**：切片阶段并经用户同意后，S4 抛出 `[STEP_4_COMPLETE]`。前端拦截该信号，点亮 Step 5，并静默发送 `[TRIGGER: S5_Storyboarding]` 唤醒 S5 技能 (Storyboarding)。
+
+## 3.13 S8 审查与导出 (Review & Export)
+S8 是工作流的终点，主要负责闭环体验与反馈收集：
+- **无缝衔接 (S7 -> S8)**: 当 S7 最终视频 `final_video.mp4` 拼装完毕且用户无修改意见时，Agent 输出 `[STEP_7_COMPLETE]`。前端将 S7 管线变暗，点亮 S8 管线，并后台隐式触发 `[TRIGGER: S8_Review_Export]`。
+- **成片交付与功能预告**: Agent 首先在一个消息流中完成三件事：
+  1. 指引用户在中间工作区 (M区) 预览成片，并在左侧目录树 (L区) 下载。
+  2. 预告即将上线的“自动宣发文案”和“一键分发 YouTube / Bilibili”等高级功能 (Coming Soon)。
+  3. 宣布当前制作流程圆满结束，并感谢用户。
+- **全局反馈收集 (Global Feedback Collection)**: 鼓励用户对生成的视频或整个 Workflow 提出建议。当用户提出反馈后，Agent 会引导明确、润色，并将结构化的数据（带时间戳的 `timestamp` 与 `feedback` 字段）自动追加写入项目根目录的 `/home/admin/.openclaw/workspace/auto_film_maker/user_feedbacks.json` 文件中，为后续的流程迭代与模型调优提供数据支撑。
