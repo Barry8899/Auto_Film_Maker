@@ -1,5 +1,20 @@
 # Auto Film Maker
 
+Auto Film Maker 是一个基于 OpenClaw 的 **Agentic 全自动视频生成与剪辑工作站**。
+本项目通过高交互性的 IDE 风格 UI、实时的前后端协同以及智能体底层能力，将传统繁琐的视频二创过程重塑为一个高度自动化的 8 步流水线。从理解视频、构思脚本、到素材抽取、AI 扩充生成及最终混剪，全生命周期均由 AI Agent 主导，并允许用户随时介入微调。
+
+### 🔄 八步核心管线 (8-Step Pipeline)
+1. **Video Upload (视频上传)**: 支持拖拽上传或选取已有视频，系统自动进行 HLS m3u8 切片以便实时流媒体预览。
+2. **Video Understanding (视频理解)**: Agent 自动截取正脸关键帧，并调用多模态大模型对剧情与人物进行深度解析，提取时间戳。
+3. **Script Writing (脚本编写)**: 基于人物与情节分析，与用户对话确认风格后，自动生成三幕剧视频脚本。
+4. **Content Extraction (内容提取)**: 根据脚本自动定位并切割原始视频素材，产出高精度的物理切片。
+5. **Storyboarding (故事板)**: 生成结构化的 JSON 故事蓝图，规划出已有素材 (Extracted) 和需要大模型生成的素材 (To_Be_Generated)。
+6. **Video Generation (视频生成)**: Agent 与用户交互，通过 Aliyun 视频生成模型 (如 wan2.6-i2v) 串行拆解并生成所有缺失的分镜视频素材。
+7. **Video Editing (视频编辑)**: 根据最终版故事板，自动统一所有素材的编码格式、分辨率和帧率，并利用 FFmpeg 执行无缝合并剪辑。
+8. **Review & Export (审查与导出)**: 闭环产出最终的高清成片，同步进行新功能预告与结构化用户反馈收集。
+
+---
+
 ## 🚀 Quick Start for Vobile Reviewers
 
 本项目为 Agentic 应用，强依赖本地 OpenClaw 智能体环境与沙盒文件系统。
@@ -17,60 +32,20 @@
 
 ---
 
-这是一个自动化视频制作控制台 (Control UI)。
+## 📁 核心项目结构 (Project Structure)
 
-## 项目结构
-- `app.py`: FastAPI 后端服务入口
-- `web_layout.html`: 前端界面模板（供后端渲染）
-- `requirements.txt`: Python 依赖库列表
-- `design_map.md`: 设计及 API 规划文档
-- `start_auto_film_maker.sh`: 供沙盒环境使用的一键部署脚本
+整个 Auto Film Maker 的核心文件与目录架构如下：
 
-## 环境配置与启动 (供非沙盒环境开发者参考)
+### 核心服务层
+- `app.py`: FastAPI 后端服务入口。接管文件读写 CRUD、视频转码流式下发，并桥接前端 UI 与底层 OpenClaw Agent。
+- `web_layout.html`: 纯前端工作站界面。包含文件树自动刷新、代码与媒体预览热更新、Markdown 渲染、多级拖拽防抖以及与用户对话流的交互逻辑。
+- `start_auto_film_maker.sh`: 供沙盒环境使用的一键部署脚本，自动清理环境、拉起后端服务并构建 Ngrok 内网穿透。
+- `design_map.md`: 详尽的系统架构、API 规划、以及各阶段 Agent 执行交互的底层逻辑说明文档。
 
-我们推荐使用 Python 的虚拟环境 (venv) 或 conda 来隔离项目依赖。以下是在本地机器上配置和启动的具体步骤：
-
-### 1. 克隆代码库 (如果你还没有克隆)
-```bash
-git clone git@github.com:Barry8899/Auto_Film_Maker.git
-cd Auto_Film_Maker
-```
-
-### 2. 创建并激活虚拟环境
-
-**使用 venv (推荐):**
-```bash
-# 创建虚拟环境
-python3 -m venv venv
-
-# 激活虚拟环境 (Linux / macOS)
-source venv/bin/activate
-
-# 激活虚拟环境 (Windows CMD)
-# venv\Scripts\activate
-# 激活虚拟环境 (Windows PowerShell)
-# .\venv\Scripts\Activate.ps1
-```
-
-**或者使用 Conda:**
-```bash
-conda create -n auto_film_maker python=3.10
-conda activate auto_film_maker
-```
-
-### 3. 安装依赖
-在激活的虚拟环境中，安装 `requirements.txt` 中列出的依赖项：
-```bash
-pip install -r requirements.txt
-```
-
-### 4. 启动服务
-使用 uvicorn 启动 FastAPI 后端服务：
-```bash
-uvicorn app:app --reload --host 0.0.0.0 --port 8000
-```
-- `--reload`: 开发模式下，代码修改后服务会自动重启。
-
-### 5. 访问网页
-打开浏览器，访问以下地址即可看到 UI 界面：
-[http://localhost:8000](http://localhost:8000)
+### 业务与智能体逻辑层
+- `repo/`: **核心业务存储区**。严格按照 8 步管线划分目录结构。存放了所有的物理视频切片、`storyboard.json` 蓝图、`features.json` 状态以及 `final_video.mp4` 最终成片。
+- `skills/`: **Agent 专属技能目录**。包含了 S2 至 S8 各个阶段的 `SKILL.md`，定义了 Agent 在每个流程节点应该遵循的指令规则、约束限制、跳过逻辑以及对外工具调用方式。
+- `tools/`: **工具链脚本区**。供 Agent 或系统后端自动调用的 Python 物理执行器。包含了如 `ffmpeg` 高清截帧、视频裁剪组装、大模型 API 交互以及时区对齐的反馈收集工具等。
+- `chats/`: 对话状态池。通过 JSON 持久化保存每个视频项目独立的会话记录，以支持系统在重启或多开场景下的无缝状态恢复。
+- `user_feedbacks.json`: 结构化用户反馈存储文件。收集在 S8 阶段用户留下的评语。
+- `vobile_logo_new.png`: 界面渲染所使用的 Vobile 品牌视觉资源。
