@@ -1,7 +1,7 @@
 # Auto Film Maker - 前端设计与架构蓝图 (Design Map)
 
 > 状态：视频生成流接入万象引擎 (Phase 4.1)
-> 最后更新：2026-06-09 (优化版)
+> 最后更新：2026-06-15 (架构总览与体验优化版)
 
 ## 1. 项目概述
 “Auto Film Maker”是一个自动理解视频并进行二次创作的 AI 平台。前端页面采用高度集成的 IDE / 工作站式布局，整合了 AI 智能体对话、本地文件管理、代码/文本/媒体编辑预览、以及视频生成生命周期追踪。
@@ -84,17 +84,17 @@
 
 ##
 ### 3.6 性能与编辑器优化 (Performance & Editor Enhancements)
-- **Monaco 换行支持**: 全局开启了 `wordWrap: "on"`，现在在编辑 markdown、json 或长文本代码时，会自动根据 M 区面板宽度进行折行，再也不需要频繁横向滚动。
-- **保存性能与异步优化**: 修复了之前 `Ctrl+S` 时阻塞事件循环导致的缓慢问题。将后端的 `PUT /api/fs/file` 路由升级为 `async def` 异步非阻塞处理，同时规范了前端 Monaco 编辑器的事件节流与快捷键接管，极大地提升了保存大文件或长文档时的响应速度（从 15s 级降低到毫秒级）。
-- **根目录上传修复**: 修复了 L 区由于参数映射异常导致的 `Failed to fetch` 根目录文件上传错误。统一了前后端的路径缺省逻辑（`path='.'`）。
-- **HLS 视频流切片播放 (M3U8)**: 彻底解决了公网穿透/弱网环境下播放 MP4 的卡顿问题。
-  - **后端 (FastAPI BackgroundTasks + ffmpeg)**: 监听 `repo/S1_uploaded_video` 路径，当用户上传视频后，立刻触发后台静默转码。利用 ffmpeg (`-preset ultrafast`) 将长视频切分为 `.m3u8` 索引与数个极小的 `.ts` 切片，并存入新建的同名 `_hls` 文件夹中。
-  - **前端 (HLS.js)**: M区多态容器新增对 `.m3u8` 文件的深度识别与拦截。当用户在左侧 Explorer 点击 `.m3u8` 时，采用 `hls.js` 劫持并注入原生 `<video>`，实现毫秒级秒开和边下边播的流媒体体验，完全规避了传统 MP4 必须预加载大量文件头的带宽瓶颈。
+- **Monaco 换行支持**: 全局开启了 `wordWrap: "on"`，在编辑 markdown、json 或长文本代码时，会自动根据 M 区面板宽度进行折行。
+- **保存性能与异步优化**: 将后端的 `PUT /api/fs/file` 路由升级为 `async def` 异步非阻塞处理，规范了前端 Monaco 编辑器的事件节流与快捷键接管，极大地提升了保存响应速度。
+- **HLS 视频流切片播放 (M3U8)**: 实现了公网穿透/弱网环境下播放 MP4 的秒开支持。
+  - **后端 (FastAPI BackgroundTasks + ffmpeg)**: 监听视频上传，立刻触发后台静默转码。利用 ffmpeg 将长视频切分为 `.m3u8` 索引与 `.ts` 切片。
+  - **前端 (HLS.js)**: M区新增对 `.m3u8` 的深度识别与拦截。采用 `hls.js` 劫持并注入原生 `<video>`，实现边下边播的流媒体体验，规避预加载瓶颈。
 
 ### 3.7 工具执行动态 UI 与会话管理 (Tool UI & Session Management)
-- **工具执行动态 UI**: 发送消息后，采用拟物化组件 (`Tool Exec Container`) 呈现工具调用状态。外层统一显示为 `1 skill exec running` 以保证布局整齐，折叠面板内动态展示真实调用的 Skill 与 Tool 名称及正在执行的具体操作内容。
-- **L区聊天历史安全删除**: 对话记录增加防误触的红色悬停删除按钮（Hover 显示），并且后端绑定同步删除物理存储的 `.json` 记录，保证空间整洁。
-- **超长任务断连保护 (Long-running Timeout UX)**: 针对 Gemini 视频理解等耗时极长的任务导致的 `Failed to fetch` 代理中断报错，前端加入了友好的断连保护 UI。不再抛出刺眼的红字错误，而是以品牌橙色温和提示用户“任务仍在后台运行，请稍后刷新对话”，极大缓解了用户的焦虑感。
+- **工具执行动态 UI**: 采用拟物化组件 (`Tool Exec Container`) 呈现工具调用状态。折叠面板内动态展示真实调用的 Skill 与 Tool 名称及操作内容。
+- **L区聊天历史管理**: 对话记录支持安全删除，后端同步删除物理存储记录。支持根据加载的聊天历史智能还原右侧管线 (Pipeline) 的进度高亮状态。
+- **多项目并发 (Session Isolation)**: S1 结束后，自动生成带编号的专属 `🎬 video_maker_X` 隔离会话，实现工作站内多视频项目的并行管理与进度自由切换。
+- **长时任务断连保护 (Timeout UX)**: 针对大模型分析等耗时极长的任务，前端加入了友好的状态保持与断连保护机制。
 
 
 ## 3.8 右侧边栏 (R区) 导航更新与管线 (Pipeline)
@@ -109,25 +109,20 @@
 8. Review & Export (审查与导出)
 
 **管线交互 (Pipeline UX) 与 Vobile 品牌对齐:**
-- 管线遵循**渐进式披露 (Progressive Disclosure)** 的设计原则。初始状态下，只有 **Step 1 (Video Upload)** 处于激活状态，并以 Vobile 品牌橙色 (`#F15A24`) 高亮，其余步骤处于暗色/禁用状态。
-- **上传弹窗 (Upload Modal) 增强:** 点击 Step 1 会在屏幕中央弹出一个定制的 Modal 覆盖层，而不是干瘪的系统文件选择器。它包含一个支持拖拽风格的浏览区，选择文件后会以绿勾图标确认，并提供一个带有加载动画的“Upload File”按钮。
-- **已有视频复用逻辑 (Existing Video Bypass):** 上传弹窗内包含一个 "Use Existing Videos" 按钮。点击后，系统会扫描 `repo/S1_uploaded_video` 目录。如果该目录下已经存在视频文件，则跳过上传流程。
-- **自动会话初始化 (Zero-Friction Chat Init)**: 修复了用户在点击管线按钮或上传视频时，由于未建立聊天室而导致的阻断弹窗 (`Please select or create a chat first`)。系统会智能检测当前是否选中了会话；如果没有，会自动创建/加载一个名为 `🎬 video_maker` 的专属会话。
-- **双语握手协议 (Bilingual Handshake Protocol)**: S1完成后不再粗暴弹窗，而是通过注入 `(System) 视频上传完成...` 的双语破冰消息，引导用户自然输入偏好语言（如"中文"或"Continue"）。
-  - **性能优化 (Skip Agent Boot)**: 为了避免一句简单的 "继续" 导致底层 OpenClaw Agent 进行耗时极长（30s+）的冷启动推理，我们在前后端通信中引入了 `skip_agent` 标记拦截器。对于这步纯流程性的握手，直接跳过模型推断、秒级写入聊天历史并模拟出 System 确认，实现毫秒级解锁 S2 与唤起弹窗，彻底消除卡顿感。
-- **Agent 执行状态 UI 优化**: 重新打磨了拟物化工具调用框 (`Tool Exec Container`) 的尺寸。移除了默认的全宽拉伸和自动间距，采用 `width: fit-content` 以及严格限定的高宽图标 (`14px`)，避免了黑框过大、中间文字空洞的问题，整体视觉更加紧凑专业。
+- 管线遵循**渐进式披露 (Progressive Disclosure)** 的设计原则。初始状态下，只有 **Step 1 (Video Upload)** 处于激活状态，并以 Vobile 品牌橙色 (`#F15A24`) 高亮。同时 M 区提供友好的欢迎大屏 (Welcome State)。
+- **双语握手协议 (Bilingual Handshake Protocol)**: S1完成后通过注入 `(System)` 级的双语破冰消息，引导用户自然输入偏好语言，并零阻力 (Zero-Friction) 唤起 S2 工具。
 
 **Step 2 (Video Understanding) 交互机制:**
 - **触发与 UI 承载**: 点击 Step 2 后，前端自动向 M 区聊天框发送 `Run Video Understanding` 指令。视频人物截图作为 Markdown 附件 (`![name](/files/...)`) 直接渲染在现有的 M 区聊天流中。Markdown 解析已修复，支持保留原生的换行符和空行，保证阅读体验。
-- **渐进式确认 (Progressive Disclosure) 与一次性确认 (One-Shot Confirmation)**: Agent 自动调用 Gemini 提取视频情节和主要角色时间戳，利用专用的 `tools/extract_frames.py` 工具静默截取正脸帧，并在聊天框**一次性抛出**“简要剧情 + 带图的人物表”。避免冗长的分批次问答带来的用户疲劳 (HITL Fatigue)。
-- **精准的 JSON 握手截帧**: `gemini_video_understanding.py` 现在会生成结构化的 JSON 数据（包含准确的 `time_stamp` 和 `source_video` 路径）。`extract_frames.py` 直接读取该 JSON 文件，使用 `ffmpeg -y -ss <timestamp> -i <video>` 实现**高精度的准确截帧**，解决了此前截取到错位帧或无效画面的痛点。
+- **渐进式确认与一次性渲染**: Agent 自动调用多模态模型提取视频情节和主要角色时间戳，利用底层工具静默截取正脸帧，并在聊天框**一次性抛出**“剧情 + 人物表”。避免冗长的分批次问答带来的用户疲劳 (HITL Fatigue)。
+- **精准的 JSON 握手截帧**: Agent 生成结构化的 JSON 数据（包含时间戳）。截帧脚本读取 JSON 并实现**高精度的准确截帧**。
 - **语言自适应**: 尽管底层 `SKILL.md` 的系统指令为统一的英文，但规定了 Agent **必须跟随用户输入的语言**进行回答与文档编写，保证用户界面的亲和力。
 - **动态搜索与完成流转**: 赋予用户修改命名或要求 Agent 进行 Web Search（背景设定检索）的权限。一切确认无误后，Agent 将包含图文的最终内容写入 `repo/S2_Video_Understanding/<video_name>/<video_name>.md` 文档。
 - **无缝流转 (S2 -> S3)**：改变了原来依靠用户手动点击下一步的割裂感。当用户针对报告回复“进入下一阶段”后，Agent 才会打出隐式信号 `[STEP_2_COMPLETE]`。前端 JS 拦截该信号后自动将 Step 2 标记为完成（绿勾），点亮 Step 3，**并静默在后台为用户发送 `[TRIGGER: S3_Script_Writing]` 指令**，瞬间无缝唤起 S3 技能，开启对话流。
 
 ### 3.9 UX/DX 体验细节打磨 (UX & Developer Experience Refinements)
-- **L区文件树状态保持 (State Preservation)**：修复了 L 区由于 CRUD 操作（增删改文件）或长连刷新导致目录树全部折叠的问题。引入了 `expandedFolders` 状态集 (Set) 并在重绘 DOM 前采集路径映射，实现了重新拉取文件树时**完全还原用户的多级展开状态**，极大地提升了查看深层嵌套文件（如 `/repo/S2/...`）的便利性。
-- **S2 Prompt 幻觉修复**：更新了 `gemini_video_understanding.py` 的提示词。增加并明确了 `Character inclusion rules`（强制排除群演和路人）与 `Timestamp rules`（必须提取正面清晰首帧），提升了 JSON 截帧输出的稳定性和准确率。
+- **L区文件树状态保持**: 采集路径映射，实现了重新拉取文件树时**完全还原用户的多级展开状态**。
+- **Prompt 防幻觉优化**: 明确了强制排除群演和路人等设定，提升了 JSON 截帧输出的稳定性和准确率。
 
 **Step 3 (Script Writing) 交互机制:**
 - **消除白纸综合征 (Direction Advisor)**：被静默唤起后，Agent 不会像填表一样盘问用户，而是主动根据 S2 剧情，抛出 2~3 种带有明显差异的风格预案（如高燃快剪、治愈回忆），引导用户做选择题。
@@ -142,38 +137,27 @@
 
 ## 3.10 S5 (Storyboarding) 与 S6 规划
 S5 (分镜表) 是衔接素材提炼与最终成片的核心枢纽。
-- **一致性同步 (JSON ↔ MD)**: 引入了 `sync_storyboard.py` 工具。Agent 只负责维护底层的 `storyboard.json` 蓝图结构，保存后通过该脚本强制解析并输出精美的 `storyboard.md` 表格供用户在前端 M 区审核。完美规避了 LLM 直接生成 Markdown 表格时因换行错乱导致的排版崩溃问题。
-- **轨道分离与非破坏性裁剪 (Non-destructive trimming)**: JSON 结构被拆分为 `Visual Track` 和 `Audio Track`。对于存在冗余或噪音的旧素材，摒弃了“重新剪切 MP4”的重负载思路，而是引入了 `trim_start` 和 `trim_end` 标记参数。这些轻量级标记将在 S7 (最终剪切) 中指导 FFmpeg 进行毫秒级去噪过滤。
-- **单向数据流与 S6 的蓝图预埋**: 彻底消灭“系统循环依赖”。在 Visual Track 中，资产被划分为两类：
-  1. `EXTRACTED`: 直接引用 S4 生成好的本地资产 `seg_001.mp4`。
-  2. `TO_BE_GENERATED`: 对于需要二创或原片没有的情节，只在蓝图里留下初步的内容方向坑位。
-  **S6 (Video Generation) 开发预览**: S6 被定性为“加工厂”。它不会去修改 S5 的蓝图，而是只负责遍历 `storyboard.json` 中所有 `TO_BE_GENERATED` 的项，创建 `asset_manifest.json`。在 S6 阶段，AI 核心任务是陪伴用户进行“找参考 -> 定 Prompt -> 生成 -> 抽卡 -> 定稿”的互动循环。在这个过程中确定的参考图、参考视频和最终生成的视频产物路径都会记录在独立的 `asset_manifest.json` 中。
-  - **异步生成与前端 Toast 通知 (Async Generation & UI Toast)**：为防止由于耗时过长导致用户阻塞，Agent 会将 `aliyun_video_generation.py` 置于后台异步运行。与此同时，前端会静默轮询 `asset_manifest.json` 的更新。当某个镜头状态变为 `completed` 时，前端界面右上角会弹出带有关闭按钮【X】的绿色 Toast 通知（`✅ Shot_X 视频已生成完成`），左侧文件树也会实时打上状态微标。从而将 S5 的结构设计和 S6 的生产填坑完美隔离。最终在 S7 环节将 S5(蓝图) 和 S6(资产映射表) 合并，完成自动混剪。
+- **一致性同步 (JSON ↔ MD)**: Agent 负责维护底层的 `storyboard.json` 分镜表结构，保存后通过同步脚本强制解析并输出精美的 `storyboard.md` 表格供用户在前端 M 区审核，规避了 LLM 直接生成 Markdown 表格时因换行错乱导致的排版崩溃问题。
+- **轨道分离与非破坏性裁剪 (Non-destructive trimming)**: JSON 结构被拆分为 `Visual Track` 和 `Audio Track`。摒弃了“重新剪切 MP4”的重负载思路，引入轻量级的 `trim_start` 和 `trim_end` 标记参数，由 S7 统一指导 FFmpeg 进行修剪。
+- **单向数据流与 S6 的分镜表预埋**: 资产被划分为两类：
+  1. `EXTRACTED`: 直接引用 S4 生成好的本地资产。
+  2. `TO_BE_GENERATED`: 仅在分镜表里留下初步的内容坑位。
+  **S6 (Video Generation) 开发预览**: S6 被定性为“加工厂”。它不修改 S5 的分镜表，而是遍历 `storyboard.json` 中的坑位，在独立的 `asset_manifest.json` 中记录参考图、生成 Prompt 和物理结果路径。
+  - **异步生成与前端 Toast 通知 (Async Generation & UI Toast)**：Agent 将生成脚本置于后台异步运行。前端静默轮询更新，完成后弹出绿色 Toast 通知，从而将 S5 的结构设计和 S6 的生产填坑隔离。
 
 ## 3.11 S6 视频生成 (Sub-clip 拆解架构)
-考虑到阿里云视频生成 API 的物理限制（单次最多 15s 且只能使用一张参考图），S6 阶段引入了 **Sub-clip (子片段) 拆解架构**：
-- **版权保护与 Prompt 泛化**：受限于阿里云的版权保护策略，Agent 在生成 Prompt 时，必须将具体的影视剧人物（如美国队长、托尼·斯塔克）替换为泛化描述（如“这个男人”、“身穿红蓝色战甲的超级英雄”）。
-- **强制用户确认机制**：为了避免 Agent 在 `asset_manifest.json` 刚填完就擅自开始消耗昂贵的生成额度，S6 的流程被强加上了一道“锁”：在正式调用后台生成脚本之前，必须主动询问用户是否准备好开始生成。用户许可后才执行。
-- **独立日志追踪**：每个生成任务的日志会精确记录在对应的 `<shot_id>_<sub_clip_id>.log` 文件中，并采用追加模式，便于多次抽卡时的排错追溯。
-- **嵌套数据结构**: `asset_manifest.json` 从扁平的 shot 列表升级为嵌套结构。每个 Shot 包含一个 `sub_clips` 数组。对于复杂或超长的 Shot，Agent 会与用户沟通一个“拆分方案”，并将其裂变为多个子片段（如 `sub_clip_id: 1`, `sub_clip_id: 2`）。
+考虑到视频生成 API 的物理限制，S6 阶段引入了 **Sub-clip (子片段) 拆解架构**：
+- **版权保护与 Prompt 泛化**：受限于模型版权策略，Agent 在生成 Prompt 时，须将具体的影视剧人物替换为泛化描述。
+- **强制用户确认机制**：在正式调用后台生成脚本消耗昂贵额度之前，S6 被加上了一道“锁”：必须主动询问用户是否准备好，用户许可后才执行。
+- **独立日志追踪**：每个生成任务的日志被精确记录在追加模式的文件中，便于排错追溯。
+- **嵌套数据结构**: `asset_manifest.json` 从扁平列表升级为嵌套的 `sub_clips` 数组，Agent 会与用户沟通拆分方案。
 
 ## 3.12 S7 视频混剪拼装 (Video Editing)
 S7 负责收集所有环节准备完毕的视频素材，进行结构化合并：
-- **生成融合映射表**: 提取 S5 的 `storyboard.json` 蓝图结构，结合 S6 的 `asset_manifest.json` 生成结果，打平梳理出包含所有单片段的统一序列文件 `shot_flow.json`，包含了绝对路径、`trim_start`、`trim_end` 等剪辑参数。
-- **安全拦截与人工校验**: 生成 JSON 后，强制中断流程，AI 需将打平后的剪辑参数呈现给用户，只有用户手动确认修剪片段准确无误后，方可触发 FFmpeg。
-- **兼容性格式化组装**: 由于原片素材(S4提取)和生成的AI素材(S6)在编码、分辨率和帧率上往往不一致，直接硬连会报错。S7 后台拼装脚本会动态利用 FFmpeg 将所有素材进行二次转码和中心裁剪补黑填充，归一化为 1080P/30FPS/x264/aac 的标准流文件，从而安全输出终版成片 `final_video.mp4`。
-- **执行顺序解耦 (Agent -> JSON -> Script -> Agent)**：
-  1. Agent 与用户沟通提示词和参考图。
-  2. 达成一致后，Agent **优先修改** `asset_manifest.json`，将数据填入坑位。
-  3. Agent 串行调用底层脚本 `aliyun_video_generation.py`，传入具体的 `shot_id` 和 `sub_clip_id`。
-  4. 脚本直接读取 JSON 内部指定的提示词和路径执行生成。
-  5. 脚本生成成功后回写 JSON 状态。
-  6. Agent 轮询到状态完成，向用户发送提示进行审核。
-- **强制逐一审核**: 为保证成片质量并避免并行 API 竞争，同一个 Shot 下的多个子片段必须**串行生成并逐一审核**。用户对片段 1 满意后，Agent 才会发起片段 2 的生成调用。
-- **思维链打点与切割 (CoT & Clipping)**：底层使用带有强 System Prompt 的 Gemini 脚本定位素材。强制输出 `reasoning` (思维链) 字段。
-- **幂等与防并发锁 (Idempotency & Execution Lock)**：由于公网代理（如 Pinggy / Nginx）在遇到长耗时任务（如 Gemini 分析视频需 60s+）时，会在超时后自动重发 POST 请求。这会导致 Agent 被二次唤醒，从而产生“用户幽灵发言”（两次 `嗯嗯继续`）并错乱工作流状态。目前已在 `app.py` 中加入了线程级别的请求锁 (`chat_locks`)，遇到重发的并发请求直接返回 409 拦截，彻底根治了公网弱网环境下的 Agent 鬼畜抢跑问题。
-- **Dashboard 级验收面板 (防卡顿超链接设计)**：为了防止多个切片视频在 M 区聊天框内直接渲染造成“多媒体轰炸”与浏览器卡死，裁剪完成后输出一个优雅的 `extraction_report.md`。Agent 会将 Markdown 表格直接输出在聊天流中，但**坚决避免**嵌入 `<video>` 或 `![vid]()`，而是采用文字超链接 `[👉 点击预览](/files/...)`，让用户像审阅 Dashboard 一样按需点击、集中验收。
-- **无缝流转 (S4 -> S5)**：切片阶段并经用户同意后，S4 抛出 `[STEP_4_COMPLETE]`。前端拦截该信号，点亮 Step 5，并静默发送 `[TRIGGER: S5_Storyboarding]` 唤醒 S5 技能 (Storyboarding)。
+- **生成融合映射表**: 提取 S5 的 `storyboard.json` 分镜表，结合 S6 的结果，梳理出包含所有单片段的统一序列文件 `shot_flow.json`。
+- **安全拦截与人工校验**: 生成 JSON 后强制中断，AI 将参数呈现给用户，用户确认后方可触发最终混剪。
+- **兼容性格式化组装**: 利用 FFmpeg 将所有素材进行二次转码和中心裁剪补黑填充，归一化为标准的 1080P 视频流，安全输出成片。
+- **幂等与防并发锁 (Idempotency Lock)**：已在后端加入了线程级别的请求锁 (`chat_locks`)，彻底根治了公网重试机制下 Agent 鬼畜抢跑或被二次唤醒的问题。
 
 ## 3.13 S8 审查与导出 (Review & Export)
 S8 是工作流的终点，主要负责闭环体验与反馈收集：
